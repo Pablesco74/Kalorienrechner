@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalorienrechner</title>
+</head>
+<body>
+
+<h1>Kalorienrechner</h1>
+
+<label>Gewicht (kg):</label>
+<input id="gewicht" type="number"><br><br>
+
+<label>Größe (cm):</label>
+<input id="groesse" type="number"><br><br>
+
+<label>Alter:</label>
+<input id="alter" type="number"><br><br>
+
+<button onclick="berechnen()">Kalorien berechnen</button>
+
+<p id="ergebnis"></p>
+
+<script>
+function berechnen() {
+  let gewicht = document.getElementById("gewicht").value;
+  let groesse = document.getElementById("groesse").value;
+  let alter = document.getElementById("alter").value;
+
+  // Grundumsatz (Mifflin-St Jeor, männlich)
+  let kalorien = 10 * gewicht + 6.25 * groesse - 5 * alter + 5;
+
+  document.getElementById("ergebnis").innerText =
+    "Dein täglicher Kalorienbedarf: " + Math.round(kalorien) + " kcal";
+}
+</script>
+
+</body>
+</html>
