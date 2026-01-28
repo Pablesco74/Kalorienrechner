@@ -157,6 +157,25 @@ function berechnen() {
   let bmr = berechneBMR(gewicht, groesse, alter, geschlecht);
   let gesamt = bmr + schritteKcal + sportKcal + cardioKcal;
 
+   /* PROZENTE */
+  let pBMR = (bmr / gesamt) * 100;
+  let pSchritte = (schritteKcal / gesamt) * 100;
+  let pSport = (sportKcal / gesamt) * 100;
+  let pCardio = (cardioKcal / gesamt) * 100;
+
+  /* MIN / MAX SPANNE */
+  let minGesamt =
+    bmr * 0.95 +
+    schritteKcal * 0.9 +
+    sportKcal * 0.85 +
+    cardioKcal * 0.85;
+
+  let maxGesamt =
+    bmr * 1.05 +
+    schritteKcal * 1.1 +
+    sportKcal * 1.15 +
+    cardioKcal * 1.15;
+
   ergebnis.innerHTML = `
     <strong>Grundumsatz:</strong> ${Math.round(bmr)} kcal<br>
     <strong>Schritte:</strong> ${Math.round(schritteKcal)} kcal<br>
