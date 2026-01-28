@@ -17,6 +17,12 @@
 <label>Alter:</label>
 <input id="alter" type="number"><br><br>
 
+<label>Geschlecht:</label>
+<select id="geschlecht">
+  <option value="mann">Männlich</option>
+  <option value="frau">Weiblich</option>
+</select>
+
 <button onclick="berechnen()">Kalorien berechnen</button>
 
 <p id="ergebnis"></p>
@@ -26,12 +32,18 @@ function berechnen() {
   let gewicht = document.getElementById("gewicht").value;
   let groesse = document.getElementById("groesse").value;
   let alter = document.getElementById("alter").value;
+  let geschlecht = document.getElementById("geschlecht").value;
 
-  // Grundumsatz (Mifflin-St Jeor, männlich)
-  let kalorien = 10 * gewicht + 6.25 * groesse - 5 * alter + 5;
+  let grundumsatz;
 
+  if (geschlecht === "mann") {
+    grundumsatz = 10 * gewicht + 6.25 * groesse - 5 * alter + 5;
+  } else {
+    grundumsatz = 10 * gewicht + 6.25 * groesse - 5 * alter - 161;
+  }
+  
   document.getElementById("ergebnis").innerText =
-    "Dein täglicher Kalorienbedarf: " + Math.round(kalorien) + " kcal";
+    "Dein Kalorienbedarf: " + Math.round(gesamt) + " kcal";
 }
 </script>
 
