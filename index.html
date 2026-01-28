@@ -109,21 +109,40 @@
 <p id="ergebnis"></p>
 
 <script>
-/* REGELER ANZEIGE */
-schritte.oninput = () => schritteAnzeige.innerText = schritte.value;
-sportDauer.oninput = () => sportAnzeige.innerText = sportDauer.value;
-cardioDauer.oninput = () => cardioAnzeige.innerText = cardioDauer.value;
+/* ELEMENTE HOLEN */
+const el = {
+  geschlecht: document.getElementById("geschlecht"),
+  gewicht: document.getElementById("gewicht"),
+  groesse: document.getElementById("groesse"),
+  alter: document.getElementById("alter"),
+  schritte: document.getElementById("schritte"),
+  schritteAnzeige: document.getElementById("schritteAnzeige"),
+  sportIntensitaet: document.getElementById("sportIntensitaet"),
+  sportFreq: document.getElementById("sportFreq"),
+  sportDauer: document.getElementById("sportDauer"),
+  sportAnzeige: document.getElementById("sportAnzeige"),
+  cardioIntensitaet: document.getElementById("cardioIntensitaet"),
+  cardioFreq: document.getElementById("cardioFreq"),
+  cardioDauer: document.getElementById("cardioDauer"),
+  cardioAnzeige: document.getElementById("cardioAnzeige"),
+  ergebnis: document.getElementById("ergebnis")
+};
 
-/* BERECHNUNGSFUNKTIONEN */
+/* REGLER-ANZEIGEN */
+el.schritte.oninput = () => el.schritteAnzeige.innerText = el.schritte.value;
+el.sportDauer.oninput = () => el.sportAnzeige.innerText = el.sportDauer.value;
+el.cardioDauer.oninput = () => el.cardioAnzeige.innerText = el.cardioDauer.value;
+
+/* BERECHNUNGEN */
 function berechneBMR(g, gr, a, sex) {
   return sex === "mann"
     ? 10 * g + 6.25 * gr - 5 * a + 5
     : 10 * g + 6.25 * gr - 5 * a - 161;
 }
 
-/* SCHRITTE MIT GEWICHT & GRÖSSE */
-function berechneSchritteKcal(schritte, gewicht, groesse) {
-  return schritte * gewicht * 0.0005 * (groesse / 170);
+  /* SCHRITTE MIT GEWICHT & GRÖSSE */
+function berechneSchritteKcal(s, g, gr) {
+  return s * g * 0.0005 * (gr / 170);
 }
 
 function berechneAktivitaetKcal(met, dauer, freq, gewicht) {
@@ -133,37 +152,43 @@ function berechneAktivitaetKcal(met, dauer, freq, gewicht) {
 
 /* HAUPTFUNKTION */
 function berechnen() {
-  let gewicht = +gewicht.value;
-  let groesse = +groesse.value;
-  let alter = +alter.value;
-  let geschlecht = document.getElementById("geschlecht").value;
+  let g = +el.gewicht.value;
+  let gr = +el.groesse.value;
+  let a = +el.alter.value;
+  let sex = el.geschlecht.value;
 
-  let schritteKcal = berechneSchritteKcal(+schritte.value);
+  /* einfache Validierung */
+  if (!g || !gr || !a) {
+    el.ergebnis.innerHTML = "Bitte alle Basisdaten eingeben.";
+    return;
+  }
+
+  let bmr = berechneBMR(g, gr, a, sex);
+  let schritteKcal = berechneSchritteKcal(+el.schritte.value, g, gr);
 
   let sportKcal = berechneAktivitaetKcal(
-    +sportIntensitaet.value,
-    +sportDauer.value,
-    +sportFreq.value,
-    gewicht
+    +el.sportIntensitaet.value,
+    +el.sportDauer.value,
+    +el.sportFreq.value,
+    g
   );
 
   let cardioKcal = berechneAktivitaetKcal(
-    +cardioIntensitaet.value,
-    +cardioDauer.value,
-    +cardioFreq.value,
-    gewicht
+    +el.cardioIntensitaet.value,
+    +el.cardioDauer.value,
+    +el.cardioFreq.value,
+    g
   );
 
-  let bmr = berechneBMR(gewicht, groesse, alter, geschlecht);
   let gesamt = bmr + schritteKcal + sportKcal + cardioKcal;
 
-   /* PROZENTE */
+  /* PROZENTE */
   let pBMR = (bmr / gesamt) * 100;
   let pSchritte = (schritteKcal / gesamt) * 100;
   let pSport = (sportKcal / gesamt) * 100;
   let pCardio = (cardioKcal / gesamt) * 100;
 
-  /* MIN / MAX SPANNE */
+  /* MIN / MAX */
   let minGesamt =
     bmr * 0.95 +
     schritteKcal * 0.9 +
@@ -176,15 +201,19 @@ function berechnen() {
     sportKcal * 1.15 +
     cardioKcal * 1.15;
 
-  ergebnis.innerHTML = `
-    <strong>Grundumsatz:</strong> ${Math.round(bmr)} kcal<br>
-    <strong>Schritte:</strong> ${Math.round(schritteKcal)} kcal<br>
-    <strong>Sport (Ø/Tag):</strong> ${Math.round(sportKcal)} kcal<br>
-    <strong>Cardio (Ø/Tag):</strong> ${Math.round(cardioKcal)} kcal<br><br>
-    <strong>Gesamtbedarf:</strong> ${Math.round(gesamt)} kcal / Tag
+  el.ergebnis.innerHTML = `
+    <strong>Gesamtbedarf:</strong> ${Math.round(gesamt)} kcal / Tag<br>
+    <strong>Realistische Spanne:</strong> ${Math.round(minGesamt)} – ${Math.round(maxGesamt)} kcal<br><br>
+
+    <strong>Aufschlüsselung:</strong><br>
+    Grundumsatz: ${Math.round(bmr)} kcal (${pBMR.toFixed(1)} %)<br>
+    Schritte: ${Math.round(schritteKcal)} kcal (${pSchritte.toFixed(1)} %)<br>
+    Sport: ${Math.round(sportKcal)} kcal (${pSport.toFixed(1)} %)<br>
+    Cardio: ${Math.round(cardioKcal)} kcal (${pCardio.toFixed(1)} %)
   `;
 }
 </script>
+
 
 </body>
 </html>
