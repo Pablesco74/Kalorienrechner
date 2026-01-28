@@ -3,47 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <title>Kalorienrechner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0 15px 0;
+    }
+    button {
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
 
 <h1>Kalorienrechner</h1>
 
-<label>Gewicht (kg):</label>
-<input id="gewicht" type="number"><br><br>
-
-<label>Größe (cm):</label>
-<input id="groesse" type="number"><br><br>
-
-<label>Alter:</label>
-<input id="alter" type="number"><br><br>
-
-<label>Geschlecht:</label>
+<!-- BASISDATEN -->
+<label>Geschlecht</label>
 <select id="geschlecht">
   <option value="mann">Männlich</option>
   <option value="frau">Weiblich</option>
 </select>
+
+<label>Gewicht (kg)</label>
+<input type="number" id="gewicht">
+
+<label>Größe (cm)</label>
+<input type="number" id="groesse">
+
+<label>Alter</label>
+<input type="number" id="alter">
+
+<hr>
+
+<!-- SCHRITTE -->
+<label>Schritte pro Tag</label>
+<input type="range" id="schritte" min="3000" max="20000" step="500" value="8000">
+<p>Schritte: <span id="schritteAnzeige">8000</span></p>
+
+<hr>
+
+<!-- SPORT -->
+<h3>Krafttraining</h3>
+
+<label>Intensität</label>
+<select id="sportIntensitaet">
+  <option value="5">Moderat</option>
+  <option value="7">Intensiv</option>
+  <option value="9">Sehr intensiv</option>
+</select>
+
+<label>Einheiten pro Woche</label>
+<select id="sportFreq">
+  <option value="0">0</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+</select>
+
+<label>Dauer pro Einheit (Minuten)</label>
+<input type="range" id="sportDauer" min="20" max="120" step="10" value="60">
+<p>Dauer: <span id="sportAnzeige">60</span> Minuten</p>
+
+<hr>
+
+<!-- CARDIO -->
+<h3>Cardio</h3>
+
+<label>Intensität</label>
+<select id="cardioIntensitaet">
+  <option value="6">Locker (120–130 BPM)</option>
+  <option value="8">Mittel (130–150 BPM)</option>
+  <option value="10">Hart (150–170 BPM)</option>
+</select>
+
+<label>Einheiten pro Woche</label>
+<select id="cardioFreq">
+  <option value="0">0</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+</select>
+
+<label>Dauer pro Einheit (Minuten)</label>
+<input type="range" id="cardioDauer" min="10" max="90" step="5" value="30">
+<p>Dauer: <span id="cardioAnzeige">30</span> Minuten</p>
+
+<hr>
 
 <button onclick="berechnen()">Kalorien berechnen</button>
 
 <p id="ergebnis"></p>
 
 <script>
+/* REGELER ANZEIGE */
+schritte.oninput = () => schritteAnzeige.innerText = schritte.value;
+sportDauer.oninput = () => sportAnzeige.innerText = sportDauer.value;
+cardioDauer.oninput = () => cardioAnzeige.innerText = cardioDauer.value;
+
+/* BERECHNUNGSFUNKTIONEN */
+function berechneBMR(g, gr, a, sex) {
+  return sex === "mann"
+    ? 10 * g + 6.25 * gr - 5 * a + 5
+    : 10 * g + 6.25 * gr - 5 * a - 161;
+}
+
+/* SCHRITTE MIT GEWICHT & GRÖSSE */
+function berechneSchritteKcal(schritte, gewicht, groesse) {
+  return schritte * gewicht * 0.0005 * (groesse / 170);
+}
+
+function berechneAktivitaetKcal(met, dauer, freq, gewicht) {
+  let kcalProEinheit = met * gewicht * (dauer / 60);
+  return (kcalProEinheit * freq) / 7;
+}
+
+/* HAUPTFUNKTION */
 function berechnen() {
-  let gewicht = document.getElementById("gewicht").value;
-  let groesse = document.getElementById("groesse").value;
-  let alter = document.getElementById("alter").value;
+  let gewicht = +gewicht.value;
+  let groesse = +groesse.value;
+  let alter = +alter.value;
   let geschlecht = document.getElementById("geschlecht").value;
 
-  let grundumsatz;
+  let schritteKcal = berechneSchritteKcal(+schritte.value);
 
-  if (geschlecht === "mann") {
-    grundumsatz = 10 * gewicht + 6.25 * groesse - 5 * alter + 5;
-  } else {
-    grundumsatz = 10 * gewicht + 6.25 * groesse - 5 * alter - 161;
-  }
-  
-  document.getElementById("ergebnis").innerText =
-    "Dein Kalorienbedarf: " + Math.round(gesamt) + " kcal";
+  let sportKcal = berechneAktivitaetKcal(
+    +sportIntensitaet.value,
+    +sportDauer.value,
+    +sportFreq.value,
+    gewicht
+  );
+
+  let cardioKcal = berechneAktivitaetKcal(
+    +cardioIntensitaet.value,
+    +cardioDauer.value,
+    +cardioFreq.value,
+    gewicht
+  );
+
+  let bmr = berechneBMR(gewicht, groesse, alter, geschlecht);
+  let gesamt = bmr + schritteKcal + sportKcal + cardioKcal;
+
+  ergebnis.innerHTML = `
+    <strong>Grundumsatz:</strong> ${Math.round(bmr)} kcal<br>
+    <strong>Schritte:</strong> ${Math.round(schritteKcal)} kcal<br>
+    <strong>Sport (Ø/Tag):</strong> ${Math.round(sportKcal)} kcal<br>
+    <strong>Cardio (Ø/Tag):</strong> ${Math.round(cardioKcal)} kcal<br><br>
+    <strong>Gesamtbedarf:</strong> ${Math.round(gesamt)} kcal / Tag
+  `;
 }
 </script>
 
