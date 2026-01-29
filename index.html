@@ -208,25 +208,39 @@ function berechnen() {
 
   function zeichneDiagramm(bmr, schritte, sport, cardio) {
   const ctx = document.getElementById("kcalChart").getContext("2d");
+  const gesamt = bmr + schritte + sport + cardio;
 
-  if (kcalChart) {
-    kcalChart.destroy(); // wichtig für Updates
-  }
+  if (kcalChart) kcalChart.destroy();
 
   kcalChart = new Chart(ctx, {
     type: "doughnut",
     data: {
-      labels: ["Grundumsatz", "Schritte", "Sport", "Cardio"],
+      labels: [
+        `Grundumsatz (${(bmr / gesamt * 100).toFixed(1)} %)`,
+        `Schritte (${(schritte / gesamt * 100).toFixed(1)} %)`,
+        `Sport (${(sport / gesamt * 100).toFixed(1)} %)`,
+        `Cardio (${(cardio / gesamt * 100).toFixed(1)} %)`
+      ],
       datasets: [{
         data: [bmr, schritte, sport, cardio],
-        borderWidth: 1
+        backgroundColor: [
+          "#4b5563", // Grundumsatz
+          "#22c55e", // Schritte
+          "#f97316", // Sport
+          "#ef4444"  // Cardio
+        ],
+        borderWidth: 0
       }]
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
-          position: "bottom"
+          position: "bottom",
+          labels: {
+            color: document.body.classList.contains("dark") ? "#e5e7eb" : "#111827"
+          }
         }
       }
     }
