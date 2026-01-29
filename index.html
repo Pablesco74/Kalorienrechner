@@ -243,15 +243,14 @@ function berechnen() {
     Sport: ${Math.round(sportKcal)} kcal (${pSport.toFixed(1)} %)<br>
     Cardio: ${Math.round(cardioKcal)} kcal (${pCardio.toFixed(1)} %)
   `;
-}
-  
+
 zeichneDiagramm(
   Math.round(bmr),
   Math.round(schritteKcal),
   Math.round(sportKcal),
   Math.round(cardioKcal)
 );
-  
+}
 </script>
 
 
