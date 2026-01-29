@@ -4,51 +4,79 @@
   <meta charset="UTF-8">
   <title>Kalorienrechner</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
       max-width: 600px;
       margin: 30px auto;
+      background: #f9fafb;
+      color: #111827;
     }
+
+    body.dark {
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
     label {
       font-weight: bold;
+      display: block;
+      margin-top: 10px;
     }
+
     input, select {
       width: 100%;
       padding: 8px;
-      margin: 5px 0 15px 0;
+      margin-top: 5px;
     }
+
+    body.dark input,
+    body.dark select {
+      background: #020617;
+      color: #e5e7eb;
+      border: 1px solid #334155;
+    }
+
     button {
       padding: 12px;
       width: 100%;
       font-size: 16px;
+      margin-top: 20px;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: 320px !important;
+      margin-top: 30px;
     }
   </style>
 </head>
+
 <body>
 
 <h1>Kalorienrechner</h1>
 
 <!-- BASISDATEN -->
-<label>Geschlecht</label>
+<label for="geschlecht">Geschlecht</label>
 <select id="geschlecht">
   <option value="mann">Männlich</option>
   <option value="frau">Weiblich</option>
 </select>
 
-<label>Gewicht (kg)</label>
+<label for="gewicht">Gewicht (kg)</label>
 <input type="number" id="gewicht">
 
-<label>Größe (cm)</label>
+<label for="groesse">Größe (cm)</label>
 <input type="number" id="groesse">
 
-<label>Alter</label>
+<label for="alter">Alter</label>
 <input type="number" id="alter">
 
 <hr>
 
 <!-- SCHRITTE -->
-<label>Schritte pro Tag</label>
+<label for="schritte">Schritte pro Tag</label>
 <input type="range" id="schritte" min="3000" max="20000" step="500" value="8000">
 <p>Schritte: <span id="schritteAnzeige">8000</span></p>
 
@@ -57,14 +85,14 @@
 <!-- SPORT -->
 <h3>Krafttraining</h3>
 
-<label>Intensität</label>
+<label for="sportIntensitaet">Intensität</label>
 <select id="sportIntensitaet">
   <option value="5">Moderat</option>
   <option value="7">Intensiv</option>
   <option value="9">Sehr intensiv</option>
 </select>
 
-<label>Einheiten pro Woche</label>
+<label for="sportFreq">Einheiten pro Woche</label>
 <select id="sportFreq">
   <option value="0">0</option>
   <option value="1">1</option>
@@ -74,7 +102,7 @@
   <option value="5">5</option>
 </select>
 
-<label>Dauer pro Einheit (Minuten)</label>
+<label for="sportDauer">Dauer pro Einheit (Minuten)</label>
 <input type="range" id="sportDauer" min="20" max="120" step="10" value="60">
 <p>Dauer: <span id="sportAnzeige">60</span> Minuten</p>
 
@@ -83,14 +111,14 @@
 <!-- CARDIO -->
 <h3>Cardio</h3>
 
-<label>Intensität</label>
+<label for="cardioIntensitaet">Intensität</label>
 <select id="cardioIntensitaet">
   <option value="6">Locker (120–130 BPM)</option>
   <option value="8">Mittel (130–150 BPM)</option>
   <option value="10">Hart (150–170 BPM)</option>
 </select>
 
-<label>Einheiten pro Woche</label>
+<label for="cardioFreq">Einheiten pro Woche</label>
 <select id="cardioFreq">
   <option value="0">0</option>
   <option value="1">1</option>
@@ -99,142 +127,65 @@
   <option value="4">4</option>
 </select>
 
-<label>Dauer pro Einheit (Minuten)</label>
+<label for="cardioDauer">Dauer pro Einheit (Minuten)</label>
 <input type="range" id="cardioDauer" min="10" max="90" step="5" value="30">
 <p>Dauer: <span id="cardioAnzeige">30</span> Minuten</p>
 
-<hr>
-
 <button onclick="berechnen()">Kalorien berechnen</button>
 
-<canvas id="kcalChart" width="400" height="400"></canvas>
-
+<canvas id="kcalChart"></canvas>
 <p id="ergebnis"></p>
 
 <script>
-/* Chart-Variable */
-  let kcalChart = null;
-/* ELEMENTE HOLEN */
+/* 🌙 Dark Mode automatisch */
+if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+  document.body.classList.add("dark");
+}
+
+let kcalChart = null;
+
+/* ELEMENTE */
 const el = {
-  geschlecht: document.getElementById("geschlecht"),
-  gewicht: document.getElementById("gewicht"),
-  groesse: document.getElementById("groesse"),
-  alter: document.getElementById("alter"),
-  schritte: document.getElementById("schritte"),
-  schritteAnzeige: document.getElementById("schritteAnzeige"),
-  sportIntensitaet: document.getElementById("sportIntensitaet"),
-  sportFreq: document.getElementById("sportFreq"),
-  sportDauer: document.getElementById("sportDauer"),
-  sportAnzeige: document.getElementById("sportAnzeige"),
-  cardioIntensitaet: document.getElementById("cardioIntensitaet"),
-  cardioFreq: document.getElementById("cardioFreq"),
-  cardioDauer: document.getElementById("cardioDauer"),
-  cardioAnzeige: document.getElementById("cardioAnzeige"),
-  ergebnis: document.getElementById("ergebnis")
+  geschlecht, gewicht, groesse, alter,
+  schritte, schritteAnzeige,
+  sportIntensitaet, sportFreq, sportDauer, sportAnzeige,
+  cardioIntensitaet, cardioFreq, cardioDauer, cardioAnzeige,
+  ergebnis
 };
 
-/* REGLER-ANZEIGEN */
-el.schritte.oninput = () => el.schritteAnzeige.innerText = el.schritte.value;
-el.sportDauer.oninput = () => el.sportAnzeige.innerText = el.sportDauer.value;
-el.cardioDauer.oninput = () => el.cardioAnzeige.innerText = el.cardioDauer.value;
+/* Slider Anzeigen */
+schritte.oninput = () => schritteAnzeige.innerText = schritte.value;
+sportDauer.oninput = () => sportAnzeige.innerText = sportDauer.value;
+cardioDauer.oninput = () => cardioAnzeige.innerText = cardioDauer.value;
 
-/* BERECHNUNGEN */
-function berechneBMR(g, gr, a, sex) {
-  return sex === "mann"
+/* Berechnungen */
+const berechneBMR = (g, gr, a, sex) =>
+  sex === "mann"
     ? 10 * g + 6.25 * gr - 5 * a + 5
     : 10 * g + 6.25 * gr - 5 * a - 161;
-}
 
-  /* SCHRITTE MIT GEWICHT & GRÖSSE */
-function berechneSchritteKcal(s, g, gr) {
-  return s * g * 0.0005 * (gr / 170);
-}
+const berechneSchritteKcal = (s, g, gr) =>
+  s * g * 0.0005 * (gr / 170);
 
-function berechneAktivitaetKcal(met, dauer, freq, gewicht) {
-  let kcalProEinheit = met * gewicht * (dauer / 60);
-  return (kcalProEinheit * freq) / 7;
-}
+const berechneAktivitaetKcal = (met, dauer, freq, g) =>
+  ((met * g * (dauer / 60)) * freq) / 7;
 
-/* HAUPTFUNKTION */
-function berechnen() {
-  let g = +el.gewicht.value;
-  let gr = +el.groesse.value;
-  let a = +el.alter.value;
-  let sex = el.geschlecht.value;
-
-  /* einfache Validierung */
-  if (!g || !gr || !a) {
-    el.ergebnis.innerHTML = "Bitte alle Basisdaten eingeben.";
-    return;
-  }
-
-  let bmr = berechneBMR(g, gr, a, sex);
-  let schritteKcal = berechneSchritteKcal(+el.schritte.value, g, gr);
-
-  let sportKcal = berechneAktivitaetKcal(
-    +el.sportIntensitaet.value,
-    +el.sportDauer.value,
-    +el.sportFreq.value,
-    g
-  );
-
-  let cardioKcal = berechneAktivitaetKcal(
-    +el.cardioIntensitaet.value,
-    +el.cardioDauer.value,
-    +el.cardioFreq.value,
-    g
-  );
-
-  let gesamt = bmr + schritteKcal + sportKcal + cardioKcal;
-
-  /* PROZENTE */
-  let pBMR = (bmr / gesamt) * 100;
-  let pSchritte = (schritteKcal / gesamt) * 100;
-  let pSport = (sportKcal / gesamt) * 100;
-  let pCardio = (cardioKcal / gesamt) * 100;
-
-  /* MIN / MAX */
-  let minGesamt =
-    bmr * 0.95 +
-    schritteKcal * 0.9 +
-    sportKcal * 0.85 +
-    cardioKcal * 0.85;
-
-  let maxGesamt =
-    bmr * 1.05 +
-    schritteKcal * 1.1 +
-    sportKcal * 1.15 +
-    cardioKcal * 1.15;
-
-  function zeichneDiagramm(bmr, schritte, sport, cardio) {
-  const ctx = document.getElementById("kcalChart").getContext("2d");
-  const gesamt = bmr + schritte + sport + cardio;
-
+/* Diagramm */
+function zeichneDiagramm(bmr, schritte, sport, cardio) {
+  const ctx = document.getElementById("kcalChart");
   if (kcalChart) kcalChart.destroy();
 
   kcalChart = new Chart(ctx, {
     type: "doughnut",
     data: {
-      labels: [
-        `Grundumsatz (${(bmr / gesamt * 100).toFixed(1)} %)`,
-        `Schritte (${(schritte / gesamt * 100).toFixed(1)} %)`,
-        `Sport (${(sport / gesamt * 100).toFixed(1)} %)`,
-        `Cardio (${(cardio / gesamt * 100).toFixed(1)} %)`
-      ],
+      labels: ["Grundumsatz", "Schritte", "Sport", "Cardio"],
       datasets: [{
         data: [bmr, schritte, sport, cardio],
-        backgroundColor: [
-          "#4b5563", // Grundumsatz
-          "#22c55e", // Schritte
-          "#f97316", // Sport
-          "#ef4444"  // Cardio
-        ],
-        borderWidth: 0
+        backgroundColor: ["#64748b", "#22c55e", "#f97316", "#ef4444"]
       }]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false,
       plugins: {
         legend: {
           position: "bottom",
@@ -247,26 +198,26 @@ function berechnen() {
   });
 }
 
-  el.ergebnis.innerHTML = `
-    <strong>Gesamtbedarf:</strong> ${Math.round(gesamt)} kcal / Tag<br>
-    <strong>Realistische Spanne:</strong> ${Math.round(minGesamt)} – ${Math.round(maxGesamt)} kcal<br><br>
+/* Hauptfunktion */
+function berechnen() {
+  if (!gewicht.value || !groesse.value || !alter.value) return;
 
-    <strong>Aufschlüsselung:</strong><br>
-    Grundumsatz: ${Math.round(bmr)} kcal (${pBMR.toFixed(1)} %)<br>
-    Schritte: ${Math.round(schritteKcal)} kcal (${pSchritte.toFixed(1)} %)<br>
-    Sport: ${Math.round(sportKcal)} kcal (${pSport.toFixed(1)} %)<br>
-    Cardio: ${Math.round(cardioKcal)} kcal (${pCardio.toFixed(1)} %)
-  `;
+  const bmr = berechneBMR(+gewicht.value, +groesse.value, +alter.value, geschlecht.value);
+  const schritteKcal = berechneSchritteKcal(+schritte.value, +gewicht.value, +groesse.value);
+  const sportKcal = berechneAktivitaetKcal(+sportIntensitaet.value, +sportDauer.value, +sportFreq.value, +gewicht.value);
+  const cardioKcal = berechneAktivitaetKcal(+cardioIntensitaet.value, +cardioDauer.value, +cardioFreq.value, +gewicht.value);
 
-zeichneDiagramm(
-  Math.round(bmr),
-  Math.round(schritteKcal),
-  Math.round(sportKcal),
-  Math.round(cardioKcal)
-);
+  const gesamt = bmr + schritteKcal + sportKcal + cardioKcal;
+
+  ergebnis.innerHTML = `<strong>Gesamtbedarf:</strong> ${Math.round(gesamt)} kcal / Tag`;
+  zeichneDiagramm(bmr, schritteKcal, sportKcal, cardioKcal);
 }
-</script>
 
+/* Live Update */
+document.querySelectorAll("input, select").forEach(el =>
+  el.addEventListener("input", berechnen)
+);
+</script>
 
 </body>
 </html>
