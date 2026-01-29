@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Kalorienrechner</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -106,9 +107,13 @@
 
 <button onclick="berechnen()">Kalorien berechnen</button>
 
+<canvas id="kcalChart" width="400" height="400"></canvas>
+
 <p id="ergebnis"></p>
 
 <script>
+/* Chart-Variable */
+  let kcalChart = null;
 /* ELEMENTE HOLEN */
 const el = {
   geschlecht: document.getElementById("geschlecht"),
@@ -201,6 +206,33 @@ function berechnen() {
     sportKcal * 1.15 +
     cardioKcal * 1.15;
 
+  function zeichneDiagramm(bmr, schritte, sport, cardio) {
+  const ctx = document.getElementById("kcalChart").getContext("2d");
+
+  if (kcalChart) {
+    kcalChart.destroy(); // wichtig für Updates
+  }
+
+  kcalChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Grundumsatz", "Schritte", "Sport", "Cardio"],
+      datasets: [{
+        data: [bmr, schritte, sport, cardio],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "bottom"
+        }
+      }
+    }
+  });
+}
+
   el.ergebnis.innerHTML = `
     <strong>Gesamtbedarf:</strong> ${Math.round(gesamt)} kcal / Tag<br>
     <strong>Realistische Spanne:</strong> ${Math.round(minGesamt)} – ${Math.round(maxGesamt)} kcal<br><br>
@@ -212,6 +244,14 @@ function berechnen() {
     Cardio: ${Math.round(cardioKcal)} kcal (${pCardio.toFixed(1)} %)
   `;
 }
+  
+zeichneDiagramm(
+  Math.round(bmr),
+  Math.round(schritteKcal),
+  Math.round(sportKcal),
+  Math.round(cardioKcal)
+);
+  
 </script>
 
 
