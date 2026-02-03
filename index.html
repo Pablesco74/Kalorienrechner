@@ -12,6 +12,7 @@
       margin: 30px auto;
       background: #f9fafb;
       color: #111827;
+      padding: 0 20px;
     }
 
     body.dark {
@@ -29,6 +30,7 @@
       width: 100%;
       padding: 8px;
       margin-top: 5px;
+      box-sizing: border-box;
     }
 
     body.dark input,
@@ -43,11 +45,40 @@
       width: 100%;
       font-size: 16px;
       margin-top: 20px;
+      cursor: pointer;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+
+    button:hover {
+      background: #2563eb;
     }
 
     canvas {
       max-width: 100%;
       margin-top: 30px;
+    }
+
+    .fehler {
+      color: #ef4444;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .erfolg {
+      color: #22c55e;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    body.dark .fehler {
+      color: #fca5a5;
+    }
+
+    body.dark .erfolg {
+      color: #86efac;
     }
   </style>
 </head>
@@ -64,13 +95,13 @@
 </select>
 
 <label for="gewicht">Gewicht (kg)</label>
-<input type="number" id="gewicht">
+<input type="number" id="gewicht" min="20" max="300" placeholder="z.B. 75">
 
 <label for="groesse">Größe (cm)</label>
-<input type="number" id="groesse">
+<input type="number" id="groesse" min="100" max="250" placeholder="z.B. 175">
 
 <label for="alter">Alter</label>
-<input type="number" id="alter">
+<input type="number" id="alter" min="10" max="120" placeholder="z.B. 30">
 
 <hr>
 
@@ -86,9 +117,9 @@
 
 <label for="sportIntensitaet">Intensität</label>
 <select id="sportIntensitaet">
-  <option value="5">Moderat</option>
-  <option value="7">Intensiv</option>
-  <option value="9">Sehr intensiv</option>
+  <option value="4,5">Moderat</option>
+  <option value="6,5">Intensiv</option>
+  <option value="8">Sehr intensiv</option>
 </select>
 
 <label for="sportFreq">Einheiten pro Woche</label>
@@ -157,6 +188,23 @@ schritte.oninput = () => schritteAnzeige.innerText = schritte.value;
 sportDauer.oninput = () => sportAnzeige.innerText = sportDauer.value;
 cardioDauer.oninput = () => cardioAnzeige.innerText = cardioDauer.value;
 
+/* VALIDATION - Überprüft, ob Eingaben korrekt sind */
+function validiereEingaben(g, gr, a) {
+  if (!g || !gr || !a) {
+    return "Bitte alle Felder ausfüllen!";
+  }
+  if (g < 20 || g > 300) {
+    return "Gewicht muss zwischen 20 und 300 kg sein!";
+  }
+  if (gr < 100 || gr > 250) {
+    return "Größe muss zwischen 100 und 250 cm sein!";
+  }
+  if (a < 10 || a > 120) {
+    return "Alter muss zwischen 10 und 120 Jahren sein!";
+  }
+  return null; // Alles OK
+}
+
 /* Berechnungen */
 const berechneBMR = (g, gr, a, sex) =>
   sex === "mann"
@@ -174,13 +222,16 @@ function zeichneDiagramm(bmr, schritte, sport, cardio) {
   const ctx = document.getElementById("kcalChart");
   if (kcalChart) kcalChart.destroy();
 
+  const isDark = document.body.classList.contains("dark");
+
   kcalChart = new Chart(ctx, {
     type: "doughnut",
     data: {
-      labels: ["Grundumsatz", "Schritte", "Sport", "Cardio"],
+      labels: ["Grundumsatz", "Schritte", "Krafttraining", "Cardio"],
       datasets: [{
         data: [bmr, schritte, sport, cardio],
-        backgroundColor: ["#64748b", "#22c55e", "#f97316", "#ef4444"]
+        backgroundColor: ["#64748b", "#22c55e", "#f97316", "#ef4444"],
+        borderWidth: 0
       }]
     },
     options: {
@@ -189,7 +240,11 @@ function zeichneDiagramm(bmr, schritte, sport, cardio) {
         legend: {
           position: "bottom",
           labels: {
-            color: document.body.classList.contains("dark") ? "#e5e7eb" : "#111827"
+            color: isDark ? "#e5e7eb" : "#111827",
+            padding: 15,
+            font: {
+              size: 13
+            }
           }
         }
       }
@@ -197,19 +252,42 @@ function zeichneDiagramm(bmr, schritte, sport, cardio) {
   });
 }
 
-/* Hauptfunktion */
+/* Hauptfunktion mit Validation und Parsing */
 function berechnen() {
-  if (!gewicht.value || !groesse.value || !alter.value) return;
+  // PARSING - Text in Zahlen umwandeln (nur einmal)
+  const g = parseFloat(gewicht.value);
+  const gr = parseFloat(groesse.value);
+  const a = parseFloat(alter.value);
+  
+  // VALIDATION - Eingaben überprüfen
+  const fehler = validiereEingaben(g, gr, a);
+  if (fehler) {
+    ergebnis.innerHTML = `<span class="fehler">${fehler}</span>`;
+    if (kcalChart) kcalChart.destroy();
+    return;
+  }
 
-  const bmr = berechneBMR(+gewicht.value, +groesse.value, +alter.value, geschlecht.value);
-  const schritteKcal = berechneSchritteKcal(+schritte.value, +gewicht.value, +groesse.value);
-  const sportKcal = berechneAktivitaetKcal(+sportIntensitaet.value, +sportDauer.value, +sportFreq.value, +gewicht.value);
-  const cardioKcal = berechneAktivitaetKcal(+cardioIntensitaet.value, +cardioDauer.value, +cardioFreq.value, +gewicht.value);
+  // Weitere Werte parsen
+  const s = parseFloat(schritte.value);
+  const sex = geschlecht.value;
+  const sportMET = parseFloat(sportIntensitaet.value);
+  const sportD = parseFloat(sportDauer.value);
+  const sportF = parseFloat(sportFreq.value);
+  const cardioMET = parseFloat(cardioIntensitaet.value);
+  const cardioD = parseFloat(cardioDauer.value);
+  const cardioF = parseFloat(cardioFreq.value);
+
+  // Berechnungen
+  const bmr = berechneBMR(g, gr, a, sex);
+  const schritteKcal = berechneSchritteKcal(s, g, gr);
+  const sportKcal = berechneAktivitaetKcal(sportMET, sportD, sportF, g);
+  const cardioKcal = berechneAktivitaetKcal(cardioMET, cardioD, cardioF, g);
 
   const gesamt = bmr + schritteKcal + sportKcal + cardioKcal;
 
-  ergebnis.innerHTML = `<strong>Gesamtbedarf:</strong> ${Math.round(gesamt)} kcal / Tag`;
-  zeichneDiagramm(bmr, schritteKcal, sportKcal, cardioKcal);
+  // Ergebnis anzeigen
+  ergebnis.innerHTML = `<span class="erfolg">Gesamtbedarf: ${Math.round(gesamt)} kcal / Tag</span>`;
+  zeichneDiagramm(Math.round(bmr), Math.round(schritteKcal), Math.round(sportKcal), Math.round(cardioKcal));
 }
 
 /* Live Update */
