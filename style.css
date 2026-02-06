@@ -1,0 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #0F172A;
+    color: #E2E8F0;
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+/* Header */
+.header {
+    background: #111827;
+    padding: 1.5rem 2rem;
+    border-bottom: 2px solid #1E293B;
+}
+
+.logo-container {
+    max-width: 400px;
+}
+
+.logo-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Main Layout */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 450px;
+    gap: 3rem;
+    padding: 2rem 4rem;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #3B82F6;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Input Styles */
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.input-section {
+    margin-bottom: 2.5rem;
+}
+
+.input-section h3 {
+    color: #F97316;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid #1E293B;
+    padding-bottom: 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #94A3B8;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+input, select {
+    width: 100%;
+    padding: 0.75rem;
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #F8FAFC;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Right Panel / Chart */
+.canvas-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+.canvas-container {
+    width: 100%;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.canvas-center {
+    position: absolute;
+    top: 55%; /* Leicht nach unten korrigiert wegen Legende */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+}
+
+.canvas-center-value {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #F97316;
+    line-height: 1;
+}
+
+.canvas-center-label {
+    font-size: 1rem;
+    color: #64748B;
+    margin-top: 0.25rem;
+}
+
+/* Messages */
+#statusMessage {
+    text-align: center;
+    font-weight: 500;
+}
+
+.fehler { color: #EF4444; }
+.erfolg { color: #10B981; }
+
+/* Responsive */
+@media (max-width: 1100px) {
+    .container {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+    }
+    .canvas-panel {
+        order: -1;
+        position: static;
+    }
+}
+
+@media (max-width: 650px) {
+    .input-grid { grid-template-columns: 1fr; }
+}
