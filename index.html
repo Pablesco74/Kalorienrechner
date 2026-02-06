@@ -1,300 +1,134 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Kalorienrechner</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 30px auto;
-      background: #f9fafb;
-      color: #111827;
-      padding: 0 20px;
-    }
-
-    body.dark {
-      background: #0f172a;
-      color: #e5e7eb;
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 10px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      box-sizing: border-box;
-    }
-
-    body.dark input,
-    body.dark select {
-      background: #020617;
-      color: #e5e7eb;
-      border: 1px solid #334155;
-    }
-
-    button {
-      padding: 12px;
-      width: 100%;
-      font-size: 16px;
-      margin-top: 20px;
-      cursor: pointer;
-      background: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 6px;
-    }
-
-    button:hover {
-      background: #2563eb;
-    }
-
-    canvas {
-      max-width: 100%;
-      margin-top: 30px;
-    }
-
-    .fehler {
-      color: #ef4444;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    .erfolg {
-      color: #22c55e;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    body.dark .fehler {
-      color: #fca5a5;
-    }
-
-    body.dark .erfolg {
-      color: #86efac;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calofix - Smart Calorie Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
+    <header class="header">
+        <div class="logo-container">
+            <svg width="480" height="120" viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg">
+                <rect width="480" height="120" fill="#111827"/>
+                <path d="M74 38 A26 26 0 1 0 74 82" stroke="#3B82F6" stroke-width="10" fill="none" stroke-linecap="round"/>
+                <path d="M74 38 A26 26 0 0 1 86 60" stroke="#F97316" stroke-width="10" fill="none" stroke-linecap="round"/>
+                <path d="M86 60 A26 26 0 0 1 74 82" stroke="#22C55E" stroke-width="10" fill="none" stroke-linecap="round"/>
+                <text x="130" y="68" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="700" fill="#FFFFFF">Calofix</text>
+                <text x="132" y="94" font-family="Inter, Arial, sans-serif" font-size="14" fill="#D1D5DB">smart calorie calculator</text>
+            </svg>
+        </div>
+    </header>
 
-<h1>Kalorienrechner</h1>
+    <main class="container">
+        <section class="input-panel">
+            <h1>Kalorien berechnen</h1>
 
-<!-- BASISDATEN -->
-<label for="geschlecht">Geschlecht</label>
-<select id="geschlecht">
-  <option value="mann">Männlich</option>
-  <option value="frau">Weiblich</option>
-</select>
+            <div class="input-grid">
+                <div class="input-column">
+                    <div class="input-section">
+                        <h3>Grundumsatz</h3>
+                        <div class="form-group">
+                            <label for="geschlecht">Geschlecht</label>
+                            <select id="geschlecht">
+                                <option value="mann">Männlich</option>
+                                <option value="frau">Weiblich</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gewicht">Gewicht (kg)</label>
+                            <input type="number" id="gewicht" min="20" max="300" placeholder="z.B. 75">
+                        </div>
+                        <div class="form-group">
+                            <label for="groesse">Größe (cm)</label>
+                            <input type="number" id="groesse" min="100" max="250" placeholder="z.B. 175">
+                        </div>
+                        <div class="form-group">
+                            <label for="alter">Alter</label>
+                            <input type="number" id="alter" min="10" max="120" placeholder="z.B. 30">
+                        </div>
+                    </div>
 
-<label for="gewicht">Gewicht (kg)</label>
-<input type="number" id="gewicht" min="20" max="300" placeholder="z.B. 75">
+                    <div class="input-section">
+                        <h3>Tägliche Aktivität</h3>
+                        <div class="form-group">
+                            <label for="schritte">Schritte pro Tag</label>
+                            <input type="number" id="schritte" min="0" max="40000" step="500" value="8000">
+                        </div>
+                    </div>
+                </div>
 
-<label for="groesse">Größe (cm)</label>
-<input type="number" id="groesse" min="100" max="250" placeholder="z.B. 175">
+                <div class="input-column">
+                    <div class="input-section">
+                        <h3>Krafttraining</h3>
+                        <div class="form-group">
+                            <label for="sportIntensitaet">Intensität</label>
+                            <select id="sportIntensitaet">
+                                <option value="4.5">Moderat</option>
+                                <option value="6.5">Intensiv</option>
+                                <option value="8">Sehr intensiv</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sportFreq">Einheiten pro Woche</label>
+                            <select id="sportFreq">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sportDauer">Dauer pro Einheit (Minuten)</label>
+                            <input type="number" id="sportDauer" min="10" max="180" value="60">
+                        </div>
+                    </div>
 
-<label for="alter">Alter</label>
-<input type="number" id="alter" min="10" max="120" placeholder="z.B. 30">
+                    <div class="input-section">
+                        <h3>Cardio</h3>
+                        <div class="form-group">
+                            <label for="cardioIntensitaet">Intensität</label>
+                            <select id="cardioIntensitaet">
+                                <option value="6">Locker (120–130 BPM)</option>
+                                <option value="8">Mittel (130–150 BPM)</option>
+                                <option value="10">Hart (150–170 BPM)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardioFreq">Einheiten pro Woche</label>
+                            <select id="cardioFreq">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardioDauer">Dauer pro Einheit (Minuten)</label>
+                            <input type="number" id="cardioDauer" min="10" max="120" value="30">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<hr>
+        <section class="canvas-panel">
+            <div class="canvas-container">
+                <canvas id="kcalChart"></canvas>
+                <div class="canvas-center">
+                    <div class="canvas-center-value" id="totalCalories">-</div>
+                    <div class="canvas-center-label">kcal / Tag</div>
+                </div>
+            </div>
+            <div id="statusMessage"></div>
+        </section>
+    </main>
 
-<!-- SCHRITTE -->
-<label for="schritte">Schritte pro Tag</label>
-<input type="range" id="schritte" min="3000" max="20000" step="500" value="8000">
-<p>Schritte: <span id="schritteAnzeige">8000</span></p>
-
-<hr>
-
-<!-- SPORT -->
-<h3>Krafttraining</h3>
-
-<label for="sportIntensitaet">Intensität</label>
-<select id="sportIntensitaet">
-  <option value="4,5">Moderat</option>
-  <option value="6,5">Intensiv</option>
-  <option value="8">Sehr intensiv</option>
-</select>
-
-<label for="sportFreq">Einheiten pro Woche</label>
-<select id="sportFreq">
-  <option value="0">0</option>
-  <option value="1">1</option>
-  <option value="2">2</option>
-  <option value="3">3</option>
-  <option value="4">4</option>
-  <option value="5">5</option>
-</select>
-
-<label for="sportDauer">Dauer pro Einheit (Minuten)</label>
-<input type="range" id="sportDauer" min="20" max="120" step="10" value="60">
-<p>Dauer: <span id="sportAnzeige">60</span> Minuten</p>
-
-<hr>
-
-<!-- CARDIO -->
-<h3>Cardio</h3>
-
-<label for="cardioIntensitaet">Intensität</label>
-<select id="cardioIntensitaet">
-  <option value="6">Locker (120–130 BPM)</option>
-  <option value="8">Mittel (130–150 BPM)</option>
-  <option value="10">Hart (150–170 BPM)</option>
-</select>
-
-<label for="cardioFreq">Einheiten pro Woche</label>
-<select id="cardioFreq">
-  <option value="0">0</option>
-  <option value="1">1</option>
-  <option value="2">2</option>
-  <option value="3">3</option>
-  <option value="4">4</option>
-</select>
-
-<label for="cardioDauer">Dauer pro Einheit (Minuten)</label>
-<input type="range" id="cardioDauer" min="10" max="90" step="5" value="30">
-<p>Dauer: <span id="cardioAnzeige">30</span> Minuten</p>
-
-<button onclick="berechnen()">Kalorien berechnen</button>
-
-<canvas id="kcalChart"></canvas>
-<p id="ergebnis"></p>
-
-<script>
-/* 🌙 Dark Mode automatisch */
-if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-  document.body.classList.add("dark");
-}
-
-let kcalChart = null;
-
-/* ELEMENTE */
-const el = {
-  geschlecht, gewicht, groesse, alter,
-  schritte, schritteAnzeige,
-  sportIntensitaet, sportFreq, sportDauer, sportAnzeige,
-  cardioIntensitaet, cardioFreq, cardioDauer, cardioAnzeige,
-  ergebnis
-};
-
-/* Slider Anzeigen */
-schritte.oninput = () => schritteAnzeige.innerText = schritte.value;
-sportDauer.oninput = () => sportAnzeige.innerText = sportDauer.value;
-cardioDauer.oninput = () => cardioAnzeige.innerText = cardioDauer.value;
-
-/* VALIDATION - Überprüft, ob Eingaben korrekt sind */
-function validiereEingaben(g, gr, a) {
-  if (!g || !gr || !a) {
-    return "Bitte alle Felder ausfüllen!";
-  }
-  if (g < 20 || g > 300) {
-    return "Gewicht muss zwischen 20 und 300 kg sein!";
-  }
-  if (gr < 100 || gr > 250) {
-    return "Größe muss zwischen 100 und 250 cm sein!";
-  }
-  if (a < 10 || a > 120) {
-    return "Alter muss zwischen 10 und 120 Jahren sein!";
-  }
-  return null; // Alles OK
-}
-
-/* Berechnungen */
-const berechneBMR = (g, gr, a, sex) =>
-  sex === "mann"
-    ? 10 * g + 6.25 * gr - 5 * a + 5
-    : 10 * g + 6.25 * gr - 5 * a - 161;
-
-const berechneSchritteKcal = (s, g, gr) =>
-  s * g * 0.0005 * (gr / 170);
-
-const berechneAktivitaetKcal = (met, dauer, freq, g) =>
-  ((met * g * (dauer / 60)) * freq) / 7;
-
-/* Diagramm */
-function zeichneDiagramm(bmr, schritte, sport, cardio) {
-  const ctx = document.getElementById("kcalChart");
-  if (kcalChart) kcalChart.destroy();
-
-  const isDark = document.body.classList.contains("dark");
-
-  kcalChart = new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels: ["Grundumsatz", "Schritte", "Krafttraining", "Cardio"],
-      datasets: [{
-        data: [bmr, schritte, sport, cardio],
-        backgroundColor: ["#64748b", "#22c55e", "#f97316", "#ef4444"],
-        borderWidth: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: "bottom",
-          labels: {
-            color: isDark ? "#e5e7eb" : "#111827",
-            padding: 15,
-            font: {
-              size: 13
-            }
-          }
-        }
-      }
-    }
-  });
-}
-
-/* Hauptfunktion mit Validation und Parsing */
-function berechnen() {
-  // PARSING - Text in Zahlen umwandeln (nur einmal)
-  const g = parseFloat(gewicht.value);
-  const gr = parseFloat(groesse.value);
-  const a = parseFloat(alter.value);
-  
-  // VALIDATION - Eingaben überprüfen
-  const fehler = validiereEingaben(g, gr, a);
-  if (fehler) {
-    ergebnis.innerHTML = `<span class="fehler">${fehler}</span>`;
-    if (kcalChart) kcalChart.destroy();
-    return;
-  }
-
-  // Weitere Werte parsen
-  const s = parseFloat(schritte.value);
-  const sex = geschlecht.value;
-  const sportMET = parseFloat(sportIntensitaet.value);
-  const sportD = parseFloat(sportDauer.value);
-  const sportF = parseFloat(sportFreq.value);
-  const cardioMET = parseFloat(cardioIntensitaet.value);
-  const cardioD = parseFloat(cardioDauer.value);
-  const cardioF = parseFloat(cardioFreq.value);
-
-  // Berechnungen
-  const bmr = berechneBMR(g, gr, a, sex);
-  const schritteKcal = berechneSchritteKcal(s, g, gr);
-  const sportKcal = berechneAktivitaetKcal(sportMET, sportD, sportF, g);
-  const cardioKcal = berechneAktivitaetKcal(cardioMET, cardioD, cardioF, g);
-
-  const gesamt = bmr + schritteKcal + sportKcal + cardioKcal;
-
-  // Ergebnis anzeigen
-  ergebnis.innerHTML = `<span class="erfolg">Gesamtbedarf: ${Math.round(gesamt)} kcal / Tag</span>`;
-  zeichneDiagramm(Math.round(bmr), Math.round(schritteKcal), Math.round(sportKcal), Math.round(cardioKcal));
-}
-
-/* Live Update */
-document.querySelectorAll("input, select").forEach(el =>
-  el.addEventListener("input", berechnen)
-);
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html>
