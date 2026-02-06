@@ -92,9 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event Listener für Live-Update
-    inputs.forEach(input => {
-        input.addEventListener('input', updateUI);
-    });
+inputs.forEach(input => {
+    input.addEventListener('input', updateUI);
+    input.addEventListener('change', updateUI); // Für <select>-Elemente
+});
 
     // Initialer Aufruf
     updateUI();
