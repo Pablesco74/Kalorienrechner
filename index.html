@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calofix - Smart Calorie Calculator</title>
+    <title>Kalora - Dein smarter Kalorienrechner</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -12,12 +12,22 @@
     <header class="header">
         <div class="logo-container">
             <svg width="480" height="120" viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg">
-                <rect width="480" height="120" fill="#111827"/>
-                <path d="M74 38 A26 26 0 1 0 74 82" stroke="#3B82F6" stroke-width="10" fill="none" stroke-linecap="round"/>
-                <path d="M74 38 A26 26 0 0 1 86 60" stroke="#F97316" stroke-width="10" fill="none" stroke-linecap="round"/>
-                <path d="M86 60 A26 26 0 0 1 74 82" stroke="#22C55E" stroke-width="10" fill="none" stroke-linecap="round"/>
-                <text x="130" y="68" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="700" fill="#FFFFFF">Calofix</text>
-                <text x="132" y="94" font-family="Inter, Arial, sans-serif" font-size="14" fill="#D1D5DB">smart calorie calculator</text>
+                <!-- Background -->
+                <rect width="480" height="120" fill="transparent"/>
+                
+                <!-- Progress Bars (Bottom aligned) -->
+                <!-- Left Bar -->
+                <rect x="20" y="60" width="15" height="40" fill="#3B82F6" rx="3"/>
+                <!-- Middle Bar -->
+                <rect x="45" y="40" width="15" height="60" fill="#22C55E" rx="3"/>
+                <!-- Right Bar -->
+                <rect x="70" y="20" width="15" height="80" fill="#F97316" rx="3"/>
+                
+                <!-- Brand Text -->
+                <text x="110" y="68" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="44" fill="#FFFFFF">Kalora</text>
+                
+                <!-- Slogan -->
+                <text x="112" y="94" font-family="Inter, Arial, sans-serif" font-weight="400" font-size="14" fill="#94A3B8">Dein smarter Kalorienrechner</text>
             </svg>
         </div>
     </header>
