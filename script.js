@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     data: [Math.round(bmr), Math.round(steps), Math.round(sport), Math.round(cardio)],
                     backgroundColor: [COLORS.bmr, COLORS.steps, COLORS.strength, COLORS.cardio],
                     borderWidth: 0,
-                    borderRadius: 5,
+                    borderRadius: 0,
                     hoverOffset: 10
                 }]
             },
