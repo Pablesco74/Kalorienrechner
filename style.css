@@ -23,6 +23,11 @@ body {
     max-width: 480px;
 }
 
+.logo-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
 /* Main Container */
 .container {
     display: grid;
@@ -83,7 +88,6 @@ label {
 }
 
 input[type="number"],
-input[type="range"],
 select {
     width: 100%;
     padding: 0.625rem;
@@ -160,14 +164,34 @@ canvas {
     max-width: 100%;
 }
 
-/* Responsive */
+/* Status Message */
+#statusMessage {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+/* Responsive - Tablet */
 @media (max-width: 1200px) {
     .container {
         grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .canvas-panel {
+        order: -1; /* Canvas nach oben */
+        margin-bottom: 2rem;
+        min-height: auto;
+    }
+
+    .canvas-container {
+        max-width: 400px;
     }
 
     .input-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
     
     .input-panel {
@@ -176,17 +200,146 @@ canvas {
     }
 }
 
-@media (max-width: 640px) {
-    .container {
-        padding: 1rem;
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem 1.5rem;
     }
 
+    .logo-container {
+        max-width: 320px;
+    }
+
+    .container {
+        padding: 1.5rem;
+        gap: 2rem;
+    }
+
+    h1 {
+        font-size: 1.15rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .input-section h3 {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    label {
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
+    }
+
+    /* Touch-optimierte Eingabefelder */
+    input[type="number"],
+    select {
+        padding: 0.85rem;
+        font-size: 16px; /* Verhindert Auto-Zoom auf iOS */
+        min-height: 48px; /* Touch-optimiert */
+        border-radius: 8px;
+    }
+
+    .canvas-container {
+        max-width: 100%;
+        margin-top: 1rem;
+    }
+
+    .canvas-center-value {
+        font-size: 3rem;
+    }
+
+    .canvas-center-label {
+        font-size: 0.95rem;
+    }
+
+    .input-panel {
+        max-width: 100%;
+    }
+}
+
+/* Responsive - Kleine Smartphones */
+@media (max-width: 480px) {
     .header {
         padding: 1rem;
     }
 
-    .logo-container svg {
-        width: 100%;
-        height: auto;
+    .logo-container {
+        max-width: 280px;
+    }
+
+    .container {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .input-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .input-section h3 {
+        font-size: 0.9rem;
+        margin-bottom: 0.85rem;
+    }
+
+    .form-group {
+        margin-bottom: 0.9rem;
+    }
+
+    label {
+        font-size: 0.85rem;
+    }
+
+    input[type="number"],
+    select {
+        padding: 0.75rem;
+        font-size: 16px;
+    }
+
+    .canvas-container {
+        max-width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .canvas-center-value {
+        font-size: 2.5rem;
+    }
+
+    .canvas-center-label {
+        font-size: 0.85rem;
+    }
+
+    .canvas-panel {
+        min-height: auto;
+    }
+}
+
+/* Landscape Mode für kleine Geräte */
+@media (max-width: 768px) and (orientation: landscape) {
+    .container {
+        padding: 1rem 2rem;
+    }
+
+    .canvas-panel {
+        order: 0; /* Canvas wieder unten im Landscape */
+        margin-bottom: 0;
+        margin-top: 1.5rem;
+    }
+
+    .canvas-container {
+        max-width: 350px;
+    }
+
+    .input-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
     }
 }
