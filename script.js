@@ -1,6 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
     let kcalChart = null;
 
+    // ---------- Theme Toggle (Dark/Light) ----------
+    const THEME_KEY = 'kalora-theme';
+    const root = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+
+    function getStoredTheme() {
+        const stored = localStorage.getItem(THEME_KEY);
+        if (stored === 'light' || stored === 'dark') return stored;
+        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+
+    function applyTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        if (themeToggle) {
+            themeToggle.setAttribute('aria-pressed', theme === 'light');
+        }
+    }
+
+    function toggleTheme() {
+        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+    }
+
+    applyTheme(getStoredTheme());
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+
     // Konstanten
     const COLORS = {
         bmr: '#3B82F6',
