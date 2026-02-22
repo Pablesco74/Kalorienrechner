@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rechtliches - Kalora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1A237E;
+            --text-color: #2C3E50;
+            --bg-color: #F5F7FA;
+            --card-bg: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 40px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .logo-sub {
+            font-size: 14px;
+            color: #7F8C8D;
+            margin-top: 5px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: var(--primary-blue);
+            margin-top: 25px;
+        }
+
+        p, li {
+            font-size: 15px;
+            color: #444;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            font-size: 12px;
+            color: #95A5A6;
+            margin-top: auto;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: #EEE;
+            margin: 50px 0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-link">← Zurück zum Rechner</a>
+
+        <div class="logo-area">
+            <p class="logo-text">KALORA</p>
+            <p class="logo-sub">Präzise und einfach Kalorien berechnen</p>
+        </div>
+
+        <!-- IMPRESSUM -->
+        <section id="impressum">
+            <h1>Impressum</h1>
+            <p><strong>Angaben gemäß § 5 DDG:</strong></p>
+            <p>
+                Ben Papke <br>
+                Roßendorf 38B <br>
+                90556 Cadolzburg
+            </p>
+
+            <h2>Kontakt</h2>
+            <p>
+                E-Mail: contact@kalora-rechner.de
+            </p>
+
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- DATENSCHUTZ -->
+        <section id="datenschutz">
+            <h1>Datenschutzerklärung</h1>
+            
+            <h2>1. Datenschutz auf einen Blick</h2>
+            <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen.</p>
+
+            <h2>2. Hosting durch GitHub Pages</h2>
+            <p>Wir hosten unsere Website bei GitHub Pages. Anbieter ist die GitHub Inc., 88 Colin P. Kelly Jr. St, San Francisco, CA 94107, USA.</p>
+            <p>Wenn Sie unsere Website besuchen, erfasst GitHub Ihre IP-Adresse. Dies ist technisch erforderlich, um die Inhalte an Ihren Browser zu übermitteln. Weitere Informationen finden Sie in der Datenschutzerklärung von GitHub.</p>
+
+            <h2>3. Datenverarbeitung im Kalorienrechner</h2>
+            <p>Der Kalora-Kalorienrechner verarbeitet Ihre Eingaben (Alter, Größe, Gewicht, Aktivitätslevel) ausschließlich lokal in Ihrem Browser. Es findet keine Speicherung oder Übermittlung dieser Gesundheitsdaten an unsere Server oder Dritte statt.</p>
+
+            <h2>4. Ihre Rechte</h2>
+            <p>Sie haben das Recht auf Auskunft, Berichtigung und Löschung Ihrer Daten. Da wir keine Daten speichern, ist dies bei uns formlos möglich.</p>
+        </section>
+    </div>
+
+    <footer>
+        &copy; 2026 Kalora - Dein smarter Kalorien Guide.
+    </footer>
+
+</body>
+</html>
