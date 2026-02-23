@@ -7,4 +7,4 @@ Ein interaktiver Kalorienrechner mit Berücksichtigung von:
 - Cardio-Training
 
 ## Live Demo
-[Hier klicken](https://pablesco74.github.io/Kalorienrechner)
+[Hier klicken](https://kalora-rechner.de/)
