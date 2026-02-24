@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Konstanten
     const COLORS = {
         bmr: '#3B82F6',
+        neat: '#A855F7',
         steps: '#22C55E',
         strength: '#F97316',
         cardio: '#EF4444'
@@ -40,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputs = document.querySelectorAll('input, select');
     const totalDisplay = document.getElementById('totalCalories');
     const statusDisplay = document.getElementById('statusMessage');
+    const neatLevelSelect = document.getElementById('neatLevel');
+    const neatGroups = document.querySelectorAll('.neat-group');
 
     // Berechnungs-Logik
     const calculations = {
@@ -85,6 +88,29 @@ document.addEventListener('DOMContentLoaded', () => {
         return { valid: true };
     }
 
+    function getNeatKcal(bmr, weight) {
+        if (!neatLevelSelect) return 0;
+
+        const level = neatLevelSelect.value;
+
+        if (level === 'beginner') {
+            const factor = parseFloat(document.getElementById('neatBeginner').value) || 0;
+            return bmr * factor;
+        }
+
+        if (level === 'intermediate') {
+            const job = parseFloat(document.getElementById('neatJob').value) || 0;
+            const leisure = parseFloat(document.getElementById('neatLeisure').value) || 0;
+            return bmr * (job + leisure);
+        }
+
+        // Experte: über Minuten bewusste Bewegung
+        const minutes = parseFloat(document.getElementById('neatMinutes').value) || 0;
+        const days = parseFloat(document.getElementById('neatDays').value) || 0;
+        const MET_NEAT = 2.0;
+        return ((MET_NEAT * weight) * (minutes / 60)) * (days / 7);
+    }
+
     function updateUI() {
         const val = getInputValues();
         const validation = validateInputs(val);
@@ -104,18 +130,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Werte berechnen
         const bmr = calculations.bmr(val.g, val.gr, val.a, val.sex);
+        const neatKcal = getNeatKcal(bmr, val.g);
         const stepKcal = calculations.steps(val.steps, val.g, val.gr);
         const sportKcal = calculations.activity(val.sMet, val.sDur, val.sFreq, val.g);
         const cardioKcal = calculations.activity(val.cMet, val.cDur, val.cFreq, val.g);
         
-        const total = bmr + stepKcal + sportKcal + cardioKcal;
+        const total = bmr + neatKcal + stepKcal + sportKcal + cardioKcal;
 
         // Anzeige
         totalDisplay.textContent = Math.round(total).toLocaleString('de-DE');
-        renderChart(bmr, stepKcal, sportKcal, cardioKcal);
+        renderChart(bmr, neatKcal, stepKcal, sportKcal, cardioKcal);
     }
 
-    function renderChart(bmr, steps, sport, cardio) {
+    function renderChart(bmr, neat, steps, sport, cardio) {
         const ctx = document.getElementById('kcalChart').getContext('2d');
         
         if (kcalChart) {
@@ -125,10 +152,16 @@ document.addEventListener('DOMContentLoaded', () => {
         kcalChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Grundumsatz', 'Schritte', 'Kraft', 'Cardio'],
+                labels: ['Grundumsatz', 'NEAT', 'Schritte', 'Kraft', 'Cardio'],
                 datasets: [{
-                    data: [Math.round(bmr), Math.round(steps), Math.round(sport), Math.round(cardio)],
-                    backgroundColor: [COLORS.bmr, COLORS.steps, COLORS.strength, COLORS.cardio],
+                    data: [
+                        Math.round(bmr),
+                        Math.round(neat),
+                        Math.round(steps),
+                        Math.round(sport),
+                        Math.round(cardio)
+                    ],
+                    backgroundColor: [COLORS.bmr, COLORS.neat, COLORS.steps, COLORS.strength, COLORS.cardio],
                     borderWidth: 0,
                     borderRadius: 0,
                     hoverOffset: 10
@@ -158,12 +191,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function updateNeatVisibility() {
+        if (!neatLevelSelect) return;
+        const current = neatLevelSelect.value;
+        neatGroups.forEach(group => {
+            if (group.dataset.level === current) {
+                group.classList.add('neat-group-active');
+            } else {
+                group.classList.remove('neat-group-active');
+            }
+        });
+    }
+
     // Event Listener für Live-Update
     // KRITISCH: Sowohl 'input' als auch 'change' Events registrieren!
     inputs.forEach(input => {
         input.addEventListener('input', updateUI);  // Für <input>-Felder
         input.addEventListener('change', updateUI); // Für <select>-Elemente
     });
+
+    if (neatLevelSelect) {
+        neatLevelSelect.addEventListener('change', () => {
+            updateNeatVisibility();
+            updateUI();
+        });
+        updateNeatVisibility();
+    }
 
     // Initialer Aufruf
     updateUI();

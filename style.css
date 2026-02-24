@@ -162,6 +162,23 @@ body {
     height: fit-content;
 }
 
+.level-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.level-switch-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.level-switch select {
+    max-width: 220px;
+}
+
 .input-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -188,6 +205,14 @@ h1 {
     font-size: 1rem;
     margin-bottom: 1.25rem;
     font-weight: 600;
+}
+
+.neat-group {
+    display: none;
+}
+
+.neat-group.neat-group-active {
+    display: block;
 }
 
 .form-group {

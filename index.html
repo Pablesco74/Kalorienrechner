@@ -54,6 +54,15 @@
         <section class="input-panel">
             <h1>Kalorien berechnen</h1>
 
+            <div class="level-switch">
+                <span class="level-switch-label">Level</span>
+                <select id="neatLevel">
+                    <option value="beginner">Einfach (Anfänger)</option>
+                    <option value="intermediate">Standard (Fortgeschritten)</option>
+                    <option value="expert">Profi (Experte)</option>
+                </select>
+            </div>
+
             <div class="input-grid">
                 <div class="input-column">
                     <div class="input-section">
@@ -76,6 +85,53 @@
                         <div class="form-group">
                             <label for="alter">Alter</label>
                             <input type="number" id="alter" min="10" max="120" placeholder="z.B. 30">
+                        </div>
+                    </div>
+
+                    <div class="input-section">
+                        <h3>NEAT / Alltagsaktivität</h3>
+
+                        <div class="neat-group neat-group-active" data-level="beginner">
+                            <div class="form-group">
+                                <label for="neatBeginner">Wie aktiv bist du im Alltag (ohne Sport)?</label>
+                                <select id="neatBeginner">
+                                    <option value="0.15">Viel Sitzen (Büro, Homeoffice)</option>
+                                    <option value="0.25">Überwiegend sitzend, kurze Wege</option>
+                                    <option value="0.35">Viel Stehen/Gehen im Alltag</option>
+                                    <option value="0.45">Körperlich anstrengender Job</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="neat-group" data-level="intermediate">
+                            <div class="form-group">
+                                <label for="neatJob">Job-Alltag</label>
+                                <select id="neatJob">
+                                    <option value="0.10">Büro / überwiegend sitzend</option>
+                                    <option value="0.20">Mischform sitzend &amp; gehend</option>
+                                    <option value="0.30">Überwiegend gehend/stehend</option>
+                                    <option value="0.40">Körperlich anstrengend</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="neatLeisure">Freizeit-Alltag</label>
+                                <select id="neatLeisure">
+                                    <option value="0.05">Viel Sitzen</option>
+                                    <option value="0.10">Gemischt</option>
+                                    <option value="0.15">Viel Bewegung</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="neat-group" data-level="expert">
+                            <div class="form-group">
+                                <label for="neatMinutes">Minuten bewusste Bewegung / Tag (ohne Sport)</label>
+                                <input type="number" id="neatMinutes" min="0" max="300" value="60">
+                            </div>
+                            <div class="form-group">
+                                <label for="neatDays">Tage pro Woche mit dieser Aktivität</label>
+                                <input type="number" id="neatDays" min="1" max="7" value="7">
+                            </div>
                         </div>
                     </div>
 
