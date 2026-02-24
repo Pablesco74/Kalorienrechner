@@ -36,9 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cardio: '#EF4444'
     };
 
-    const STEPS_CAL_FACTOR = 0.0005;
-    const HEIGHT_ADJUSTMENT = 170;
-
     // DOM Elemente
     const inputs = document.querySelectorAll('input, select');
     const totalDisplay = document.getElementById('totalCalories');
@@ -51,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ? (10 * g) + (6.25 * gr) - (5 * a) + 5 
             : (10 * g) + (6.25 * gr) - (5 * a) - 161,
         
-        steps: (s, g, gr) => s * g * STEPS_CAL_FACTOR * (gr / HEIGHT_ADJUSTMENT),
+        steps: (s, g, gr) => 3.5 * g * ((s * gr * 0.0041) / 1000) / 5,
         
         activity: (met, dauer, freq, g) => ((met * g * (dauer / 60)) * freq) / 7
     };
