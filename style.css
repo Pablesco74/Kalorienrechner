@@ -49,7 +49,7 @@ body {
 /* Header */
 .header {
     background: var(--bg-header);
-    padding: 1.25rem 2rem;
+    padding: 1.5rem 2rem;
     border-bottom: 2px solid var(--border-header);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
     transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -61,10 +61,38 @@ body {
 
 .header-inner {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     max-width: 1800px;
     margin: 0 auto;
+}
+
+/* Logo Dark/Light Mode */
+.logo-container {
+    max-width: 480px;
+}
+
+.logo-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Dark Mode: Dark Logo sichtbar */
+[data-theme="dark"] .logo-dark {
+    display: block;
+}
+
+[data-theme="dark"] .logo-light {
+    display: none;
+}
+
+/* Light Mode: Light Logo sichtbar */
+[data-theme="light"] .logo-dark {
+    display: none;
+}
+
+[data-theme="light"] .logo-light {
+    display: block;
 }
 
 /* Theme Toggle */
@@ -132,20 +160,6 @@ body {
     outline: 2px solid var(--accent-blue);
     outline-offset: 4px;
     border-radius: 999px;
-}
-
-.logo-container {
-    max-width: 220px;
-    height: 48px;
-    overflow: hidden;
-}
-
-.logo-container .logo {
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    object-position: left center;
 }
 
 /* Main Container */
@@ -357,7 +371,7 @@ canvas {
     }
 
     .canvas-panel {
-        order: -1; /* Canvas nach oben */
+        order: -1;
         margin-bottom: 2rem;
         min-height: auto;
     }
@@ -380,7 +394,7 @@ canvas {
 /* Responsive - Mobile */
 @media (max-width: 768px) {
     .header {
-        padding: 0.85rem 1.25rem;
+        padding: 1rem 1.5rem;
     }
 
     .theme-label {
@@ -388,12 +402,7 @@ canvas {
     }
 
     .logo-container {
-        max-width: 180px;
-        height: 40px;
-    }
-    
-    .logo-container .logo {
-        width: 100%;
+        max-width: 320px;
     }
 
     .container {
@@ -420,12 +429,11 @@ canvas {
         margin-bottom: 0.4rem;
     }
 
-    /* Touch-optimierte Eingabefelder */
     input[type="number"],
     select {
         padding: 0.85rem;
-        font-size: 16px; /* Verhindert Auto-Zoom auf iOS */
-        min-height: 48px; /* Touch-optimiert */
+        font-size: 16px;
+        min-height: 48px;
         border-radius: 8px;
     }
 
@@ -454,12 +462,7 @@ canvas {
     }
 
     .logo-container {
-        max-width: 160px;
-        height: 36px;
-    }
-    
-    .logo-container .logo {
-        width: 100%;
+        max-width: 280px;
     }
 
     .container {
@@ -520,7 +523,7 @@ canvas {
     }
 
     .canvas-panel {
-        order: 0; /* Canvas wieder unten im Landscape */
+        order: 0;
         margin-bottom: 0;
         margin-top: 1.5rem;
     }
