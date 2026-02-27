@@ -138,9 +138,11 @@ body {
     max-width: 480px;
 }
 
-.logo-container svg {
+.logo-container .logo {
+    display: block;
     max-width: 100%;
-    height: auto;
+    height: 56px;
+    width: auto;
 }
 
 /* Main Container */
@@ -385,6 +387,10 @@ canvas {
     .logo-container {
         max-width: 320px;
     }
+    
+    .logo-container .logo {
+        height: 46px;
+    }
 
     .container {
         padding: 1.5rem;
@@ -445,6 +451,10 @@ canvas {
 
     .logo-container {
         max-width: 280px;
+    }
+    
+    .logo-container .logo {
+        height: 42px;
     }
 
     .container {
