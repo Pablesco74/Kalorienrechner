@@ -82,46 +82,80 @@
                     <div class="input-section">
                         <h3>NEAT / Alltagsaktivität</h3>
 
+                        <!-- ANFÄNGER -->
                         <div class="neat-group neat-group-active" data-level="beginner">
                             <div class="form-group">
-                                <label for="neatBeginner">Wie aktiv bist du im Alltag (ohne Sport)?</label>
+                                <label for="neatBeginner">Wie aktiv bist du im Alltag (ohne Training)?</label>
                                 <select id="neatBeginner">
-                                    <option value="0.15">Viel Sitzen (Büro, Homeoffice)</option>
-                                    <option value="0.25">Überwiegend sitzend, kurze Wege</option>
-                                    <option value="0.35">Viel Stehen/Gehen im Alltag</option>
-                                    <option value="0.45">Körperlich anstrengender Job</option>
+                                    <option value="0.08">Sehr wenig aktiv (Bürojob, viel sitzen)</option>
+                                    <option value="0.12">Wenig aktiv (Büro + Hausarbeit)</option>
+                                    <option value="0.18">Mäßig aktiv (viel Stehen/Gehen)</option>
+                                    <option value="0.25">Sehr aktiv (körperliche Arbeit)</option>
                                 </select>
                             </div>
                         </div>
 
+                        <!-- FORTGESCHRITTEN -->
                         <div class="neat-group" data-level="intermediate">
                             <div class="form-group">
-                                <label for="neatJob">Job-Alltag</label>
-                                <select id="neatJob">
-                                    <option value="0.10">Büro / überwiegend sitzend</option>
-                                    <option value="0.20">Mischform sitzend &amp; gehend</option>
-                                    <option value="0.30">Überwiegend gehend/stehend</option>
-                                    <option value="0.40">Körperlich anstrengend</option>
+                                <label for="neatJobInter">Berufliche Aktivität</label>
+                                <select id="neatJobInter">
+                                    <option value="0.05">Sitzend (Büro, Homeoffice)</option>
+                                    <option value="0.08">Teilweise stehend/gehend</option>
+                                    <option value="0.12">Überwiegend stehend/gehend</option>
+                                    <option value="0.18">Körperlich anstrengend</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="neatLeisure">Freizeit-Alltag</label>
+                                <label for="neatLeisure">Freizeit-Aktivität</label>
                                 <select id="neatLeisure">
-                                    <option value="0.05">Viel Sitzen</option>
-                                    <option value="0.10">Gemischt</option>
-                                    <option value="0.15">Viel Bewegung</option>
+                                    <option value="0.03">Wenig Bewegung (TV, Lesen)</option>
+                                    <option value="0.06">Leichte Aktivität (Kochen, Aufräumen)</option>
+                                    <option value="0.10">Moderate Aktivität (Gartenarbeit, Kinder)</option>
                                 </select>
                             </div>
                         </div>
 
+                        <!-- EXPERTE -->
                         <div class="neat-group" data-level="expert">
+                            <h4 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; font-weight: 600;">Berufliche Aktivität</h4>
                             <div class="form-group">
-                                <label for="neatMinutes">Minuten bewusste Bewegung / Tag (ohne Sport)</label>
-                                <input type="number" id="neatMinutes" min="0" max="300" value="60">
+                                <label for="neatJobExpert">Art der Arbeit</label>
+                                <select id="neatJobExpert">
+                                    <option value="0.05">Sitzend (Büro, Student)</option>
+                                    <option value="0.10">Leicht aktiv (stehend/gehend)</option>
+                                    <option value="0.15">Moderat aktiv (Handwerk)</option>
+                                    <option value="0.20">Sehr aktiv (Bauarbeiter)</option>
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label for="neatDays">Tage pro Woche mit dieser Aktivität</label>
-                                <input type="number" id="neatDays" min="1" max="7" value="7">
+                                <label for="neatWorkDays">Arbeitstage pro Woche</label>
+                                <input type="number" id="neatWorkDays" min="0" max="7" value="5">
+                            </div>
+
+                            <h4 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; margin-top: 1.5rem; font-weight: 600;">Alltags-Aktivität (außerhalb Job & Training)</h4>
+                            <div class="form-group">
+                                <label for="neatDaily">Aktivitätslevel</label>
+                                <select id="neatDaily">
+                                    <option value="0.03">Minimal (wenig Bewegung)</option>
+                                    <option value="0.06">Niedrig (normale Hausarbeit)</option>
+                                    <option value="0.09">Moderat (aktiv im Alltag)</option>
+                                    <option value="0.12">Hoch (sehr aktiver Lifestyle)</option>
+                                </select>
+                            </div>
+
+                            <h4 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; margin-top: 1.5rem; font-weight: 600;">Trainingsfreie Tage</h4>
+                            <div class="form-group">
+                                <label for="neatRestDays">Rest Days pro Woche</label>
+                                <input type="number" id="neatRestDays" min="0" max="7" value="2">
+                            </div>
+                            <div class="form-group">
+                                <label for="neatRestActivity">Aktivität an Rest Days</label>
+                                <select id="neatRestActivity">
+                                    <option value="0.00">Volle Erholung (komplett passiv)</option>
+                                    <option value="0.05">Light Activity (Spazieren, Mobility)</option>
+                                    <option value="0.08">Active Recovery (lange Walks, Rad)</option>
+                                </select>
                             </div>
                         </div>
                     </div>
