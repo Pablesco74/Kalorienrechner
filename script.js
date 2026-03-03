@@ -23,19 +23,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
         localStorage.setItem(THEME_KEY, next);
         applyTheme(next);
+        
+        // Chart neu rendern mit neuen Farben
+        if (kcalChart) {
+            const lastData = kcalChart.data.datasets[0].data;
+            const labels = kcalChart.data.labels;
+            kcalChart.destroy();
+            renderChartWithData(labels, lastData);
+        }
     }
 
     applyTheme(getStoredTheme());
     if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
 
-    // Konstanten
-    const COLORS = {
-        bmr: '#3B82F6',
-        neat: '#A855F7',
-        steps: '#22C55E',
-        strength: '#F97316',
-        cardio: '#EF4444'
-    };
+    // Farben aus CSS-Variablen holen
+    function getChartColors() {
+        const style = getComputedStyle(document.documentElement);
+        return {
+            bmr: style.getPropertyValue('--chart-bmr').trim() || '#4C7CF5',
+            neat: style.getPropertyValue('--chart-neat').trim() || '#7C3AED',
+            steps: style.getPropertyValue('--chart-steps').trim() || '#22C55E',
+            strength: style.getPropertyValue('--chart-strength').trim() || '#F97316',
+            cardio: style.getPropertyValue('--chart-cardio').trim() || '#EF4444'
+        };
+    }
 
     // DOM Elemente
     const inputs = document.querySelectorAll('input, select');
@@ -142,8 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
         renderChart(bmr, neatKcal, stepKcal, sportKcal, cardioKcal);
     }
 
-    function renderChart(bmr, neat, steps, sport, cardio) {
+    function renderChartWithData(labels, data) {
         const ctx = document.getElementById('kcalChart').getContext('2d');
+        const colors = getChartColors();
         
         if (kcalChart) {
             kcalChart.destroy();
@@ -152,18 +164,11 @@ document.addEventListener('DOMContentLoaded', () => {
         kcalChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Grundumsatz', 'NEAT', 'Schritte', 'Kraft', 'Cardio'],
+                labels: labels,
                 datasets: [{
-                    data: [
-                        Math.round(bmr),
-                        Math.round(neat),
-                        Math.round(steps),
-                        Math.round(sport),
-                        Math.round(cardio)
-                    ],
-                    backgroundColor: [COLORS.bmr, COLORS.neat, COLORS.steps, COLORS.strength, COLORS.cardio],
+                    data: data,
+                    backgroundColor: [colors.bmr, colors.neat, colors.steps, colors.strength, colors.cardio],
                     borderWidth: 0,
-                    borderRadius: 0,
                     hoverOffset: 10
                 }]
             },
@@ -175,20 +180,39 @@ document.addEventListener('DOMContentLoaded', () => {
                     legend: {
                         position: 'bottom',
                         labels: { 
-                            color: '#94A3B8', 
+                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-chart').trim(),
                             padding: 20, 
                             usePointStyle: true, 
-                            font: { size: 12 } 
+                            font: { size: 12, weight: '600' } 
                         }
                     },
                     tooltip: {
                         callbacks: {
                             label: (item) => ` ${item.label}: ${item.raw.toLocaleString('de-DE')} kcal`
-                        }
+                        },
+                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-card').trim(),
+                        titleColor: getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim(),
+                        bodyColor: getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim(),
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--input-border').trim(),
+                        borderWidth: 1,
+                        padding: 12
                     }
                 }
             }
         });
+    }
+
+    function renderChart(bmr, neat, steps, sport, cardio) {
+        const labels = ['Grundumsatz', 'NEAT', 'Schritte', 'Kraft', 'Cardio'];
+        const data = [
+            Math.round(bmr),
+            Math.round(neat),
+            Math.round(steps),
+            Math.round(sport),
+            Math.round(cardio)
+        ];
+        
+        renderChartWithData(labels, data);
     }
 
     function updateNeatVisibility() {
@@ -204,10 +228,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event Listener für Live-Update
-    // KRITISCH: Sowohl 'input' als auch 'change' Events registrieren!
     inputs.forEach(input => {
-        input.addEventListener('input', updateUI);  // Für <input>-Felder
-        input.addEventListener('change', updateUI); // Für <select>-Elemente
+        input.addEventListener('input', updateUI);
+        input.addEventListener('change', updateUI);
     });
 
     if (neatLevelSelect) {
