@@ -69,12 +69,16 @@ body {
 
 /* Logo Dark/Light Mode */
 .logo-container {
-    max-width: 480px;
+    max-width: 200px;
+    height: 44px;
+    display: flex;
+    align-items: center;
 }
 
-.logo-container svg {
+.logo-container img {
     max-width: 100%;
     height: auto;
+    display: block;
 }
 
 /* Dark Mode: Dark Logo sichtbar */
@@ -402,7 +406,8 @@ canvas {
     }
 
     .logo-container {
-        max-width: 320px;
+        max-width: 150px;
+        height: 32px;
     }
 
     .container {
@@ -462,7 +467,8 @@ canvas {
     }
 
     .logo-container {
-        max-width: 280px;
+        max-width: 130px;
+        height: 28px;
     }
 
     .container {
