@@ -67,6 +67,34 @@ body {
     margin: 0 auto;
 }
 
+/* Logo Dark/Light Mode */
+.logo-container {
+    max-width: 480px;
+}
+
+.logo-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Dark Mode: Dark Logo sichtbar */
+[data-theme="dark"] .logo-dark {
+    display: block;
+}
+
+[data-theme="dark"] .logo-light {
+    display: none;
+}
+
+/* Light Mode: Light Logo sichtbar */
+[data-theme="light"] .logo-dark {
+    display: none;
+}
+
+[data-theme="light"] .logo-light {
+    display: block;
+}
+
 /* Theme Toggle */
 .theme-toggle-wrap {
     display: flex;
@@ -134,15 +162,6 @@ body {
     border-radius: 999px;
 }
 
-.logo-container {
-    max-width: 480px;
-}
-
-.logo-container svg {
-    max-width: 100%;
-    height: auto;
-}
-
 /* Main Container */
 .container {
     display: grid;
@@ -160,6 +179,23 @@ body {
     padding: 0;
     box-shadow: none;
     height: fit-content;
+}
+
+.level-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.level-switch-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.level-switch select {
+    max-width: 220px;
 }
 
 .input-grid {
@@ -188,6 +224,14 @@ h1 {
     font-size: 1rem;
     margin-bottom: 1.25rem;
     font-weight: 600;
+}
+
+.neat-group {
+    display: none;
+}
+
+.neat-group.neat-group-active {
+    display: block;
 }
 
 .form-group {
@@ -327,7 +371,7 @@ canvas {
     }
 
     .canvas-panel {
-        order: -1; /* Canvas nach oben */
+        order: -1;
         margin-bottom: 2rem;
         min-height: auto;
     }
@@ -385,12 +429,11 @@ canvas {
         margin-bottom: 0.4rem;
     }
 
-    /* Touch-optimierte Eingabefelder */
     input[type="number"],
     select {
         padding: 0.85rem;
-        font-size: 16px; /* Verhindert Auto-Zoom auf iOS */
-        min-height: 48px; /* Touch-optimiert */
+        font-size: 16px;
+        min-height: 48px;
         border-radius: 8px;
     }
 
@@ -480,7 +523,7 @@ canvas {
     }
 
     .canvas-panel {
-        order: 0; /* Canvas wieder unten im Landscape */
+        order: 0;
         margin-bottom: 0;
         margin-top: 1.5rem;
     }

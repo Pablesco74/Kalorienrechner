@@ -18,41 +18,51 @@
 <body>
     <header class="header">
         <div class="header-inner">
-        <div class="logo-container">
-            <svg width="480" height="120" viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg">
-                <!-- Background -->
-                <rect width="480" height="120" fill="transparent"/>
+            <div class="logo-container">
+                <!-- Dark Mode Logo -->
+                <svg class="logo-dark" width="480" height="120" viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="480" height="120" fill="transparent"/>
+                    <rect x="20" y="60" width="15" height="40" fill="#3B82F6" rx="3"/>
+                    <rect x="45" y="40" width="15" height="60" fill="#22C55E" rx="3"/>
+                    <rect x="70" y="20" width="15" height="80" fill="#F97316" rx="3"/>
+                    <text x="110" y="68" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="44" fill="#FFFFFF">Kalora</text>
+                    <text x="112" y="94" font-family="Inter, Arial, sans-serif" font-weight="400" font-size="14" fill="#94A3B8">Dein smarter Kalorienrechner</text>
+                </svg>
                 
-                <!-- Progress Bars (Bottom aligned) -->
-                <!-- Left Bar -->
-                <rect x="20" y="60" width="15" height="40" fill="#3B82F6" rx="3"/>
-                <!-- Middle Bar -->
-                <rect x="45" y="40" width="15" height="60" fill="#22C55E" rx="3"/>
-                <!-- Right Bar -->
-                <rect x="70" y="20" width="15" height="80" fill="#F97316" rx="3"/>
-                
-                <!-- Brand Text -->
-                <text x="110" y="68" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="44" fill="#FFFFFF">Kalora</text>
-                
-                <!-- Slogan -->
-                <text x="112" y="94" font-family="Inter, Arial, sans-serif" font-weight="400" font-size="14" fill="#94A3B8">Dein smarter Kalorienrechner</text>
-            </svg>
-        </div>
-        <div class="theme-toggle-wrap" aria-label="Dark/Light Mode umschalten">
-            <span class="theme-label theme-label-dark" aria-hidden="true">Dark</span>
-            <button type="button" class="theme-toggle" id="themeToggle" aria-pressed="false" title="Theme umschalten">
-                <span class="theme-toggle-track">
-                    <span class="theme-toggle-thumb"></span>
-                </span>
-            </button>
-            <span class="theme-label theme-label-light" aria-hidden="true">Light</span>
-        </div>
+                <!-- Light Mode Logo -->
+                <svg class="logo-light" width="480" height="120" viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="480" height="120" fill="transparent"/>
+                    <rect x="20" y="60" width="15" height="40" fill="#3B82F6" rx="3"/>
+                    <rect x="45" y="40" width="15" height="60" fill="#22C55E" rx="3"/>
+                    <rect x="70" y="20" width="15" height="80" fill="#F97316" rx="3"/>
+                    <text x="110" y="68" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="44" fill="#111827">Kalora</text>
+                    <text x="112" y="94" font-family="Inter, Arial, sans-serif" font-weight="400" font-size="14" fill="#64748B">Dein smarter Kalorienrechner</text>
+                </svg>
+            </div>
+            <div class="theme-toggle-wrap" aria-label="Dark/Light Mode umschalten">
+                <span class="theme-label theme-label-dark" aria-hidden="true">Dark</span>
+                <button type="button" class="theme-toggle" id="themeToggle" aria-pressed="false" title="Theme umschalten">
+                    <span class="theme-toggle-track">
+                        <span class="theme-toggle-thumb"></span>
+                    </span>
+                </button>
+                <span class="theme-label theme-label-light" aria-hidden="true">Light</span>
+            </div>
         </div>
     </header>
 
     <main class="container">
         <section class="input-panel">
             <h1>Kalorien berechnen</h1>
+
+            <div class="level-switch">
+                <span class="level-switch-label">Level</span>
+                <select id="neatLevel">
+                    <option value="beginner">Einfach (Anfänger)</option>
+                    <option value="intermediate">Standard (Fortgeschritten)</option>
+                    <option value="expert">Profi (Experte)</option>
+                </select>
+            </div>
 
             <div class="input-grid">
                 <div class="input-column">
@@ -76,6 +86,53 @@
                         <div class="form-group">
                             <label for="alter">Alter</label>
                             <input type="number" id="alter" min="10" max="120" placeholder="z.B. 30">
+                        </div>
+                    </div>
+
+                    <div class="input-section">
+                        <h3>NEAT / Alltagsaktivität</h3>
+
+                        <div class="neat-group neat-group-active" data-level="beginner">
+                            <div class="form-group">
+                                <label for="neatBeginner">Wie aktiv bist du im Alltag (ohne Sport)?</label>
+                                <select id="neatBeginner">
+                                    <option value="0.15">Viel Sitzen (Büro, Homeoffice)</option>
+                                    <option value="0.25">Überwiegend sitzend, kurze Wege</option>
+                                    <option value="0.35">Viel Stehen/Gehen im Alltag</option>
+                                    <option value="0.45">Körperlich anstrengender Job</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="neat-group" data-level="intermediate">
+                            <div class="form-group">
+                                <label for="neatJob">Job-Alltag</label>
+                                <select id="neatJob">
+                                    <option value="0.10">Büro / überwiegend sitzend</option>
+                                    <option value="0.20">Mischform sitzend &amp; gehend</option>
+                                    <option value="0.30">Überwiegend gehend/stehend</option>
+                                    <option value="0.40">Körperlich anstrengend</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="neatLeisure">Freizeit-Alltag</label>
+                                <select id="neatLeisure">
+                                    <option value="0.05">Viel Sitzen</option>
+                                    <option value="0.10">Gemischt</option>
+                                    <option value="0.15">Viel Bewegung</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="neat-group" data-level="expert">
+                            <div class="form-group">
+                                <label for="neatMinutes">Minuten bewusste Bewegung / Tag (ohne Sport)</label>
+                                <input type="number" id="neatMinutes" min="0" max="300" value="60">
+                            </div>
+                            <div class="form-group">
+                                <label for="neatDays">Tage pro Woche mit dieser Aktivität</label>
+                                <input type="number" id="neatDays" min="1" max="7" value="7">
+                            </div>
                         </div>
                     </div>
 
@@ -158,8 +215,6 @@
     </main>
 
     <script src="script.js"></script>
-    
-    <!-- ... Dein restlicher Inhalt der Webseite ... -->
 
     <footer class="site-footer">
         <p>&copy; 2026 Kalora - Dein smarter Kalorien Guide</p>
