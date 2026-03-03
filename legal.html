@@ -5,13 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>Rechtliches - Kalora</title>
+    <script>
+        (function() {
+            var s = localStorage.getItem('kalora-theme');
+            var preferLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+            document.documentElement.setAttribute('data-theme', (s === 'light' || s === 'dark') ? s : (preferLight ? 'light' : 'dark'));
+        })();
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
+        :root,
+        [data-theme="light"] {
             --primary-blue: #1A237E;
             --text-color: #2C3E50;
             --bg-color: #F5F7FA;
             --card-bg: #FFFFFF;
+            --text-muted: #7F8C8D;
+            --text-body: #444;
+            --footer-color: #95A5A6;
+            --divider: #EEE;
+        }
+
+        [data-theme="dark"] {
+            --primary-blue: #60A5FA;
+            --text-color: #E2E8F0;
+            --bg-color: #0F172A;
+            --card-bg: #1E293B;
+            --text-muted: #94A3B8;
+            --text-body: #CBD5E1;
+            --footer-color: #64748B;
+            --divider: #334155;
         }
 
         body {
@@ -23,6 +46,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
@@ -32,6 +56,11 @@
             background: var(--card-bg);
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        [data-theme="dark"] .container {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .logo-area {
@@ -50,14 +79,14 @@
 
         .logo-sub {
             font-size: 14px;
-            color: #7F8C8D;
+            color: var(--text-muted);
             margin-top: 5px;
         }
 
         h1 {
             font-size: 24px;
             color: var(--primary-blue);
-            border-bottom: 2px solid var(--bg-color);
+            border-bottom: 2px solid var(--divider);
             padding-bottom: 10px;
             margin-top: 40px;
         }
@@ -70,7 +99,7 @@
 
         p, li {
             font-size: 15px;
-            color: #444;
+            color: var(--text-body);
         }
 
         .back-link {
