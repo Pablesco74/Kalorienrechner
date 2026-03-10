@@ -1,28 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
     let kcalChart = null;
 
-    // ---------- Theme Toggle (Dark/Light) ----------
-    const THEME_KEY = 'kalora-theme';
+    // ---------- Theme basiert auf System-Präferenz ----------
     const root = document.documentElement;
-    const themeToggle = document.getElementById('themeToggle');
 
-    function getStoredTheme() {
-        const stored = localStorage.getItem(THEME_KEY);
-        if (stored === 'light' || stored === 'dark') return stored;
-        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    function getSystemTheme() {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
 
     function applyTheme(theme) {
         root.setAttribute('data-theme', theme);
-        if (themeToggle) {
-            themeToggle.setAttribute('aria-pressed', theme === 'light');
-        }
     }
 
-    function toggleTheme() {
-        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        localStorage.setItem(THEME_KEY, next);
-        applyTheme(next);
+    // Setze Theme basierend auf System
+    applyTheme(getSystemTheme());
+
+    // Lausche auf System-Theme-Änderungen
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        const newTheme = e.matches ? 'dark' : 'light';
+        applyTheme(newTheme);
         
         // Chart neu rendern mit neuen Farben
         if (kcalChart) {
@@ -31,20 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
             kcalChart.destroy();
             renderChartWithData(labels, lastData);
         }
-    }
-
-    applyTheme(getStoredTheme());
-    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+    });
 
     // Farben aus CSS-Variablen holen
     function getChartColors() {
         const style = getComputedStyle(document.documentElement);
         return {
-            bmr: style.getPropertyValue('--chart-bmr').trim() || '#4C7CF5',
-            neat: style.getPropertyValue('--chart-neat').trim() || '#7C3AED',
-            steps: style.getPropertyValue('--chart-steps').trim() || '#22C55E',
-            strength: style.getPropertyValue('--chart-strength').trim() || '#F97316',
-            cardio: style.getPropertyValue('--chart-cardio').trim() || '#EF4444'
+            bmr: style.getPropertyValue('--chart-bmr').trim() || '#E85D75',
+            neat: style.getPropertyValue('--chart-neat').trim() || '#9DB4A0',
+            steps: style.getPropertyValue('--chart-steps').trim() || '#F2CC8F',
+            strength: style.getPropertyValue('--chart-strength').trim() || '#D97757',
+            cardio: style.getPropertyValue('--chart-cardio').trim() || '#B4A5F5'
         };
     }
 
@@ -132,252 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const neatRest = (restDayFaktor * restDays) / 7;
 
         return bmr * (neatJob + neatAlltag + neatRest);
-    }
-
-    function updateUI() {
-        const val = getInputValues();
-        const validation = validateInputs(val);
-
-        // Validierung
-        if (!validation.valid) {
-            totalDisplay.textContent = '-';
-            statusDisplay.innerHTML = `<span class="fehler">${validation.message}</span>`;
-            if (kcalChart) {
-                kcalChart.destroy();
-                kcalChart = null;
-            }
-            return;
-        }
-
-        statusDisplay.innerHTML = '';
-
-        // Werte berechnen
-        const bmr = calculations.bmr(val.g, val.gr, val.a, val.sex);
-        const neatKcal = getNeatKcal(bmr, val.g);
-        const stepKcal = calculations.steps(val.steps, val.g, val.gr);
-        const sportKcal = calculations.activity(val.sMet, val.sDur, val.sFreq, val.g);
-        const cardioKcal = calculations.activity(val.cMet, val.cDur, val.cFreq, val.g);
-        
-        const total = bmr + neatKcal + stepKcal + sportKcal + cardioKcal;
-
-        // Anzeige
-        totalDisplay.textContent = Math.round(total).toLocaleString('de-DE');
-        renderChart(bmr, neatKcal, stepKcal, sportKcal, cardioKcal);
-    }
-
-    function renderChartWithData(labels, data) {
-        const ctx = document.getElementById('kcalChart').getContext('2d');
-        const colors = getChartColors();
-        
-        if (kcalChart) {
-            kcalChart.destroy();
-        }
-
-        kcalChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: [colors.bmr, colors.neat, colors.steps, colors.strength, colors.cardio],
-                    borderWidth: 0,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                cutout: '75%',
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { 
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-chart').trim(),
-                            padding: 20, 
-                            usePointStyle: true, 
-                            font: { size: 12, weight: '600' } 
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: (item) => ` ${item.label}: ${item.raw.toLocaleString('de-DE')} kcal`
-                        },
-                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-card').trim(),
-                        titleColor: getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim(),
-                        bodyColor: getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim(),
-                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--input-border').trim(),
-                        borderWidth: 1,
-                        padding: 12
-                    }
-                }
-            }
-        });
-    }
-
-    function renderChart(bmr, neat, steps, sport, cardio) {
-        const labels = ['Grundumsatz', 'NEAT', 'Schritte', 'Kraft', 'Cardio'];
-        const data = [
-            Math.round(bmr),
-            Math.round(neat),
-            Math.round(steps),
-            Math.round(sport),
-            Math.round(cardio)
-        ];
-        
-        renderChartWithData(labels, data);
-    }
-
-    function updateNeatVisibility() {
-        if (!neatLevelSelect) return;
-        const current = neatLevelSelect.value;
-        neatGroups.forEach(group => {
-            if (group.dataset.level === current) {
-                group.classList.add('neat-group-active');
-            } else {
-                group.classList.remove('neat-group-active');
-            }
-        });
-    }
-
-    // Event Listener für Live-Update
-    inputs.forEach(input => {
-        input.addEventListener('input', updateUI);
-        input.addEventListener('change', updateUI);
-    });
-
-    if (neatLevelSelect) {
-        neatLevelSelect.addEventListener('change', () => {
-            updateNeatVisibility();
-            updateUI();
-        });
-        updateNeatVisibility();
-    }
-
-    // Initialer Aufruf
-    updateUI();
-});
-document.addEventListener('DOMContentLoaded', () => {
-    let kcalChart = null;
-
-    // ---------- Theme Toggle (Dark/Light) ----------
-    const THEME_KEY = 'kalora-theme';
-    const root = document.documentElement;
-    const themeToggle = document.getElementById('themeToggle');
-
-    function getStoredTheme() {
-        const stored = localStorage.getItem(THEME_KEY);
-        if (stored === 'light' || stored === 'dark') return stored;
-        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-    }
-
-    function applyTheme(theme) {
-        root.setAttribute('data-theme', theme);
-        if (themeToggle) {
-            themeToggle.setAttribute('aria-pressed', theme === 'light');
-        }
-    }
-
-    function toggleTheme() {
-        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        localStorage.setItem(THEME_KEY, next);
-        applyTheme(next);
-        
-        // Chart neu rendern mit neuen Farben
-        if (kcalChart) {
-            const lastData = kcalChart.data.datasets[0].data;
-            const labels = kcalChart.data.labels;
-            kcalChart.destroy();
-            renderChartWithData(labels, lastData);
-        }
-    }
-
-    applyTheme(getStoredTheme());
-    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-
-    // Farben aus CSS-Variablen holen
-    function getChartColors() {
-        const style = getComputedStyle(document.documentElement);
-        return {
-            bmr: style.getPropertyValue('--chart-bmr').trim() || '#4C7CF5',
-            neat: style.getPropertyValue('--chart-neat').trim() || '#7C3AED',
-            steps: style.getPropertyValue('--chart-steps').trim() || '#22C55E',
-            strength: style.getPropertyValue('--chart-strength').trim() || '#F97316',
-            cardio: style.getPropertyValue('--chart-cardio').trim() || '#EF4444'
-        };
-    }
-
-    // DOM Elemente
-    const inputs = document.querySelectorAll('input, select');
-    const totalDisplay = document.getElementById('totalCalories');
-    const statusDisplay = document.getElementById('statusMessage');
-    const neatLevelSelect = document.getElementById('neatLevel');
-    const neatGroups = document.querySelectorAll('.neat-group');
-
-    // Berechnungs-Logik
-    const calculations = {
-        bmr: (g, gr, a, sex) => 
-            sex === "mann" 
-            ? (10 * g) + (6.25 * gr) - (5 * a) + 5 
-            : (10 * g) + (6.25 * gr) - (5 * a) - 161,
-        
-        steps: (s, g, gr) => 3.5 * g * ((s * gr * 0.0041) / 1000) / 5,
-        
-        activity: (met, dauer, freq, g) => ((met * g * (dauer / 60)) * freq) / 7
-    };
-
-    function getInputValues() {
-        return {
-            g: parseFloat(document.getElementById('gewicht').value),
-            gr: parseFloat(document.getElementById('groesse').value),
-            a: parseFloat(document.getElementById('alter').value),
-            sex: document.getElementById('geschlecht').value,
-            steps: parseFloat(document.getElementById('schritte').value) || 0,
-            sMet: parseFloat(document.getElementById('sportIntensitaet').value),
-            sDur: parseFloat(document.getElementById('sportDauer').value),
-            sFreq: parseFloat(document.getElementById('sportFreq').value),
-            cMet: parseFloat(document.getElementById('cardioIntensitaet').value),
-            cDur: parseFloat(document.getElementById('cardioDauer').value),
-            cFreq: parseFloat(document.getElementById('cardioFreq').value)
-        };
-    }
-
-    function validateInputs(val) {
-        if (!val.g || !val.gr || !val.a) {
-            return { valid: false, message: 'Bitte Basisdaten eingeben' };
-        }
-        if (val.g < 20 || val.g > 300) {
-            return { valid: false, message: 'Gewicht muss zwischen 20 und 300 kg liegen' };
-        }
-        if (val.gr < 100 || val.gr > 250) {
-            return { valid: false, message: 'Größe muss zwischen 100 und 250 cm liegen' };
-        }
-        if (val.a < 10 || val.a > 120) {
-            return { valid: false, message: 'Alter muss zwischen 10 und 120 Jahren liegen' };
-        }
-        return { valid: true };
-    }
-
-    function getNeatKcal(bmr, weight) {
-        if (!neatLevelSelect) return 0;
-
-        const level = neatLevelSelect.value;
-
-        if (level === 'beginner') {
-            const factor = parseFloat(document.getElementById('neatBeginner').value) || 0;
-            return bmr * factor;
-        }
-
-        if (level === 'intermediate') {
-            const job = parseFloat(document.getElementById('neatJob').value) || 0;
-            const leisure = parseFloat(document.getElementById('neatLeisure').value) || 0;
-            return bmr * (job + leisure);
-        }
-
-        // Experte: über Minuten bewusste Bewegung
-        const minutes = parseFloat(document.getElementById('neatMinutes').value) || 0;
-        const days = parseFloat(document.getElementById('neatDays').value) || 0;
-        const MET_NEAT = 2.0;
-        return ((MET_NEAT * weight) * (minutes / 60)) * (days / 7);
     }
 
     function updateUI() {
