@@ -50,10 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Berechnungs-Logik
     const calculations = {
+        // Mifflin-St. Jeor (Standard)
         bmr: (g, gr, a, sex) => 
             sex === "mann" 
             ? (10 * g) + (6.25 * gr) - (5 * a) + 5 
             : (10 * g) + (6.25 * gr) - (5 * a) - 161,
+        
+        // Katch-McArdle (Expert, wenn KFA vorhanden)
+        bmrExpert: (g, kfa) => {
+            const lbm = g * (1 - (kfa / 100));
+            return 370 + (21.6 * lbm);
+        },
         
         steps: (s, g, gr) => 3.5 * g * ((s * gr * 0.0041) / 1000) / 5,
         
@@ -61,11 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function getInputValues() {
+        const kfaVal = document.getElementById('kfa').value;
         return {
             g: parseFloat(document.getElementById('gewicht').value),
             gr: parseFloat(document.getElementById('groesse').value),
             a: parseFloat(document.getElementById('alter').value),
             sex: document.getElementById('geschlecht').value,
+            kfa: kfaVal !== '' ? parseFloat(kfaVal) : null,
             steps: parseFloat(document.getElementById('schritte').value) || 0,
             sMet: parseFloat(document.getElementById('sportIntensitaet').value),
             sDur: parseFloat(document.getElementById('sportDauer').value),
@@ -88,6 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (val.a < 10 || val.a > 120) {
             return { valid: false, message: 'Alter muss zwischen 10 und 120 Jahren liegen' };
+        }
+        const level = neatLevelSelect ? neatLevelSelect.value : '';
+        if (level === 'expert' && val.kfa != null && !isNaN(val.kfa)) {
+            if (val.kfa < 5 || val.kfa > 60) {
+                return { valid: false, message: 'KFA muss zwischen 5 und 60 % liegen' };
+            }
         }
         return { valid: true };
     }
@@ -144,8 +159,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         statusDisplay.innerHTML = '';
 
+        // BMR berechnen (Formel abhängig von Level und KFA)
+        const level = neatLevelSelect ? neatLevelSelect.value : '';
+        let bmr;
+        if (level === 'expert' && val.kfa != null && val.kfa >= 5 && val.kfa <= 60) {
+            bmr = calculations.bmrExpert(val.g, val.kfa);
+        } else {
+            bmr = calculations.bmr(val.g, val.gr, val.a, val.sex);
+        }
+
         // Werte berechnen
-        const bmr = calculations.bmr(val.g, val.gr, val.a, val.sex);
         const neatKcal = getNeatKcal(bmr, val.g);
         const stepKcal = calculations.steps(val.steps, val.g, val.gr);
         const sportKcal = calculations.activity(val.sMet, val.sDur, val.sFreq, val.g);
@@ -230,6 +253,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 group.classList.remove('neat-group-active');
             }
         });
+        const kfaGroup = document.querySelector('.kfa-group');
+        if (kfaGroup) {
+            if (current === 'expert') {
+                kfaGroup.classList.add('kfa-group-active');
+            } else {
+                kfaGroup.classList.remove('kfa-group-active');
+            }
+        }
     }
 
     // Event Listener für Live-Update

@@ -199,6 +199,15 @@ h1 {
     display: block;
 }
 
+/* KFA-Feld: Standardmäßig versteckt, nur bei Expert-Level sichtbar */
+.kfa-group {
+    display: none;
+}
+
+.kfa-group.kfa-group-active {
+    display: block;
+}
+
 .form-group {
     margin-bottom: 1.25rem;
 }
