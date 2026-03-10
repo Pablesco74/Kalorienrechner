@@ -1,57 +1,55 @@
 /* ========== Theme Variables ========== */
 :root,
-[data-theme="dark"] {
-    /* Backgrounds - Flat, keine Gradienten */
-    --bg-body: #161B36;
-    --bg-header: #1E2449;
-    --bg-card: #252D5A;
-    --bg-input: #1E2449;
-    --border-color: #2F3760;
+[data-theme="light"] {
+    /* Backgrounds - Warm & Soft */
+    --bg-body: #FDFBF7;           /* Warm Cream */
+    --bg-header: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --bg-input: #FAFAF8;
+    --border-color: #E8E5DF;      /* Warm Grey */
     
     /* Text Colors */
-    --text-primary: #E8EAF6;
-    --text-muted: #9FA8DA;
+    --text-primary: #2D3047;      /* Soft Charcoal */
+    --text-muted: #6B6D7C;        /* Muted Grey */
+    --text-chart: #8B8D9E;
+    
+    /* Accent Colors - Minimalistisch */
+    --accent-primary: #E85D75;    /* Rose */
+    --accent-secondary: #9DB4A0;  /* Sage */
+    --accent-tertiary: #D97757;   /* Terracotta */
+    
+    /* Chart Colors - Harmonisch */
+    --chart-bmr: #E85D75;         /* Rose */
+    --chart-neat: #9DB4A0;        /* Sage */
+    --chart-steps: #F2CC8F;       /* Amber */
+    --chart-strength: #D97757;    /* Terracotta */
+    --chart-cardio: #B4A5F5;      /* Lavender */
+}
+
+[data-theme="dark"] {
+    /* Backgrounds - Soft Navy */
+    --bg-body: #1A2332;           /* Soft Navy */
+    --bg-header: #212936;
+    --bg-card: #242D3E;
+    --bg-input: #1F2731;
+    --border-color: #313A4D;
+    
+    /* Text Colors */
+    --text-primary: #E8EAF0;
+    --text-muted: #9FA3B8;
     --text-chart: #B4BAE3;
     
     /* Accent Colors */
-    --accent-blue: #4C7CF5;
-    --accent-orange: #F97316;
-    --accent-purple: #7C3AED;
-    --accent-green: #22C55E;
+    --accent-primary: #FF8B7B;    /* Coral */
+    --accent-secondary: #A8D5BA;  /* Mint */
+    --accent-tertiary: #F2A884;   /* Peach */
     
     /* Chart Colors */
-    --chart-bmr: #4C7CF5;
-    --chart-neat: #7C3AED;
-    --chart-steps: #22C55E;
-    --chart-strength: #F97316;
-    --chart-cardio: #EF4444;
-}
-
-[data-theme="light"] {
-    /* Backgrounds - Flat */
-    --bg-body: #F5F6FA;
-    --bg-header: #FFFFFF;
-    --bg-card: #FFFFFF;
-    --bg-input: #FFFFFF;
-    --border-color: #D1D5E8;
-    
-    /* Text Colors */
-    --text-primary: #1A1F4D;
-    --text-muted: #5A5F8A;
-    --text-chart: #6B70A0;
-    
-    /* Accent Colors */
-    --accent-blue: #252D85;
-    --accent-orange: #F97316;
-    --accent-purple: #7C3AED;
-    --accent-green: #22C55E;
-    
-    /* Chart Colors */
-    --chart-bmr: #252D85;
-    --chart-neat: #7C3AED;
-    --chart-steps: #22C55E;
-    --chart-strength: #F97316;
-    --chart-cardio: #EF4444;
+    --chart-bmr: #FF8B7B;
+    --chart-neat: #A8D5BA;
+    --chart-steps: #F9E4B7;
+    --chart-strength: #F2A884;
+    --chart-cardio: #B4A5F5;
 }
 
 * {
@@ -66,9 +64,11 @@ body {
     color: var(--text-primary);
     min-height: 100vh;
     transition: background-color 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* Header - Flat */
+/* Header - Clean & Soft */
 .header {
     background: var(--bg-header);
     padding: 1.5rem 2rem;
@@ -113,7 +113,7 @@ body {
     display: block;
 }
 
-/* Theme Toggle - Flat */
+/* Theme Toggle - Soft & Friendly */
 .theme-toggle-wrap {
     display: flex;
     align-items: center;
@@ -122,9 +122,9 @@ body {
 
 .theme-label {
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-muted);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
 .theme-toggle {
@@ -146,7 +146,7 @@ body {
 }
 
 .theme-toggle:hover .theme-toggle-track {
-    background: var(--accent-blue);
+    background: var(--accent-primary);
 }
 
 .theme-toggle-thumb {
@@ -155,17 +155,13 @@ body {
     left: 3px;
     width: 22px;
     height: 22px;
-    background: var(--text-primary);
+    background: #FFFFFF;
     border-radius: 50%;
     transition: transform 0.3s ease;
 }
 
-[data-theme="light"] .theme-toggle-thumb {
-    background: #FFFFFF;
-}
-
 [data-theme="light"] .theme-toggle .theme-toggle-track {
-    background: var(--accent-blue);
+    background: var(--accent-primary);
 }
 
 [data-theme="light"] .theme-toggle-thumb {
@@ -173,7 +169,7 @@ body {
 }
 
 .theme-toggle:focus-visible {
-    outline: 2px solid var(--accent-blue);
+    outline: 2px solid var(--accent-primary);
     outline-offset: 4px;
 }
 
@@ -182,7 +178,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 500px;
     gap: 4rem;
-    padding: 2rem 4rem;
+    padding: 3rem 4rem;
     max-width: 1800px;
     margin: 0 auto;
 }
@@ -194,27 +190,29 @@ body {
     height: fit-content;
 }
 
-/* Level Switch */
+/* Level Switch - Soft Rounded */
 .level-switch {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem 1.25rem;
     background: var(--bg-card);
+    border-radius: 16px;
     border: 1px solid var(--border-color);
 }
 
 .level-switch-label {
     font-size: 0.875rem;
     color: var(--text-muted);
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .level-switch select {
     max-width: 220px;
     background: var(--bg-input);
     border: 1px solid var(--border-color);
+    border-radius: 10px;
 }
 
 .input-grid {
@@ -224,17 +222,19 @@ body {
 }
 
 h1 {
-    color: var(--accent-blue);
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 1.75rem;
+    margin-bottom: 2.5rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
 }
 
-/* Input Sections - Flat */
+/* Input Sections - Soft & Rounded */
 .input-section {
     margin-bottom: 2rem;
-    padding: 1.5rem;
+    padding: 1.75rem;
     background: var(--bg-card);
+    border-radius: 20px;
     border: 1px solid var(--border-color);
 }
 
@@ -243,10 +243,11 @@ h1 {
 }
 
 .input-section h3 {
-    color: var(--accent-orange);
-    font-size: 1.1rem;
-    margin-bottom: 1.25rem;
-    font-weight: 700;
+    color: var(--accent-primary);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.2px;
 }
 
 .neat-group {
@@ -258,37 +259,40 @@ h1 {
 }
 
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
 }
 
 label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
     color: var(--text-muted);
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 input[type="number"],
 select {
     width: 100%;
-    padding: 0.75rem;
+    padding: 0.875rem 1rem;
     background: var(--bg-input);
     border: 1px solid var(--border-color);
+    border-radius: 12px;
     color: var(--text-primary);
-    font-size: 0.875rem;
-    transition: border-color 0.2s ease;
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+    font-weight: 400;
 }
 
 input[type="number"]:hover,
 select:hover {
-    border-color: var(--accent-blue);
+    border-color: var(--accent-primary);
 }
 
 input:focus,
 select:focus {
     outline: none;
-    border-color: var(--accent-blue);
+    border-color: var(--accent-primary);
+    background: #FFFFFF;
 }
 
 /* Canvas Panel */
@@ -314,14 +318,15 @@ select:focus {
     display: none;
 }
 
-/* Canvas Container - Flat */
+/* Canvas Container - Soft & Rounded */
 .canvas-container {
     width: 100%;
     max-width: 450px;
-    margin-top: 2rem;
+    margin-top: 3rem;
     position: relative;
-    padding: 2rem;
+    padding: 2.5rem;
     background: var(--bg-card);
+    border-radius: 24px;
     border: 1px solid var(--border-color);
 }
 
@@ -336,26 +341,28 @@ select:focus {
 
 .canvas-center-value {
     font-size: 3.5rem;
-    font-weight: 800;
-    color: var(--accent-orange);
+    font-weight: 700;
+    color: var(--accent-primary);
     line-height: 1;
     margin-bottom: 0.25rem;
+    letter-spacing: -1px;
 }
 
 .canvas-center-label {
     font-size: 1rem;
     color: var(--text-chart);
-    font-weight: 600;
+    font-weight: 500;
+    letter-spacing: 0.3px;
 }
 
 canvas {
     max-width: 100%;
 }
 
-/* Footer - Flat */
+/* Footer - Minimal */
 .site-footer {
-    margin-top: 50px;
-    padding: 20px;
+    margin-top: 4rem;
+    padding: 2rem;
     text-align: center;
     border-top: 1px solid var(--border-color);
     font-family: 'Inter', sans-serif;
@@ -363,41 +370,42 @@ canvas {
 
 .site-footer p {
     color: var(--text-muted);
-    font-size: 12px;
+    font-size: 0.8125rem;
     margin-bottom: 0.5rem;
+    font-weight: 400;
 }
 
 .footer-link {
-    color: var(--accent-blue);
+    color: var(--accent-primary);
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 0.875rem;
+    font-weight: 500;
     transition: opacity 0.2s ease;
 }
 
 .footer-link:hover {
-    opacity: 0.8;
+    opacity: 0.7;
 }
 
 /* Status Message */
 #statusMessage {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     text-align: center;
     font-size: 0.875rem;
     color: var(--text-muted);
 }
 
 #statusMessage .fehler {
-    color: #EF4444;
-    font-weight: 600;
+    color: #E85D75;
+    font-weight: 500;
 }
 
 /* Responsive - Tablet */
 @media (max-width: 1200px) {
     .container {
         grid-template-columns: 1fr;
-        gap: 2rem;
-        padding: 2rem;
+        gap: 2.5rem;
+        padding: 2.5rem 2rem;
     }
 
     .canvas-panel {
@@ -424,7 +432,7 @@ canvas {
 /* Responsive - Mobile */
 @media (max-width: 768px) {
     .header {
-        padding: 1rem 1.5rem;
+        padding: 1.25rem 1.5rem;
     }
 
     .theme-label {
@@ -437,44 +445,47 @@ canvas {
     }
 
     .container {
-        padding: 1.5rem;
+        padding: 2rem 1.5rem;
         gap: 2rem;
     }
 
     h1 {
-        font-size: 1.25rem;
-        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
     }
 
     .input-section {
-        padding: 1.25rem;
+        padding: 1.5rem;
+        border-radius: 16px;
     }
 
     .input-section h3 {
-        font-size: 1rem;
-        margin-bottom: 1rem;
+        font-size: 0.9375rem;
+        margin-bottom: 1.25rem;
     }
 
     .form-group {
-        margin-bottom: 1rem;
+        margin-bottom: 1.125rem;
     }
 
     label {
-        font-size: 0.9rem;
-        margin-bottom: 0.4rem;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
     }
 
     input[type="number"],
     select {
-        padding: 0.85rem;
+        padding: 0.875rem;
         font-size: 16px;
         min-height: 48px;
+        border-radius: 12px;
     }
 
     .canvas-container {
         max-width: 100%;
-        margin-top: 1rem;
-        padding: 1.5rem;
+        margin-top: 1.5rem;
+        padding: 2rem;
+        border-radius: 20px;
     }
 
     .canvas-center-value {
@@ -482,11 +493,15 @@ canvas {
     }
 
     .canvas-center-label {
-        font-size: 0.95rem;
+        font-size: 0.9375rem;
     }
 
     .input-panel {
         max-width: 100%;
+    }
+
+    .level-switch {
+        border-radius: 12px;
     }
 }
 
@@ -502,31 +517,31 @@ canvas {
     }
 
     .container {
-        padding: 1rem;
+        padding: 1.5rem 1rem;
         gap: 1.5rem;
     }
 
     h1 {
-        font-size: 1.15rem;
-        margin-bottom: 1.25rem;
+        font-size: 1.375rem;
+        margin-bottom: 1.75rem;
     }
 
     .input-section {
         margin-bottom: 1.5rem;
-        padding: 1rem;
+        padding: 1.25rem;
     }
 
     .input-section h3 {
-        font-size: 0.95rem;
-        margin-bottom: 0.85rem;
+        font-size: 0.9375rem;
+        margin-bottom: 1rem;
     }
 
     .form-group {
-        margin-bottom: 0.9rem;
+        margin-bottom: 1rem;
     }
 
     label {
-        font-size: 0.85rem;
+        font-size: 0.8125rem;
     }
 
     input[type="number"],
@@ -537,16 +552,16 @@ canvas {
 
     .canvas-container {
         max-width: 100%;
-        margin-top: 0.5rem;
-        padding: 1.25rem;
+        margin-top: 1rem;
+        padding: 1.75rem;
     }
 
     .canvas-center-value {
-        font-size: 2.5rem;
+        font-size: 2.75rem;
     }
 
     .canvas-center-label {
-        font-size: 0.85rem;
+        font-size: 0.875rem;
     }
 
     .canvas-panel {
@@ -557,7 +572,7 @@ canvas {
 /* Landscape Mode */
 @media (max-width: 768px) and (orientation: landscape) {
     .container {
-        padding: 1rem 2rem;
+        padding: 1.5rem 2rem;
     }
 
     .canvas-panel {
