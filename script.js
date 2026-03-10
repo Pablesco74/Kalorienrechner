@@ -159,10 +159,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         statusDisplay.innerHTML = '';
 
-        // BMR berechnen (Formel abhängig von Level und KFA)
+        // BMR: Katch-McArdle NUR bei Expert + KFA, sonst zwingend Mifflin-St. Jeor
         const level = neatLevelSelect ? neatLevelSelect.value : '';
+        const hasValidKfa = val.kfa != null && !isNaN(val.kfa) && val.kfa >= 5 && val.kfa <= 60;
+        const useKatchMcArdle = level === 'expert' && hasValidKfa;
+
         let bmr;
-        if (level === 'expert' && val.kfa != null && val.kfa >= 5 && val.kfa <= 60) {
+        if (useKatchMcArdle) {
             bmr = calculations.bmrExpert(val.g, val.kfa);
         } else {
             bmr = calculations.bmr(val.g, val.gr, val.a, val.sex);
@@ -255,11 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const kfaGroup = document.querySelector('.kfa-group');
         if (kfaGroup) {
-            if (current === 'expert') {
-                kfaGroup.classList.add('kfa-group-active');
-            } else {
-                kfaGroup.classList.remove('kfa-group-active');
-            }
+            kfaGroup.style.display = current === 'expert' ? 'block' : 'none';
         }
     }
 
