@@ -233,7 +233,6 @@ input:focus,
 select:focus {
     outline: none;
     border-color: var(--accent-primary);
-    background: #FFFFFF;
 }
 
 /* Canvas Panel */
