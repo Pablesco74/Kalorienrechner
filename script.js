@@ -125,21 +125,58 @@ document.addEventListener('DOMContentLoaded', () => {
             return bmr * (job + leisure);
         }
 
-        // EXPERTE: Gewichteter Wochendurchschnitt
-        const jobFaktor = parseFloat(document.getElementById('neatJobExpert').value) || 0;
-        const arbeitsTage = parseFloat(document.getElementById('neatWorkDays').value) || 0;
-        
-        const alltagFaktor = parseFloat(document.getElementById('neatDaily').value) || 0;
-        
-        const restDays = parseFloat(document.getElementById('neatRestDays').value) || 0;
-        const restDayFaktor = parseFloat(document.getElementById('neatRestActivity').value) || 0;
-
-        // Gewichteter Durchschnitt über die Woche
+        // EXPERTE: Nutzt Wochen-Matrix (NEAT aus calculateWeeklyAverage in updateUI)
+        // Fallback: alte Logik falls weekly matrix nicht genutzt
+        const jobFaktor = parseFloat(document.getElementById('neatJobExpert')?.value) || 0;
+        const arbeitsTage = parseFloat(document.getElementById('neatWorkDays')?.value) || 0;
+        const alltagFaktor = parseFloat(document.getElementById('neatDaily')?.value) || 0;
+        const restDays = parseFloat(document.getElementById('neatRestDays')?.value) || 0;
+        const restDayFaktor = parseFloat(document.getElementById('neatRestActivity')?.value) || 0;
         const neatJob = (jobFaktor * arbeitsTage) / 7;
-        const neatAlltag = alltagFaktor;  // Gilt jeden Tag
+        const neatAlltag = alltagFaktor;
         const neatRest = (restDayFaktor * restDays) / 7;
-
         return bmr * (neatJob + neatAlltag + neatRest);
+    }
+
+    function calculateWeeklyAverage(bmr, weight) {
+        const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+        const jobFaktor = parseFloat(document.getElementById('neatJobExpert')?.value) || 0.1;
+        const alltagFaktor = parseFloat(document.getElementById('neatDaily')?.value) || 0.06;
+        const restDayFaktor = parseFloat(document.getElementById('neatRestActivity')?.value) || 0.05;
+        const sMet = parseFloat(document.getElementById('expertSportMet')?.value) || 4.5;
+        const sDur = parseFloat(document.getElementById('expertSportDur')?.value) || 60;
+        const cMet = parseFloat(document.getElementById('expertCardioMet')?.value) || 6;
+        const cDur = parseFloat(document.getElementById('expertCardioDur')?.value) || 30;
+        const steps = parseFloat(document.getElementById('schritte')?.value) || 8000;
+        const gr = parseFloat(document.getElementById('groesse')?.value) || 175;
+
+        let totalNeat = 0, totalStrength = 0, totalCardio = 0;
+        const stepKcalPerDay = calculations.steps(steps, weight, gr);
+
+        days.forEach((day, i) => {
+            const workEl = document.getElementById('work' + day);
+            const trainEl = document.getElementById('train' + day);
+            const workDay = workEl?.checked ?? (i < 5);
+            const trainType = trainEl?.value || 'none';
+
+            const neatFactor = workDay ? jobFaktor : restDayFaktor;
+            totalNeat += bmr * (neatFactor + alltagFaktor);
+
+            if (trainType === 'kraft' || trainType === 'beides') {
+                totalStrength += (sMet * weight * (sDur / 60));
+            }
+            if (trainType === 'cardio' || trainType === 'beides') {
+                totalCardio += (cMet * weight * (cDur / 60));
+            }
+        });
+
+        return {
+            bmr,
+            neat: totalNeat / 7,
+            steps: stepKcalPerDay,
+            strength: totalStrength / 7,
+            cardio: totalCardio / 7
+        };
     }
 
     function updateUI() {
@@ -172,11 +209,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Werte berechnen
-        const neatKcal = getNeatKcal(bmr, val.g);
-        const stepKcal = calculations.steps(val.steps, val.g, val.gr);
-        const sportKcal = calculations.activity(val.sMet, val.sDur, val.sFreq, val.g);
-        const cardioKcal = calculations.activity(val.cMet, val.cDur, val.cFreq, val.g);
-        
+        let neatKcal, stepKcal, sportKcal, cardioKcal;
+        const isExpertWithGrid = level === 'expert';
+
+        if (isExpertWithGrid) {
+            const weekly = calculateWeeklyAverage(bmr, val.g);
+            neatKcal = weekly.neat;
+            stepKcal = weekly.steps;
+            sportKcal = weekly.strength;
+            cardioKcal = weekly.cardio;
+        } else {
+            neatKcal = getNeatKcal(bmr, val.g);
+            stepKcal = calculations.steps(val.steps, val.g, val.gr);
+            sportKcal = calculations.activity(val.sMet, val.sDur, val.sFreq, val.g);
+            cardioKcal = calculations.activity(val.cMet, val.cDur, val.cFreq, val.g);
+        }
+
         const total = bmr + neatKcal + stepKcal + sportKcal + cardioKcal;
 
         // Anzeige
@@ -260,6 +308,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (kfaGroup) {
             kfaGroup.style.display = current === 'expert' ? 'block' : 'none';
         }
+        const expertGrid = document.querySelector('.expert-weekly-grid');
+        const sportStandard = document.querySelector('.sport-inputs-standard');
+        if (expertGrid) expertGrid.style.display = current === 'expert' ? 'block' : 'none';
+        if (sportStandard) sportStandard.style.display = current === 'expert' ? 'none' : 'block';
     }
 
     // Event Listener für Live-Update

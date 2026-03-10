@@ -167,56 +167,126 @@
                 </div>
 
                 <div class="input-column">
-                    <div class="input-section">
-                        <h3>Krafttraining</h3>
-                        <div class="form-group">
-                            <label for="sportIntensitaet">Intensität</label>
-                            <select id="sportIntensitaet">
-                                <option value="4.5">Moderat</option>
-                                <option value="6.5">Intensiv</option>
-                                <option value="8">Sehr intensiv</option>
-                            </select>
+                    <!-- Standard: Kraft & Cardio (Anfänger/Fortgeschritten) -->
+                    <div class="sport-inputs-standard">
+                        <div class="input-section">
+                            <h3>Krafttraining</h3>
+                            <div class="form-group">
+                                <label for="sportIntensitaet">Intensität</label>
+                                <select id="sportIntensitaet">
+                                    <option value="4.5">Moderat</option>
+                                    <option value="6.5">Intensiv</option>
+                                    <option value="8">Sehr intensiv</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sportFreq">Einheiten pro Woche</label>
+                                <select id="sportFreq">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sportDauer">Dauer pro Einheit (Minuten)</label>
+                                <input type="number" id="sportDauer" min="10" max="180" value="60">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="sportFreq">Einheiten pro Woche</label>
-                            <select id="sportFreq">
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="sportDauer">Dauer pro Einheit (Minuten)</label>
-                            <input type="number" id="sportDauer" min="10" max="180" value="60">
+
+                        <div class="input-section">
+                            <h3>Cardio</h3>
+                            <div class="form-group">
+                                <label for="cardioIntensitaet">Intensität</label>
+                                <select id="cardioIntensitaet">
+                                    <option value="6">Locker (120–130 BPM)</option>
+                                    <option value="8">Mittel (130–150 BPM)</option>
+                                    <option value="10">Hart (150–170 BPM)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cardioFreq">Einheiten pro Woche</label>
+                                <select id="cardioFreq">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cardioDauer">Dauer pro Einheit (Minuten)</label>
+                                <input type="number" id="cardioDauer" min="10" max="120" value="30">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="input-section">
-                        <h3>Cardio</h3>
-                        <div class="form-group">
-                            <label for="cardioIntensitaet">Intensität</label>
-                            <select id="cardioIntensitaet">
-                                <option value="6">Locker (120–130 BPM)</option>
-                                <option value="8">Mittel (130–150 BPM)</option>
-                                <option value="10">Hart (150–170 BPM)</option>
-                            </select>
+                    <!-- Experten-Modus: Wochen-Matrix -->
+                    <div class="expert-weekly-grid input-section">
+                        <h3>Wochenplanung</h3>
+                        <p class="expert-tip">Expertinnen-Tipp: Plane deine Woche individuell, um Schwankungen im Energiebedarf präziser auszugleichen.</p>
+                        <div class="weekly-matrix">
+                            <div class="weekly-matrix-row weekly-matrix-header">
+                                <div class="matrix-label"></div>
+                                <div class="day-cell">Mo</div>
+                                <div class="day-cell">Di</div>
+                                <div class="day-cell">Mi</div>
+                                <div class="day-cell">Do</div>
+                                <div class="day-cell">Fr</div>
+                                <div class="day-cell">Sa</div>
+                                <div class="day-cell">So</div>
+                            </div>
+                            <div class="weekly-matrix-row">
+                                <div class="matrix-label">Arbeitstag</div>
+                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workMo" class="expert-checkbox" checked><span class="toggle-slider"></span></label></div>
+                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workDi" class="expert-checkbox" checked><span class="toggle-slider"></span></label></div>
+                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workMi" class="expert-checkbox" checked><span class="toggle-slider"></span></label></div>
+                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workDo" class="expert-checkbox" checked><span class="toggle-slider"></span></label></div>
+                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workFr" class="expert-checkbox" checked><span class="toggle-slider"></span></label></div>
+                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workSa" class="expert-checkbox"><span class="toggle-slider"></span></label></div>
+                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workSo" class="expert-checkbox"><span class="toggle-slider"></span></label></div>
+                            </div>
+                            <div class="weekly-matrix-row">
+                                <div class="matrix-label">Training</div>
+                                <div class="day-cell"><select id="trainMo" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
+                                <div class="day-cell"><select id="trainDi" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
+                                <div class="day-cell"><select id="trainMi" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
+                                <div class="day-cell"><select id="trainDo" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
+                                <div class="day-cell"><select id="trainFr" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
+                                <div class="day-cell"><select id="trainSa" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
+                                <div class="day-cell"><select id="trainSo" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="cardioFreq">Einheiten pro Woche</label>
-                            <select id="cardioFreq">
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="cardioDauer">Dauer pro Einheit (Minuten)</label>
-                            <input type="number" id="cardioDauer" min="10" max="120" value="30">
+                        <div class="expert-training-defaults">
+                            <h4>Training-Standards</h4>
+                            <div class="expert-defaults-row">
+                                <div class="form-group">
+                                    <label for="expertSportMet">Kraft: MET</label>
+                                    <select id="expertSportMet">
+                                        <option value="4.5">4.5 (Moderat)</option>
+                                        <option value="6.5">6.5 (Intensiv)</option>
+                                        <option value="8">8 (Sehr intensiv)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expertSportDur">Dauer (min)</label>
+                                    <input type="number" id="expertSportDur" min="10" max="180" value="60">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expertCardioMet">Cardio: MET</label>
+                                    <select id="expertCardioMet">
+                                        <option value="6">6 (Locker)</option>
+                                        <option value="8">8 (Mittel)</option>
+                                        <option value="10">10 (Hart)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="expertCardioDur">Dauer (min)</label>
+                                    <input type="number" id="expertCardioDur" min="10" max="120" value="30">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
