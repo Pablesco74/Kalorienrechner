@@ -71,29 +71,33 @@ body {
 /* Header - Clean & Soft */
 .header {
     background: var(--bg-header);
-    padding: 1.5rem 2rem;
+    padding: 1.25rem 2rem;
     border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .header-inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     max-width: 1800px;
     margin: 0 auto;
 }
 
 /* Logo */
 .logo-container {
-    max-width: 200px;
-    height: 44px;
+    height: 40px;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .logo-container img {
-    max-width: 100%;
-    height: auto;
+    height: 100%;
+    width: auto;
     display: block;
 }
 
@@ -425,12 +429,11 @@ canvas {
 /* Responsive - Mobile */
 @media (max-width: 768px) {
     .header {
-        padding: 1.25rem 1.5rem;
+        padding: 1rem 1.5rem;
     }
 
     .logo-container {
-        max-width: 150px;
-        height: 32px;
+        height: 34px;
     }
 
     .container {
@@ -493,11 +496,10 @@ canvas {
 /* Responsive - Kleine Smartphones */
 @media (max-width: 480px) {
     .header {
-        padding: 1rem;
+        padding: 0.875rem 1rem;
     }
 
     .logo-container {
-        max-width: 130px;
         height: 28px;
     }
 
