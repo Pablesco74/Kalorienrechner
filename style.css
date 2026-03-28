@@ -120,11 +120,12 @@ body {
 
 /* Main Container */
 .container {
-    display: grid;
-    grid-template-columns: 1fr 500px;
-    gap: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
     padding: 3rem 4rem;
-    max-width: 1800px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -133,6 +134,7 @@ body {
     background: transparent;
     padding: 0;
     height: fit-content;
+    width: 100%;
 }
 
 .input-grid {
@@ -144,6 +146,7 @@ body {
 .input-grid--stack {
     grid-template-columns: 1fr;
     max-width: 640px;
+    margin: 0 auto;
 }
 
 h1 {
@@ -152,6 +155,7 @@ h1 {
     margin-bottom: 2.5rem;
     font-weight: 600;
     letter-spacing: -0.3px;
+    text-align: center;
 }
 
 @keyframes slideIn {
@@ -280,20 +284,23 @@ select:focus {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    min-height: 600px;
+    width: 100%;
+    max-width: 500px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.5s ease;
+    max-height: 0;
+    overflow: hidden;
 }
 
 .canvas-panel:not(.visible) {
-    min-height: 0;
+    max-height: 0;
 }
 
 .canvas-panel.visible {
     opacity: 1;
     pointer-events: auto;
-    min-height: 600px;
+    max-height: 800px;
 }
 
 .canvas-header {
@@ -312,7 +319,7 @@ select:focus {
 .canvas-container {
     width: 100%;
     max-width: 450px;
-    margin-top: 3rem;
+    margin-top: 0;
     position: relative;
     padding: 2.5rem;
     background: var(--bg-card);
@@ -321,12 +328,8 @@ select:focus {
 }
 
 .canvas-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     text-align: center;
-    pointer-events: none;
+    margin-bottom: 1.5rem;
 }
 
 .canvas-center-value {
@@ -393,22 +396,8 @@ canvas {
 /* Responsive - Tablet */
 @media (max-width: 1200px) {
     .container {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
         padding: 2.5rem 2rem;
-    }
-
-    .canvas-panel {
-        order: -1;
-        margin-bottom: 2rem;
-    }
-
-    .canvas-panel.visible {
-        min-height: auto;
-    }
-
-    .canvas-panel:not(.visible) {
-        min-height: 0;
+        gap: 2.5rem;
     }
 
     .canvas-container {
@@ -418,11 +407,6 @@ canvas {
     .input-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
-    }
-    
-    .input-panel {
-        max-width: 600px;
-        margin: 0 auto;
     }
 }
 

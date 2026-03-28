@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         grundumsatz: {
             step: 1,
             element: document.querySelector('[data-section="grundumsatz"]'),
-            requiredFields: ['geschlecht', 'gewicht', 'groesse', 'alter']
+            requiredFields: ['geschlecht', 'gewicht', 'groesse', 'alter', 'kfa']
         },
         schritte: {
             step: 2,
@@ -47,6 +47,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function scrollToElement(el) {
+        const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
+        const viewportHeight = window.innerHeight - headerHeight;
+        const elTop = el.getBoundingClientRect().top + window.scrollY - headerHeight;
+        const target = elTop - (viewportHeight - el.offsetHeight) / 2;
+        const start = window.scrollY;
+        const distance = target - start;
+        const duration = 700;
+        let startTime = null;
+
+        function easeInOutCubic(t) {
+            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            window.scrollTo(0, start + distance * easeInOutCubic(progress));
+            if (progress < 1) requestAnimationFrame(step);
+        }
+
+        requestAnimationFrame(step);
+    }
+
     function updateSectionsVisibility() {
         let allPreviousComplete = true;
 
@@ -60,9 +85,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (allPreviousComplete) {
-                section.element.classList.add('visible');
+            const wasVisible = section.element.classList.contains('visible');
+
+            if (allPreviousComplete && wasVisible) {
+                // Bereits sichtbar – offen halten, weiter kaskadieren
                 allPreviousComplete = isSectionComplete(sectionName);
+            } else if (allPreviousComplete && !wasVisible) {
+                // Neu aufdecken – scrollen und hier stoppen
+                section.element.classList.add('visible');
+                setTimeout(() => scrollToElement(section.element), 800);
+                allPreviousComplete = false;
             } else {
                 section.element.classList.remove('visible');
             }
@@ -188,8 +220,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function setCanvasVisible(visible) {
         if (!canvasPanel) return;
         if (visible) {
+            const wasVisible = canvasPanel.classList.contains('visible');
             canvasPanel.classList.add('visible');
             canvasPanel.setAttribute('aria-hidden', 'false');
+            if (!wasVisible) {
+                setTimeout(() => scrollToElement(canvasPanel), 800);
+            }
         } else {
             canvasPanel.classList.remove('visible');
             canvasPanel.setAttribute('aria-hidden', 'true');

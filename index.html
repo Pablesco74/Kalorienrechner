@@ -61,8 +61,7 @@
                         <div class="kfa-group">
                             <div class="form-group">
                                 <label for="kfa">Körperfettanteil (KFA)</label>
-                                <input type="number" id="kfa" min="5" max="60" step="0.1" placeholder="optional, in %" title="Optional – wird nur unter 11 % oder über 25 % für die Grundumsatz-Berechnung genutzt.">
-                                <p class="field-hint">Optional – wird nur unter 11&nbsp;% oder über 25&nbsp;% für den Grundumsatz verwendet.</p>
+                                <input type="number" id="kfa" min="5" max="60" step="0.1" placeholder="in %">
                             </div>
                         </div>
                     </div>
@@ -71,7 +70,7 @@
                         <h3>Tägliche Aktivität</h3>
                         <div class="form-group">
                             <label for="schritte">Schritte pro Tag</label>
-                            <input type="number" id="schritte" min="0" max="40000" step="500" value="8000">
+                            <input type="number" id="schritte" min="0" max="40000" step="500" placeholder="z.B. 8000">
                         </div>
                     </div>
 
@@ -80,12 +79,13 @@
 
                         <div class="form-group">
                             <label for="workDays">Arbeitstage pro Woche</label>
-                            <input type="number" id="workDays" min="0" max="7" value="5">
+                            <input type="number" id="workDays" min="0" max="7" placeholder="z.B. 5">
                         </div>
 
                         <div class="form-group">
                             <label for="neatWork">Aktivität an Arbeitstagen</label>
                             <select id="neatWork">
+                                <option value="" disabled selected>Bitte wählen</option>
                                 <option value="0.08">Sitzend (Büro, Homeoffice)</option>
                                 <option value="0.12">Aktiv (viel Stehen/Gehen)</option>
                                 <option value="0.18">Sehr aktiv (körperliche Arbeit)</option>
@@ -95,6 +95,7 @@
                         <div class="form-group">
                             <label for="neatRest">Aktivität an freien Tagen</label>
                             <select id="neatRest">
+                                <option value="" disabled selected>Bitte wählen</option>
                                 <option value="0.05">Entspannt (viel Ruhe)</option>
                                 <option value="0.08">Normal (Hausarbeit, Hobbys)</option>
                                 <option value="0.12">Aktiv (Sport, Ausflüge)</option>
@@ -122,6 +123,7 @@
                         <div class="form-group">
                             <label for="kraftMet">Intensität</label>
                             <select id="kraftMet">
+                                <option value="" disabled selected>Bitte wählen</option>
                                 <option value="4.5">Moderat</option>
                                 <option value="6.5">Intensiv</option>
                                 <option value="8">Sehr intensiv</option>
@@ -130,7 +132,7 @@
 
                         <div class="form-group">
                             <label for="kraftDur">Dauer pro Einheit (Minuten)</label>
-                            <input type="number" id="kraftDur" min="10" max="180" value="60">
+                            <input type="number" id="kraftDur" min="10" max="180" placeholder="z.B. 60">
                         </div>
 
                         <h4 class="training-subheading training-subheading--spaced">Cardio</h4>
@@ -149,6 +151,7 @@
                         <div class="form-group">
                             <label for="cardioMet">Intensität</label>
                             <select id="cardioMet">
+                                <option value="" disabled selected>Bitte wählen</option>
                                 <option value="6">Locker (120–130 BPM)</option>
                                 <option value="8">Mittel (130–150 BPM)</option>
                                 <option value="10">Hart (150–170 BPM)</option>
@@ -157,19 +160,19 @@
 
                         <div class="form-group">
                             <label for="cardioDur">Dauer pro Einheit (Minuten)</label>
-                            <input type="number" id="cardioDur" min="10" max="120" value="30">
+                            <input type="number" id="cardioDur" min="10" max="120" placeholder="z.B. 30">
                         </div>
                     </div>
             </div>
         </section>
 
         <section class="canvas-panel" aria-hidden="true">
+            <div class="canvas-center">
+                <div class="canvas-center-value" id="totalCalories">-</div>
+                <div class="canvas-center-label">kcal / Tag</div>
+            </div>
             <div class="canvas-container">
                 <canvas id="kcalChart"></canvas>
-                <div class="canvas-center">
-                    <div class="canvas-center-value" id="totalCalories">-</div>
-                    <div class="canvas-center-label">kcal / Tag</div>
-                </div>
             </div>
             <div id="statusMessage"></div>
         </section>
