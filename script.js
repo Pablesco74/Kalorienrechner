@@ -12,15 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
         root.setAttribute('data-theme', theme);
     }
 
-    // Setze Theme basierend auf System
     applyTheme(getSystemTheme());
 
-    // Lausche auf System-Theme-Änderungen
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
         const newTheme = e.matches ? 'dark' : 'light';
         applyTheme(newTheme);
-        
-        // Chart neu rendern mit neuen Farben
+
         if (kcalChart) {
             const lastData = kcalChart.data.datasets[0].data;
             const labels = kcalChart.data.labels;
@@ -29,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Farben aus CSS-Variablen holen
     function getChartColors() {
         const style = getComputedStyle(document.documentElement);
         return {
@@ -41,47 +37,38 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // DOM Elemente
     const inputs = document.querySelectorAll('input, select');
     const totalDisplay = document.getElementById('totalCalories');
     const statusDisplay = document.getElementById('statusMessage');
-    const neatLevelSelect = document.getElementById('neatLevel');
-    const neatGroups = document.querySelectorAll('.neat-group');
 
-    // Berechnungs-Logik
     const calculations = {
-        // Mifflin-St. Jeor (Standard)
-        bmr: (g, gr, a, sex) => 
-            sex === "mann" 
-            ? (10 * g) + (6.25 * gr) - (5 * a) + 5 
-            : (10 * g) + (6.25 * gr) - (5 * a) - 161,
-        
-        // Katch-McArdle (Expert, wenn KFA vorhanden)
-        bmrExpert: (g, kfa) => {
-            const lbm = g * (1 - (kfa / 100));
-            return 370 + (21.6 * lbm);
-        },
-        
-        steps: (s, g, gr) => 3.5 * g * ((s * gr * 0.0041) / 1000) / 5,
-        
-        activity: (met, dauer, freq, g) => ((met * g * (dauer / 60)) * freq) / 7
+        steps: (s, g, gr) => 3.5 * g * ((s * gr * 0.0041) / 1000) / 5
     };
 
     function getInputValues() {
-        const kfaVal = document.getElementById('kfa').value;
+        const kfaRaw = document.getElementById('kfa').value;
+        const kfa = kfaRaw !== '' && kfaRaw != null ? parseFloat(kfaRaw) : null;
+
+        let workDays = parseFloat(document.getElementById('workDays').value);
+        if (isNaN(workDays)) workDays = 5;
+        workDays = Math.max(0, Math.min(7, workDays));
+
         return {
             g: parseFloat(document.getElementById('gewicht').value),
             gr: parseFloat(document.getElementById('groesse').value),
             a: parseFloat(document.getElementById('alter').value),
             sex: document.getElementById('geschlecht').value,
-            kfa: kfaVal !== '' ? parseFloat(kfaVal) : null,
+            kfa,
             steps: parseFloat(document.getElementById('schritte').value) || 0,
-            sMet: parseFloat(document.getElementById('sportIntensitaet').value),
-            sDur: parseFloat(document.getElementById('sportDauer').value),
-            sFreq: parseFloat(document.getElementById('sportFreq').value),
-            cMet: parseFloat(document.getElementById('cardioIntensitaet').value),
-            cDur: parseFloat(document.getElementById('cardioDauer').value),
-            cFreq: parseFloat(document.getElementById('cardioFreq').value)
+            workDays,
+            neatWork: parseFloat(document.getElementById('neatWork').value),
+            neatRest: parseFloat(document.getElementById('neatRest').value),
+            kraftFreq: parseFloat(document.getElementById('kraftFreq').value),
+            kraftMet: parseFloat(document.getElementById('kraftMet').value),
+            kraftDur: parseFloat(document.getElementById('kraftDur').value),
+            cardioFreq: parseFloat(document.getElementById('cardioFreq').value),
+            cardioMet: parseFloat(document.getElementById('cardioMet').value),
+            cardioDur: parseFloat(document.getElementById('cardioDur').value)
         };
     }
 
@@ -98,8 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (val.a < 10 || val.a > 120) {
             return { valid: false, message: 'Alter muss zwischen 10 und 120 Jahren liegen' };
         }
-        const level = neatLevelSelect ? neatLevelSelect.value : '';
-        if (level === 'expert' && val.kfa != null && !isNaN(val.kfa)) {
+        if (val.kfa != null && !isNaN(val.kfa)) {
             if (val.kfa < 5 || val.kfa > 60) {
                 return { valid: false, message: 'KFA muss zwischen 5 und 60 % liegen' };
             }
@@ -107,83 +93,34 @@ document.addEventListener('DOMContentLoaded', () => {
         return { valid: true };
     }
 
-    function getNeatKcal(bmr, weight) {
-        if (!neatLevelSelect) return 0;
+    function calculateBMR(val) {
+        const hasKFA = val.kfa !== null && !isNaN(val.kfa) && val.kfa >= 5 && val.kfa <= 60;
 
-        const level = neatLevelSelect.value;
-
-        // ANFÄNGER: Einfache Prozent-Auswahl
-        if (level === 'beginner') {
-            const factor = parseFloat(document.getElementById('neatBeginner').value) || 0;
-            return bmr * factor;
+        if (hasKFA && (val.kfa < 11 || val.kfa > 25)) {
+            const lbm = val.g * (1 - (val.kfa / 100));
+            return 370 + (21.6 * lbm);
         }
 
-        // FORTGESCHRITTEN: Job + Freizeit
-        if (level === 'intermediate') {
-            const job = parseFloat(document.getElementById('neatJobInter').value) || 0;
-            const leisure = parseFloat(document.getElementById('neatLeisure').value) || 0;
-            return bmr * (job + leisure);
-        }
-
-        // EXPERTE: Nutzt Wochen-Matrix (NEAT aus calculateWeeklyAverage in updateUI)
-        // Fallback: alte Logik falls weekly matrix nicht genutzt
-        const jobFaktor = parseFloat(document.getElementById('neatJobExpert')?.value) || 0;
-        const arbeitsTage = parseFloat(document.getElementById('neatWorkDays')?.value) || 0;
-        const alltagFaktor = parseFloat(document.getElementById('neatDaily')?.value) || 0;
-        const restDays = parseFloat(document.getElementById('neatRestDays')?.value) || 0;
-        const restDayFaktor = parseFloat(document.getElementById('neatRestActivity')?.value) || 0;
-        const neatJob = (jobFaktor * arbeitsTage) / 7;
-        const neatAlltag = alltagFaktor;
-        const neatRest = (restDayFaktor * restDays) / 7;
-        return bmr * (neatJob + neatAlltag + neatRest);
+        return val.sex === 'mann'
+            ? (10 * val.g) + (6.25 * val.gr) - (5 * val.a) + 5
+            : (10 * val.g) + (6.25 * val.gr) - (5 * val.a) - 161;
     }
 
-    function calculateWeeklyAverage(bmr, weight) {
-        const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
-        const jobFaktor = parseFloat(document.getElementById('neatJobExpert')?.value) || 0.1;
-        const alltagFaktor = parseFloat(document.getElementById('neatDaily')?.value) || 0.06;
-        const restDayFaktor = parseFloat(document.getElementById('neatRestActivity')?.value) || 0.05;
-        const sMet = parseFloat(document.getElementById('expertSportMet')?.value) || 4.5;
-        const sDur = parseFloat(document.getElementById('expertSportDur')?.value) || 60;
-        const cMet = parseFloat(document.getElementById('expertCardioMet')?.value) || 6;
-        const cDur = parseFloat(document.getElementById('expertCardioDur')?.value) || 30;
-        const steps = parseFloat(document.getElementById('schritte')?.value) || 8000;
-        const gr = parseFloat(document.getElementById('groesse')?.value) || 175;
+    function calculateNEAT(bmr, val) {
+        const restDays = 7 - val.workDays;
+        return bmr * ((val.workDays / 7 * val.neatWork) + (restDays / 7 * val.neatRest));
+    }
 
-        let totalNeat = 0, totalStrength = 0, totalCardio = 0;
-        const stepKcalPerDay = calculations.steps(steps, weight, gr);
-
-        days.forEach((day, i) => {
-            const workEl = document.getElementById('work' + day);
-            const trainEl = document.getElementById('train' + day);
-            const workDay = workEl?.checked ?? (i < 5);
-            const trainType = trainEl?.value || 'none';
-
-            const neatFactor = workDay ? jobFaktor : restDayFaktor;
-            totalNeat += bmr * (neatFactor + alltagFaktor);
-
-            if (trainType === 'kraft' || trainType === 'beides') {
-                totalStrength += (sMet * weight * (sDur / 60));
-            }
-            if (trainType === 'cardio' || trainType === 'beides') {
-                totalCardio += (cMet * weight * (cDur / 60));
-            }
-        });
-
-        return {
-            bmr,
-            neat: totalNeat / 7,
-            steps: stepKcalPerDay,
-            strength: totalStrength / 7,
-            cardio: totalCardio / 7
-        };
+    function calculateTraining(val) {
+        const kraft = (val.kraftFreq * val.kraftMet * val.g * (val.kraftDur / 60)) / 7;
+        const cardioM = (val.cardioFreq * val.cardioMet * val.g * (val.cardioDur / 60)) / 7;
+        return { kraft, cardio: cardioM };
     }
 
     function updateUI() {
         const val = getInputValues();
         const validation = validateInputs(val);
 
-        // Validierung
         if (!validation.valid) {
             totalDisplay.textContent = '-';
             statusDisplay.innerHTML = `<span class="fehler">${validation.message}</span>`;
@@ -196,46 +133,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         statusDisplay.innerHTML = '';
 
-        // BMR: Katch-McArdle NUR bei Expert + KFA, sonst zwingend Mifflin-St. Jeor
-        const level = neatLevelSelect ? neatLevelSelect.value : '';
-        const hasValidKfa = val.kfa != null && !isNaN(val.kfa) && val.kfa >= 5 && val.kfa <= 60;
-        const useKatchMcArdle = level === 'expert' && hasValidKfa;
+        const bmr = calculateBMR(val);
+        const neatKcal = calculateNEAT(bmr, val);
+        const stepKcal = calculations.steps(val.steps, val.g, val.gr);
+        const training = calculateTraining(val);
 
-        let bmr;
-        if (useKatchMcArdle) {
-            bmr = calculations.bmrExpert(val.g, val.kfa);
-        } else {
-            bmr = calculations.bmr(val.g, val.gr, val.a, val.sex);
-        }
+        const total = bmr + neatKcal + stepKcal + training.kraft + training.cardio;
 
-        // Werte berechnen
-        let neatKcal, stepKcal, sportKcal, cardioKcal;
-        const isExpertWithGrid = level === 'expert';
-
-        if (isExpertWithGrid) {
-            const weekly = calculateWeeklyAverage(bmr, val.g);
-            neatKcal = weekly.neat;
-            stepKcal = weekly.steps;
-            sportKcal = weekly.strength;
-            cardioKcal = weekly.cardio;
-        } else {
-            neatKcal = getNeatKcal(bmr, val.g);
-            stepKcal = calculations.steps(val.steps, val.g, val.gr);
-            sportKcal = calculations.activity(val.sMet, val.sDur, val.sFreq, val.g);
-            cardioKcal = calculations.activity(val.cMet, val.cDur, val.cFreq, val.g);
-        }
-
-        const total = bmr + neatKcal + stepKcal + sportKcal + cardioKcal;
-
-        // Anzeige
         totalDisplay.textContent = Math.round(total).toLocaleString('de-DE');
-        renderChart(bmr, neatKcal, stepKcal, sportKcal, cardioKcal);
+        renderChart(bmr, neatKcal, stepKcal, training.kraft, training.cardio);
     }
 
     function renderChartWithData(labels, data) {
         const ctx = document.getElementById('kcalChart').getContext('2d');
         const colors = getChartColors();
-        
+
         if (kcalChart) {
             kcalChart.destroy();
         }
@@ -258,11 +170,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 plugins: {
                     legend: {
                         position: 'bottom',
-                        labels: { 
+                        labels: {
                             color: getComputedStyle(document.documentElement).getPropertyValue('--text-chart').trim(),
-                            padding: 20, 
-                            usePointStyle: true, 
-                            font: { size: 12, weight: '600' } 
+                            padding: 20,
+                            usePointStyle: true,
+                            font: { size: 12, weight: '600' }
                         }
                     },
                     tooltip: {
@@ -290,44 +202,14 @@ document.addEventListener('DOMContentLoaded', () => {
             Math.round(sport),
             Math.round(cardio)
         ];
-        
+
         renderChartWithData(labels, data);
     }
 
-    function updateNeatVisibility() {
-        if (!neatLevelSelect) return;
-        const current = neatLevelSelect.value;
-        neatGroups.forEach(group => {
-            if (group.dataset.level === current) {
-                group.classList.add('neat-group-active');
-            } else {
-                group.classList.remove('neat-group-active');
-            }
-        });
-        const kfaGroup = document.querySelector('.kfa-group');
-        if (kfaGroup) {
-            kfaGroup.style.display = current === 'expert' ? 'block' : 'none';
-        }
-        const expertGrid = document.querySelector('.expert-weekly-grid');
-        const sportStandard = document.querySelector('.sport-inputs-standard');
-        if (expertGrid) expertGrid.style.display = current === 'expert' ? 'block' : 'none';
-        if (sportStandard) sportStandard.style.display = current === 'expert' ? 'none' : 'block';
-    }
-
-    // Event Listener für Live-Update
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
         input.addEventListener('input', updateUI);
         input.addEventListener('change', updateUI);
     });
 
-    if (neatLevelSelect) {
-        neatLevelSelect.addEventListener('change', () => {
-            updateNeatVisibility();
-            updateUI();
-        });
-        updateNeatVisibility();
-    }
-
-    // Initialer Aufruf
     updateUI();
 });
