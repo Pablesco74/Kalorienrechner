@@ -137,6 +137,11 @@ body {
     gap: 2rem;
 }
 
+.input-grid--stack {
+    grid-template-columns: 1fr;
+    max-width: 640px;
+}
+
 h1 {
     color: var(--text-primary);
     font-size: 1.75rem;
@@ -145,16 +150,55 @@ h1 {
     letter-spacing: -0.3px;
 }
 
-/* Input Sections - Soft & Rounded */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Input Sections - Soft & Rounded + Progressive Disclosure */
 .input-section {
-    margin-bottom: 2rem;
     padding: 1.75rem;
     background: var(--bg-card);
     border-radius: 20px;
     border: 1px solid var(--border-color);
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.4s ease, max-height 0.4s ease, margin-bottom 0.4s ease, padding-top 0.4s ease, padding-bottom 0.4s ease, border-width 0.4s ease;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    pointer-events: none;
+}
+
+.input-section.visible {
+    opacity: 1;
+    max-height: 2000px;
+    margin-bottom: 2rem;
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-width: 1px;
+    pointer-events: auto;
+    animation: slideIn 0.4s ease;
+}
+
+.input-section.locked {
+    pointer-events: none;
+    opacity: 0.4;
 }
 
 .input-section:last-child {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.input-section.visible:last-child {
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -232,6 +276,19 @@ select:focus {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    min-height: 600px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.canvas-panel:not(.visible) {
+    min-height: 0;
+}
+
+.canvas-panel.visible {
+    opacity: 1;
+    pointer-events: auto;
     min-height: 600px;
 }
 
@@ -340,7 +397,14 @@ canvas {
     .canvas-panel {
         order: -1;
         margin-bottom: 2rem;
+    }
+
+    .canvas-panel.visible {
         min-height: auto;
+    }
+
+    .canvas-panel:not(.visible) {
+        min-height: 0;
     }
 
     .canvas-container {
@@ -379,7 +443,7 @@ canvas {
         margin-bottom: 2rem;
     }
 
-    .input-section {
+    .input-section.visible {
         padding: 1.5rem;
         border-radius: 16px;
     }
@@ -447,7 +511,7 @@ canvas {
         margin-bottom: 1.75rem;
     }
 
-    .input-section {
+    .input-section.visible {
         margin-bottom: 1.5rem;
         padding: 1.25rem;
     }
@@ -485,8 +549,12 @@ canvas {
         font-size: 0.875rem;
     }
 
-    .canvas-panel {
+    .canvas-panel.visible {
         min-height: auto;
+    }
+
+    .canvas-panel:not(.visible) {
+        min-height: 0;
     }
 }
 
@@ -506,8 +574,7 @@ canvas {
         max-width: 350px;
     }
 
-    .input-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
+    .input-grid--stack {
+        grid-template-columns: 1fr;
     }
 }

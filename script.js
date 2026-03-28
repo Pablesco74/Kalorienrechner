@@ -1,6 +1,74 @@
 document.addEventListener('DOMContentLoaded', () => {
     let kcalChart = null;
 
+    const SECTION_ORDER = ['grundumsatz', 'schritte', 'arbeit', 'training'];
+
+    const sections = {
+        grundumsatz: {
+            step: 1,
+            element: document.querySelector('[data-section="grundumsatz"]'),
+            requiredFields: ['geschlecht', 'gewicht', 'groesse', 'alter']
+        },
+        schritte: {
+            step: 2,
+            element: document.querySelector('[data-section="schritte"]'),
+            requiredFields: ['schritte']
+        },
+        arbeit: {
+            step: 3,
+            element: document.querySelector('[data-section="arbeit"]'),
+            requiredFields: ['workDays', 'neatWork', 'neatRest']
+        },
+        training: {
+            step: 4,
+            element: document.querySelector('[data-section="training"]'),
+            requiredFields: ['kraftFreq', 'kraftMet', 'kraftDur', 'cardioFreq', 'cardioMet', 'cardioDur']
+        }
+    };
+
+    const canvasPanel = document.querySelector('.canvas-panel');
+
+    function isSectionComplete(sectionName) {
+        const section = sections[sectionName];
+        if (!section || !section.element) return false;
+
+        return section.requiredFields.every((fieldId) => {
+            const field = document.getElementById(fieldId);
+            if (!field) return false;
+
+            if (field.type === 'number') {
+                const val = parseFloat(field.value);
+                const minAttr = field.getAttribute('min');
+                const min = minAttr !== null && minAttr !== '' ? parseFloat(minAttr) : 0;
+                return !isNaN(val) && val >= min;
+            }
+
+            return field.value !== '';
+        });
+    }
+
+    function updateSectionsVisibility() {
+        let allPreviousComplete = true;
+
+        SECTION_ORDER.forEach((sectionName) => {
+            const section = sections[sectionName];
+            if (!section || !section.element) return;
+
+            if (section.step === 1) {
+                section.element.classList.add('visible');
+                allPreviousComplete = isSectionComplete(sectionName);
+                return;
+            }
+
+            if (allPreviousComplete) {
+                section.element.classList.add('visible');
+                allPreviousComplete = isSectionComplete(sectionName);
+            } else {
+                section.element.classList.remove('visible');
+            }
+        });
+    }
+
     // ---------- Theme basiert auf System-Präferenz ----------
     const root = document.documentElement;
 
@@ -117,21 +185,46 @@ document.addEventListener('DOMContentLoaded', () => {
         return { kraft, cardio: cardioM };
     }
 
+    function setCanvasVisible(visible) {
+        if (!canvasPanel) return;
+        if (visible) {
+            canvasPanel.classList.add('visible');
+            canvasPanel.setAttribute('aria-hidden', 'false');
+        } else {
+            canvasPanel.classList.remove('visible');
+            canvasPanel.setAttribute('aria-hidden', 'true');
+        }
+    }
+
     function updateUI() {
         const val = getInputValues();
         const validation = validateInputs(val);
 
-        if (!validation.valid) {
+        updateSectionsVisibility();
+
+        const trainingEl = sections.training.element;
+        const allComplete =
+            trainingEl &&
+            trainingEl.classList.contains('visible') &&
+            SECTION_ORDER.every((s) => isSectionComplete(s));
+
+        const showResult = allComplete && validation.valid;
+
+        if (!showResult) {
             totalDisplay.textContent = '-';
-            statusDisplay.innerHTML = `<span class="fehler">${validation.message}</span>`;
+            statusDisplay.innerHTML = validation.valid
+                ? ''
+                : `<span class="fehler">${validation.message}</span>`;
             if (kcalChart) {
                 kcalChart.destroy();
                 kcalChart = null;
             }
+            setCanvasVisible(false);
             return;
         }
 
         statusDisplay.innerHTML = '';
+        setCanvasVisible(true);
 
         const bmr = calculateBMR(val);
         const neatKcal = calculateNEAT(bmr, val);

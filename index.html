@@ -36,9 +36,8 @@
         <section class="input-panel">
             <h1>Kalorien berechnen</h1>
 
-            <div class="input-grid">
-                <div class="input-column">
-                    <div class="input-section">
+            <div class="input-grid input-grid--stack">
+                <div class="input-section visible" data-step="1" data-section="grundumsatz">
                         <h3>Grundumsatz</h3>
                         <div class="form-group">
                             <label for="geschlecht">Geschlecht</label>
@@ -68,8 +67,15 @@
                         </div>
                     </div>
 
-                    <!-- ARBEIT & ALLTAG Section -->
-                    <div class="input-section">
+                <div class="input-section" data-step="2" data-section="schritte">
+                        <h3>Tägliche Aktivität</h3>
+                        <div class="form-group">
+                            <label for="schritte">Schritte pro Tag</label>
+                            <input type="number" id="schritte" min="0" max="40000" step="500" value="8000">
+                        </div>
+                    </div>
+
+                <div class="input-section" data-step="3" data-section="arbeit">
                         <h3>Arbeit &amp; Alltag</h3>
 
                         <div class="form-group">
@@ -96,18 +102,7 @@
                         </div>
                     </div>
 
-                    <div class="input-section">
-                        <h3>Tägliche Aktivität</h3>
-                        <div class="form-group">
-                            <label for="schritte">Schritte pro Tag</label>
-                            <input type="number" id="schritte" min="0" max="40000" step="500" value="8000">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-column">
-                    <!-- TRAINING Section -->
-                    <div class="input-section">
+                <div class="input-section" data-step="4" data-section="training">
                         <h3>Training</h3>
 
                         <h4 class="training-subheading">Krafttraining</h4>
@@ -165,11 +160,10 @@
                             <input type="number" id="cardioDur" min="10" max="120" value="30">
                         </div>
                     </div>
-                </div>
             </div>
         </section>
 
-        <section class="canvas-panel">
+        <section class="canvas-panel" aria-hidden="true">
             <div class="canvas-container">
                 <canvas id="kcalChart"></canvas>
                 <div class="canvas-center">
