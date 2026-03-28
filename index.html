@@ -36,18 +36,8 @@
         <section class="input-panel">
             <h1>Kalorien berechnen</h1>
 
-            <div class="level-switch">
-                <span class="level-switch-label">Level</span>
-                <select id="neatLevel">
-                    <option value="beginner">Einfach (Anfänger)</option>
-                    <option value="intermediate">Standard (Fortgeschritten)</option>
-                    <option value="expert">Profi (Experte)</option>
-                </select>
-            </div>
-
-            <div class="input-grid">
-                <div class="input-column">
-                    <div class="input-section">
+            <div class="input-grid input-grid--stack">
+                <div class="input-section visible" data-step="1" data-section="grundumsatz">
                         <h3>Grundumsatz</h3>
                         <div class="form-group">
                             <label for="geschlecht">Geschlecht</label>
@@ -76,230 +66,113 @@
                         </div>
                     </div>
 
-                    <div class="input-section">
-                        <h3>NEAT / Alltagsaktivität</h3>
-
-                        <!-- ANFÄNGER -->
-                        <div class="neat-group neat-group-active" data-level="beginner">
-                            <div class="form-group">
-                                <label for="neatBeginner">Wie aktiv bist du im Alltag (ohne Training)?</label>
-                                <select id="neatBeginner">
-                                    <option value="0.08">Sehr wenig aktiv (Bürojob, viel sitzen)</option>
-                                    <option value="0.12">Wenig aktiv (Büro + Hausarbeit)</option>
-                                    <option value="0.18">Mäßig aktiv (viel Stehen/Gehen)</option>
-                                    <option value="0.25">Sehr aktiv (körperliche Arbeit)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- FORTGESCHRITTEN -->
-                        <div class="neat-group" data-level="intermediate">
-                            <div class="form-group">
-                                <label for="neatJobInter">Berufliche Aktivität</label>
-                                <select id="neatJobInter">
-                                    <option value="0.05">Sitzend (Büro, Homeoffice)</option>
-                                    <option value="0.08">Teilweise stehend/gehend</option>
-                                    <option value="0.12">Überwiegend stehend/gehend</option>
-                                    <option value="0.18">Körperlich anstrengend</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="neatLeisure">Freizeit-Aktivität</label>
-                                <select id="neatLeisure">
-                                    <option value="0.03">Wenig Bewegung (TV, Lesen)</option>
-                                    <option value="0.06">Leichte Aktivität (Kochen, Aufräumen)</option>
-                                    <option value="0.10">Moderate Aktivität (Gartenarbeit, Kinder)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- EXPERTE -->
-                        <div class="neat-group" data-level="expert">
-                            <h4 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; font-weight: 600;">Berufliche Aktivität</h4>
-                            <div class="form-group">
-                                <label for="neatJobExpert">Art der Arbeit</label>
-                                <select id="neatJobExpert">
-                                    <option value="0.05">Sitzend (Büro, Student)</option>
-                                    <option value="0.10">Leicht aktiv (stehend/gehend)</option>
-                                    <option value="0.15">Moderat aktiv (Handwerk)</option>
-                                    <option value="0.20">Sehr aktiv (Bauarbeiter)</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="neatWorkDays">Arbeitstage pro Woche</label>
-                                <input type="number" id="neatWorkDays" min="0" max="7" value="5">
-                            </div>
-
-                            <h4 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; margin-top: 1.5rem; font-weight: 600;">Alltags-Aktivität (außerhalb Job & Training)</h4>
-                            <div class="form-group">
-                                <label for="neatDaily">Aktivitätslevel</label>
-                                <select id="neatDaily">
-                                    <option value="0.03">Minimal (wenig Bewegung)</option>
-                                    <option value="0.06">Niedrig (normale Hausarbeit)</option>
-                                    <option value="0.09">Moderat (aktiv im Alltag)</option>
-                                    <option value="0.12">Hoch (sehr aktiver Lifestyle)</option>
-                                </select>
-                            </div>
-
-                            <h4 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; margin-top: 1.5rem; font-weight: 600;">Trainingsfreie Tage</h4>
-                            <div class="form-group">
-                                <label for="neatRestDays">Rest Days pro Woche</label>
-                                <input type="number" id="neatRestDays" min="0" max="7" value="2">
-                            </div>
-                            <div class="form-group">
-                                <label for="neatRestActivity">Aktivität an Rest Days</label>
-                                <select id="neatRestActivity">
-                                    <option value="0.00">Volle Erholung (komplett passiv)</option>
-                                    <option value="0.05">Light Activity (Spazieren, Mobility)</option>
-                                    <option value="0.08">Active Recovery (lange Walks, Rad)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="input-section">
+                <div class="input-section" data-step="2" data-section="schritte">
                         <h3>Tägliche Aktivität</h3>
                         <div class="form-group">
                             <label for="schritte">Schritte pro Tag</label>
-                            <input type="number" id="schritte" min="0" max="40000" step="500" value="8000">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-column">
-                    <!-- Standard: Kraft & Cardio (Anfänger/Fortgeschritten) -->
-                    <div class="sport-inputs-standard">
-                        <div class="input-section">
-                            <h3>Krafttraining</h3>
-                            <div class="form-group">
-                                <label for="sportIntensitaet">Intensität</label>
-                                <select id="sportIntensitaet">
-                                    <option value="4.5">Moderat</option>
-                                    <option value="6.5">Intensiv</option>
-                                    <option value="8">Sehr intensiv</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="sportFreq">Einheiten pro Woche</label>
-                                <select id="sportFreq">
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="sportDauer">Dauer pro Einheit (Minuten)</label>
-                                <input type="number" id="sportDauer" min="10" max="180" value="60">
-                            </div>
-                        </div>
-
-                        <div class="input-section">
-                            <h3>Cardio</h3>
-                            <div class="form-group">
-                                <label for="cardioIntensitaet">Intensität</label>
-                                <select id="cardioIntensitaet">
-                                    <option value="6">Locker (120–130 BPM)</option>
-                                    <option value="8">Mittel (130–150 BPM)</option>
-                                    <option value="10">Hart (150–170 BPM)</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="cardioFreq">Einheiten pro Woche</label>
-                                <select id="cardioFreq">
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="cardioDauer">Dauer pro Einheit (Minuten)</label>
-                                <input type="number" id="cardioDauer" min="10" max="120" value="30">
-                            </div>
+                            <input type="number" id="schritte" min="0" max="40000" step="500" placeholder="z.B. 8000">
                         </div>
                     </div>
 
-                    <!-- Experten-Modus: Wochen-Matrix -->
-                    <div class="expert-weekly-grid input-section">
-                        <h3>Wochenplanung</h3>
-                        <p class="expert-tip">Expertinnen-Tipp: Plane deine Woche individuell, um Schwankungen im Energiebedarf präziser auszugleichen.</p>
-                        <div class="weekly-matrix">
-                            <div class="weekly-matrix-row weekly-matrix-header">
-                                <div class="matrix-label"></div>
-                                <div class="day-cell">Mo</div>
-                                <div class="day-cell">Di</div>
-                                <div class="day-cell">Mi</div>
-                                <div class="day-cell">Do</div>
-                                <div class="day-cell">Fr</div>
-                                <div class="day-cell">Sa</div>
-                                <div class="day-cell">So</div>
-                            </div>
-                            <div class="weekly-matrix-row">
-                                <div class="matrix-label">Arbeitstag</div>
-                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workMo" class="expert-checkbox" checked><span class="toggle-slider"></span></label></div>
-                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workDi" class="expert-checkbox" checked><span class="toggle-slider"></span></label></div>
-                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workMi" class="expert-checkbox" checked><span class="toggle-slider"></span></label></div>
-                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workDo" class="expert-checkbox" checked><span class="toggle-slider"></span></label></div>
-                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workFr" class="expert-checkbox" checked><span class="toggle-slider"></span></label></div>
-                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workSa" class="expert-checkbox"><span class="toggle-slider"></span></label></div>
-                                <div class="day-cell"><label class="toggle-wrap"><input type="checkbox" id="workSo" class="expert-checkbox"><span class="toggle-slider"></span></label></div>
-                            </div>
-                            <div class="weekly-matrix-row">
-                                <div class="matrix-label">Training</div>
-                                <div class="day-cell"><select id="trainMo" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
-                                <div class="day-cell"><select id="trainDi" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
-                                <div class="day-cell"><select id="trainMi" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
-                                <div class="day-cell"><select id="trainDo" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
-                                <div class="day-cell"><select id="trainFr" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
-                                <div class="day-cell"><select id="trainSa" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
-                                <div class="day-cell"><select id="trainSo" class="expert-select"><option value="none">Kein</option><option value="kraft">Kraft</option><option value="cardio">Cardio</option><option value="beides">Beides</option></select></div>
-                            </div>
+                <div class="input-section" data-step="3" data-section="arbeit">
+                        <h3>Arbeit &amp; Alltag</h3>
+
+                        <div class="form-group">
+                            <label for="workDays">Arbeitstage pro Woche</label>
+                            <input type="number" id="workDays" min="0" max="7" placeholder="z.B. 5">
                         </div>
-                        <div class="expert-training-defaults">
-                            <h4>Training-Standards</h4>
-                            <div class="expert-defaults-row">
-                                <div class="form-group">
-                                    <label for="expertSportMet">Kraft: MET</label>
-                                    <select id="expertSportMet">
-                                        <option value="4.5">4.5 (Moderat)</option>
-                                        <option value="6.5">6.5 (Intensiv)</option>
-                                        <option value="8">8 (Sehr intensiv)</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="expertSportDur">Dauer (min)</label>
-                                    <input type="number" id="expertSportDur" min="10" max="180" value="60">
-                                </div>
-                                <div class="form-group">
-                                    <label for="expertCardioMet">Cardio: MET</label>
-                                    <select id="expertCardioMet">
-                                        <option value="6">6 (Locker)</option>
-                                        <option value="8">8 (Mittel)</option>
-                                        <option value="10">10 (Hart)</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="expertCardioDur">Dauer (min)</label>
-                                    <input type="number" id="expertCardioDur" min="10" max="120" value="30">
-                                </div>
-                            </div>
+
+                        <div class="form-group">
+                            <label for="neatWork">Aktivität an Arbeitstagen</label>
+                            <select id="neatWork">
+                                <option value="" disabled selected>Bitte wählen</option>
+                                <option value="0.08">Sitzend (Büro, Homeoffice)</option>
+                                <option value="0.12">Aktiv (viel Stehen/Gehen)</option>
+                                <option value="0.18">Sehr aktiv (körperliche Arbeit)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="neatRest">Aktivität an freien Tagen</label>
+                            <select id="neatRest">
+                                <option value="" disabled selected>Bitte wählen</option>
+                                <option value="0.05">Entspannt (viel Ruhe)</option>
+                                <option value="0.08">Normal (Hausarbeit, Hobbys)</option>
+                                <option value="0.12">Aktiv (Sport, Ausflüge)</option>
+                            </select>
                         </div>
                     </div>
-                </div>
+
+                <div class="input-section" data-step="4" data-section="training">
+                        <h3>Training</h3>
+
+                        <h4 class="training-subheading">Krafttraining</h4>
+
+                        <div class="form-group">
+                            <label for="kraftFreq">Einheiten pro Woche</label>
+                            <select id="kraftFreq">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="kraftMet">Intensität</label>
+                            <select id="kraftMet">
+                                <option value="" disabled selected>Bitte wählen</option>
+                                <option value="4.5">Moderat</option>
+                                <option value="6.5">Intensiv</option>
+                                <option value="8">Sehr intensiv</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="kraftDur">Dauer pro Einheit (Minuten)</label>
+                            <input type="number" id="kraftDur" min="10" max="180" placeholder="z.B. 60">
+                        </div>
+
+                        <h4 class="training-subheading training-subheading--spaced">Cardio</h4>
+
+                        <div class="form-group">
+                            <label for="cardioFreq">Einheiten pro Woche</label>
+                            <select id="cardioFreq">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardioMet">Intensität</label>
+                            <select id="cardioMet">
+                                <option value="" disabled selected>Bitte wählen</option>
+                                <option value="6">Locker (120–130 BPM)</option>
+                                <option value="8">Mittel (130–150 BPM)</option>
+                                <option value="10">Hart (150–170 BPM)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardioDur">Dauer pro Einheit (Minuten)</label>
+                            <input type="number" id="cardioDur" min="10" max="120" placeholder="z.B. 30">
+                        </div>
+                    </div>
             </div>
         </section>
 
-        <section class="canvas-panel">
+        <section class="canvas-panel" aria-hidden="true">
+            <div class="canvas-center">
+                <div class="canvas-center-value" id="totalCalories">-</div>
+                <div class="canvas-center-label">kcal / Tag</div>
+            </div>
             <div class="canvas-container">
                 <canvas id="kcalChart"></canvas>
-                <div class="canvas-center">
-                    <div class="canvas-center-value" id="totalCalories">-</div>
-                    <div class="canvas-center-label">kcal / Tag</div>
-                </div>
             </div>
             <div id="statusMessage"></div>
         </section>
@@ -309,7 +182,7 @@
 
     <footer class="site-footer">
         <p>&copy; 2026 Kalora - Dein smarter Kalorien Guide</p>
-        <a href="legal.html" class="footer-link">Impressum & Datenschutz</a>
+        <a href="legal.html" class="footer-link">Impressum &amp; Datenschutz</a>
     </footer>
 
 </body>
