@@ -33,6 +33,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const section = sections[sectionName];
         if (!section || !section.element) return false;
 
+        // Speziallogik für Training-Abschnitt
+        if (sectionName === 'training') {
+            const kraftFreq = document.getElementById('kraftFreq').value;
+            const cardioFreq = document.getElementById('cardioFreq').value;
+
+            // Beide müssen gesetzt sein (nicht leer)
+            if (kraftFreq === '' || cardioFreq === '') return false;
+
+            // Wenn Kraft-Training gewählt, müssen Met und Dur ausgefüllt sein
+            if (kraftFreq !== '0') {
+                const kraftMet = document.getElementById('kraftMet').value;
+                const kraftDur = document.getElementById('kraftDur').value;
+                if (kraftMet === '' || !kraftDur) return false;
+            }
+
+            // Wenn Cardio-Training gewählt, müssen Met und Dur ausgefüllt sein
+            if (cardioFreq !== '0') {
+                const cardioMet = document.getElementById('cardioMet').value;
+                const cardioDur = document.getElementById('cardioDur').value;
+                if (cardioMet === '' || !cardioDur) return false;
+            }
+
+            return true;
+        }
+
         return section.requiredFields.every((fieldId) => {
             const field = document.getElementById(fieldId);
             if (!field) return false;
