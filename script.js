@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     let kcalChart = null;
+    let lastUnlockedStep = 1;
 
     const SECTION_ORDER = ['grundumsatz', 'schritte', 'arbeit', 'training'];
 
@@ -7,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         grundumsatz: {
             step: 1,
             element: document.querySelector('[data-section="grundumsatz"]'),
-            requiredFields: ['geschlecht', 'gewicht', 'groesse', 'alter', 'kfa']
+            requiredFields: ['geschlecht', 'gewicht', 'groesse', 'alter']
         },
         schritte: {
             step: 2,
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = elTop - (viewportHeight - el.offsetHeight) / 2;
         const start = window.scrollY;
         const distance = target - start;
-        const duration = 700;
+        const duration = 1200;
         let startTime = null;
 
         function easeInOutCubic(t) {
@@ -73,32 +74,61 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateSectionsVisibility() {
-        let allPreviousComplete = true;
-
         SECTION_ORDER.forEach((sectionName) => {
             const section = sections[sectionName];
             if (!section || !section.element) return;
 
-            if (section.step === 1) {
+            if (section.step <= lastUnlockedStep) {
                 section.element.classList.add('visible');
-                allPreviousComplete = isSectionComplete(sectionName);
-                return;
-            }
-
-            const wasVisible = section.element.classList.contains('visible');
-
-            if (allPreviousComplete && wasVisible) {
-                // Bereits sichtbar – offen halten, weiter kaskadieren
-                allPreviousComplete = isSectionComplete(sectionName);
-            } else if (allPreviousComplete && !wasVisible) {
-                // Neu aufdecken – scrollen und hier stoppen
-                section.element.classList.add('visible');
-                setTimeout(() => scrollToElement(section.element), 800);
-                allPreviousComplete = false;
             } else {
                 section.element.classList.remove('visible');
             }
         });
+
+        updateButtonStates();
+    }
+
+    function updateButtonStates() {
+        SECTION_ORDER.forEach((sectionName) => {
+            const section = sections[sectionName];
+            if (!section || !section.element) return;
+
+            const btn = section.element.nextElementSibling?.classList?.contains('next-btn')
+                ? section.element.nextElementSibling
+                : section.element.querySelector('.next-btn');
+            if (!btn) return;
+
+            const isComplete = isSectionComplete(sectionName);
+            const isCurrent = section.step === lastUnlockedStep;
+
+            if (isComplete && isCurrent) {
+                btn.classList.add('show');
+            } else {
+                btn.classList.remove('show');
+            }
+        });
+    }
+
+    function nextSection(currentStep) {
+        if (currentStep < SECTION_ORDER.length) {
+            // Verstecke Button des aktuellen Abschnitts
+            const currentSectionName = SECTION_ORDER[currentStep - 1];
+            const currentSection = sections[currentSectionName];
+            const currentBtn = currentSection?.element?.nextElementSibling?.classList?.contains('next-btn')
+                ? currentSection.element.nextElementSibling
+                : currentSection?.element?.querySelector('.next-btn');
+            if (currentBtn) {
+                currentBtn.classList.remove('show');
+            }
+
+            lastUnlockedStep = currentStep + 1;
+            updateUI();
+            const nextIndex = currentStep;
+            const nextSection = sections[SECTION_ORDER[nextIndex]];
+            if (nextSection && nextSection.element) {
+                setTimeout(() => scrollToElement(nextSection.element), 100);
+            }
+        }
     }
 
     // ---------- Theme basiert auf System-Präferenz ----------
@@ -163,12 +193,12 @@ document.addEventListener('DOMContentLoaded', () => {
             workDays,
             neatWork: parseFloat(document.getElementById('neatWork').value),
             neatRest: parseFloat(document.getElementById('neatRest').value),
-            kraftFreq: parseFloat(document.getElementById('kraftFreq').value),
-            kraftMet: parseFloat(document.getElementById('kraftMet').value),
-            kraftDur: parseFloat(document.getElementById('kraftDur').value),
-            cardioFreq: parseFloat(document.getElementById('cardioFreq').value),
-            cardioMet: parseFloat(document.getElementById('cardioMet').value),
-            cardioDur: parseFloat(document.getElementById('cardioDur').value)
+            kraftFreq: parseFloat(document.getElementById('kraftFreq').value) || 0,
+            kraftMet: parseFloat(document.getElementById('kraftMet').value) || 0,
+            kraftDur: parseFloat(document.getElementById('kraftDur').value) || 0,
+            cardioFreq: parseFloat(document.getElementById('cardioFreq').value) || 0,
+            cardioMet: parseFloat(document.getElementById('cardioMet').value) || 0,
+            cardioDur: parseFloat(document.getElementById('cardioDur').value) || 0
         };
     }
 
@@ -220,12 +250,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function setCanvasVisible(visible) {
         if (!canvasPanel) return;
         if (visible) {
-            const wasVisible = canvasPanel.classList.contains('visible');
             canvasPanel.classList.add('visible');
             canvasPanel.setAttribute('aria-hidden', 'false');
-            if (!wasVisible) {
-                setTimeout(() => scrollToElement(canvasPanel), 800);
-            }
         } else {
             canvasPanel.classList.remove('visible');
             canvasPanel.setAttribute('aria-hidden', 'true');
@@ -335,10 +361,58 @@ document.addEventListener('DOMContentLoaded', () => {
         renderChartWithData(labels, data);
     }
 
+    function updateTrainingFieldsVisibility() {
+        const kraftFreqVal = document.getElementById('kraftFreq').value;
+        const cardioFreqVal = document.getElementById('cardioFreq').value;
+
+        const kraftMetGroup = document.getElementById('kraftMet')?.closest('.form-group');
+        const kraftDurGroup = document.getElementById('kraftDur')?.closest('.form-group');
+        const cardioMetGroup = document.getElementById('cardioMet')?.closest('.form-group');
+        const cardioDurGroup = document.getElementById('cardioDur')?.closest('.form-group');
+
+        if (kraftMetGroup && kraftDurGroup) {
+            if (kraftFreqVal === '0') {
+                kraftMetGroup.classList.add('hidden');
+                kraftDurGroup.classList.add('hidden');
+            } else {
+                kraftMetGroup.classList.remove('hidden');
+                kraftDurGroup.classList.remove('hidden');
+            }
+        }
+
+        if (cardioMetGroup && cardioDurGroup) {
+            if (cardioFreqVal === '0') {
+                cardioMetGroup.classList.add('hidden');
+                cardioDurGroup.classList.add('hidden');
+            } else {
+                cardioMetGroup.classList.remove('hidden');
+                cardioDurGroup.classList.remove('hidden');
+            }
+        }
+    }
+
     inputs.forEach((input) => {
         input.addEventListener('input', updateUI);
         input.addEventListener('change', updateUI);
     });
 
+    // Training-Felder Sichtbarkeit
+    document.getElementById('kraftFreq')?.addEventListener('change', updateTrainingFieldsVisibility);
+    document.getElementById('cardioFreq')?.addEventListener('change', updateTrainingFieldsVisibility);
+
+    // Weiter-Button Event-Listener
+    Object.keys(sections).forEach((sectionName) => {
+        const section = sections[sectionName];
+        const btn = section.element?.nextElementSibling?.classList?.contains('next-btn')
+            ? section.element.nextElementSibling
+            : section.element?.querySelector('.next-btn');
+        if (btn) {
+            btn.addEventListener('click', () => {
+                nextSection(section.step);
+            });
+        }
+    });
+
     updateUI();
+    updateTrainingFieldsVisibility();
 });
