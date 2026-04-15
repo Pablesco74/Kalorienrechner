@@ -1,3 +1,8 @@
+/* ========== Global ========== */
+html {
+    scroll-behavior: auto;
+}
+
 /* ========== Theme Variables ========== */
 :root,
 [data-theme="light"] {
@@ -63,7 +68,7 @@ body {
     background: var(--bg-body);
     color: var(--text-primary);
     min-height: 100vh;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.5s ease, color 0.5s ease;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -145,7 +150,6 @@ body {
 
 .input-grid--stack {
     grid-template-columns: 1fr;
-    max-width: 640px;
     margin: 0 auto;
 }
 
@@ -242,6 +246,18 @@ h1 {
 
 .form-group {
     margin-bottom: 1.25rem;
+    width: 100%;
+    opacity: 1;
+    max-height: 500px;
+    overflow: hidden;
+    transition: opacity 0.5s ease, max-height 0.5s ease, margin-bottom 0.5s ease;
+}
+
+.form-group.hidden {
+    opacity: 0;
+    max-height: 0;
+    margin-bottom: 0;
+    pointer-events: none;
 }
 
 label {
@@ -255,14 +271,26 @@ label {
 input[type="number"],
 select {
     width: 100%;
+    min-width: 0;
     padding: 0.875rem 1rem;
     background: var(--bg-input);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     color: var(--text-primary);
     font-size: 0.9375rem;
+    font-family: inherit;
     transition: all 0.2s ease;
     font-weight: 400;
+    box-sizing: border-box;
+    appearance: none;
+}
+
+select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1em 1em;
+    padding-right: 2.5rem;
 }
 
 input[type="number"]:hover,
@@ -274,6 +302,45 @@ input:focus,
 select:focus {
     outline: none;
     border-color: var(--accent-primary);
+}
+
+/* Weiter Button */
+.next-btn {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease, max-height 0.5s ease, margin-top 0.5s ease;
+    pointer-events: none;
+}
+
+.next-btn.show {
+    opacity: 1;
+    max-height: 60px;
+    margin-top: 1.5rem;
+    pointer-events: auto;
+}
+
+.next-btn:hover:not(.show) {
+    opacity: 1;
+    background: var(--accent-hover, #d97757);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(232, 93, 117, 0.3);
+}
+
+.next-btn.show:hover {
+    background: var(--accent-hover, #d97757);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(232, 93, 117, 0.3);
 }
 
 /* Canvas Panel */
