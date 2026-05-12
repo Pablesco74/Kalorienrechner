@@ -124,9 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!btn) return;
 
             const isComplete = isSectionComplete(sectionName);
+            const isVisible = section.element.classList.contains('visible');
             const isCurrent = section.step === lastUnlockedStep;
 
-            if (isComplete && isCurrent) {
+            if (isComplete && isVisible && isCurrent) {
                 btn.classList.add('show');
             } else {
                 btn.classList.remove('show');
