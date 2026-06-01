@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kalora – Dein smarter Kalorienrechner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Exact theme variables from kalora-rechner.de ── */
+    :root,
+    [data-theme="light"] {
+      --bg-body:          #FDFBF7;
+      --bg-header:        #FFFFFF;
+      --bg-card:          #FFFFFF;
+      --border-color:     #E8E5DF;
+      --text-primary:     #2D3047;
+      --text-muted:       #6B6D7C;
+      --accent-primary:   #E85D75;
+      --accent-secondary: #9DB4A0;
+      --accent-tertiary:  #D97757;
+    }
+
+    [data-theme="dark"] {
+      --bg-body:          #1A2332;
+      --bg-header:        #212936;
+      --bg-card:          #242D3E;
+      --border-color:     #313A4D;
+      --text-primary:     #E8EAF0;
+      --text-muted:       #9FA3B8;
+      --accent-primary:   #FF8B7B;
+      --accent-secondary: #A8D5BA;
+      --accent-tertiary:  #F2A884;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: var(--bg-body);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.5s ease, color 0.5s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER (matches rechner) ── */
+    .header {
+      background: var(--bg-header);
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-container {
+      height: 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-container img { height: 100%; width: auto; display: block; }
+
+    [data-theme="dark"]  .logo-dark  { display: block; }
+    [data-theme="dark"]  .logo-light { display: none;  }
+    [data-theme="light"] .logo-dark  { display: none;  }
+    [data-theme="light"] .logo-light { display: block; }
+
+    .header-right { display: flex; align-items: center; gap: 10px; }
+
+    .theme-btn {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: transparent;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .theme-btn:hover { background: var(--bg-body); }
+
+    .header-cta {
+      background: var(--accent-primary);
+      color: #fff;
+      padding: 0.6rem 1.1rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .header-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 64px;
+    }
+
+    .bip-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      animation: fadeDown .5s ease both;
+    }
+
+    .bip-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      flex-shrink: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .4; transform: scale(.75); }
+    }
+
+    .bip-pill a {
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .bip-pill a:hover { text-decoration: underline; }
+
+    h1 {
+      font-size: clamp(1.875rem, 5vw, 3.25rem);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      max-width: 600px;
+      margin-bottom: 20px;
+      animation: fadeUp .6s .1s ease both;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--accent-primary);
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      max-width: 400px;
+      margin-bottom: 36px;
+      font-weight: 400;
+      animation: fadeUp .6s .2s ease both;
+    }
+
+    .cta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp .6s .3s ease both;
+    }
+
+    .btn-main {
+      background: var(--accent-primary);
+      color: #fff;
+      padding: 0.875rem 1.75rem;
+      border-radius: 12px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity .2s, transform .15s;
+      box-shadow: 0 4px 12px rgba(232,93,117,0.25);
+    }
+    .btn-main:hover { opacity: .88; transform: translateY(-1px); }
+
+    .btn-sec {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 400;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: color .2s;
+      padding: 0.875rem 0.5rem;
+    }
+    .btn-sec:hover { color: var(--text-primary); }
+
+    /* ── FEATURE CARDS ── */
+    .what {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      padding: 0 2rem 4.5rem;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      animation: fadeUp .7s .4s ease both;
+    }
+
+    .what-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 1.75rem;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .what-item:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+
+    .what-num {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-primary);
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+      opacity: 0.7;
+    }
+
+    .what-item h3 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      line-height: 1.35;
+      letter-spacing: -0.2px;
+    }
+
+    .what-item p {
+      font-size: 0.8125rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ── BIP STRIP ── */
+    .bip-strip {
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-card);
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .bip-text {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 560px;
+    }
+
+    .bip-text strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .bip-link {
+      background: var(--accent-primary);
+      color: #fff;
+      padding: 0.625rem 1.25rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: opacity .2s;
+      flex-shrink: 0;
+    }
+    .bip-link:hover { opacity: .85; }
+
+    /* ── FOOTER (matches rechner) ── */
+    .site-footer {
+      margin-top: auto;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-logo { height: 22px; }
+    .footer-logo img { height: 100%; width: auto; opacity: 0.5; }
+
+    .footer-links { display: flex; gap: 20px; }
+
+    .footer-links a {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      text-decoration: none;
+      font-weight: 400;
+      transition: opacity .2s;
+    }
+    .footer-links a:hover { opacity: .7; }
+
+    .footer-copy { font-size: 0.8125rem; color: var(--text-muted); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .header { padding: 1rem 1.5rem; }
+      .logo-container { height: 34px; }
+      .hero { padding: 60px 20px 48px; }
+      .what { grid-template-columns: 1fr; padding: 0 1.25rem 3rem; gap: 1rem; }
+      .bip-strip { padding: 1.5rem 1.25rem; }
+      .site-footer { padding: 1.25rem; flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 480px) {
+      .header { padding: 0.875rem 1rem; }
+      .logo-container { height: 28px; }
+      .header-cta { display: none; }
+      h1 { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo-container">
+    <img class="logo-dark"  src="https://kalora-rechner.de/assets/Kalora_Light.svg" alt="Kalora"/>
+    <img class="logo-light" src="https://kalora-rechner.de/assets/Kalora_Dark.svg"  alt="Kalora"/>
+  </div>
+  <div class="header-right">
+    <button class="theme-btn" id="themeToggle" title="Theme wechseln">☀️</button>
+    <a href="rechner.html" class="header-cta">Zum Rechner →</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<main class="hero">
+  <div class="bip-pill">
+    <span class="bip-dot"></span>
+    Wir bauen öffentlich &nbsp;·&nbsp;
+    <a href="https://instagram.com" target="_blank" rel="noopener">Folge dem Weg →</a>
+  </div>
+
+  <h1>Kalorien berechnen,<br/>das <em>wirklich passt.</em></h1>
+
+  <p class="hero-sub">
+    Ein präziser Kalorienrechner, der Aktivität, Training und Alltag berücksichtigt. Kostenlos, ohne Account.
+  </p>
+
+  <div class="cta-row">
+    <a href="rechner.html" class="btn-main">Jetzt berechnen</a>
+    <a href="https://instagram.com" target="_blank" rel="noopener" class="btn-sec">
+      Aufbau mitverfolgen
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</main>
+
+<!-- FEATURE CARDS -->
+<section class="what">
+  <div class="what-item">
+    <div class="what-num">01</div>
+    <h3>Schritte · Kraft · Cardio · NEAT</h3>
+    <p>Kein pauschaler Aktivitätsfaktor. Der Verbrauch wird aus Schritten, Krafttraining und Cardio einzeln berechnet.</p>
+  </div>
+  <div class="what-item">
+    <div class="what-num">02</div>
+    <h3>Grundumsatz mit oder ohne KFA</h3>
+    <p>Mit Körperfettanteil wird die Katch-McArdle-Formel genutzt – präziser als Harris-Benedict für trainierte Körper.</p>
+  </div>
+  <div class="what-item">
+    <div class="what-num">03</div>
+    <h3>Mehr kommt noch</h3>
+    <p>Zyklusbasierte Ernährung, Pläne und App sind in Entwicklung. Hier entsteht mehr.</p>
+  </div>
+</section>
+
+<!-- BIP STRIP -->
+<div class="bip-strip">
+  <p class="bip-text">
+    <strong>Kalora wird öffentlich gebaut.</strong> Vom Kalorienrechner zur vollautomatisierten Gesundheits-App für Frauen – du siehst jeden Schritt auf Instagram.
+  </p>
+  <a href="https://instagram.com" target="_blank" rel="noopener" class="bip-link">
+    @kalora.health folgen →
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img class="logo-dark"  src="https://kalora-rechner.de/assets/Kalora_Light.svg" alt="Kalora"/>
+    <img class="logo-light" src="https://kalora-rechner.de/assets/Kalora_Dark.svg"  alt="Kalora"/>
+  </div>
+  <div class="footer-links">
+    <a href="legal.html">Impressum & Datenschutz</a>
+    <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+  </div>
+  <p class="footer-copy">© 2026 Kalora Health</p>
+</footer>
+
+<script>
+  const btn  = document.getElementById('themeToggle');
+  const html = document.documentElement;
+
+  function applyTheme(t) {
+    html.setAttribute('data-theme', t);
+    btn.textContent = t === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('kalora-theme', t);
+  }
+
+  const saved = localStorage.getItem('kalora-theme');
+  if (saved) applyTheme(saved);
+
+  btn.addEventListener('click', () => {
+    applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+</script>
+</body>
+</html>
