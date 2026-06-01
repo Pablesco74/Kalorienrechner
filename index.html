@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" data-theme="dark">
+<html lang="de" data-theme="light">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -77,18 +77,6 @@
     [data-theme="light"] .logo-light { display: block; }
 
     .header-right { display: flex; align-items: center; gap: 10px; }
-
-    .theme-btn {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      background: transparent;
-      cursor: pointer;
-      font-size: 15px;
-      transition: background 0.2s;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .theme-btn:hover { background: var(--bg-body); }
 
     .header-cta {
       background: var(--accent-primary);
@@ -362,7 +350,6 @@
     <img class="logo-light" src="https://kalora-rechner.de/assets/Kalora_Dark.svg"  alt="Kalora"/>
   </div>
   <div class="header-right">
-    <button class="theme-btn" id="themeToggle" title="Theme wechseln">☀️</button>
     <a href="rechner.html" class="header-cta">Zum Rechner →</a>
   </div>
 </header>
@@ -372,7 +359,7 @@
   <div class="bip-pill">
     <span class="bip-dot"></span>
     Wir bauen öffentlich &nbsp;·&nbsp;
-    <a href="https://instagram.com" target="_blank" rel="noopener">Folge dem Weg →</a>
+    <a href="https://www.instagram.com/kalora.de/" target="_blank" rel="noopener">Folge dem Weg →</a>
   </div>
 
   <h1>Kalorien berechnen,<br/>das <em>wirklich passt.</em></h1>
@@ -383,7 +370,7 @@
 
   <div class="cta-row">
     <a href="rechner.html" class="btn-main">Jetzt berechnen</a>
-    <a href="https://instagram.com" target="_blank" rel="noopener" class="btn-sec">
+    <a href="https://www.instagram.com/kalora.de/" target="_blank" rel="noopener" class="btn-sec">
       Aufbau mitverfolgen
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
@@ -394,27 +381,27 @@
 <section class="what">
   <div class="what-item">
     <div class="what-num">01</div>
-    <h3>Schritte · Kraft · Cardio · NEAT</h3>
-    <p>Kein pauschaler Aktivitätsfaktor. Der Verbrauch wird aus Schritten, Krafttraining und Cardio einzeln berechnet.</p>
+    <h3>Dein Verbrauch, Schritt für Schritt</h3>
+    <p>Kein pauschaler Aktivitätsfaktor, wie bei anderen Rechnern. Der Verbrauch wird aus Schritten, Krafttraining und Cardio einzeln berechnet.</p>
   </div>
   <div class="what-item">
     <div class="what-num">02</div>
-    <h3>Grundumsatz mit oder ohne KFA</h3>
-    <p>Mit Körperfettanteil wird die Katch-McArdle-Formel genutzt – präziser als Harris-Benedict für trainierte Körper.</p>
+    <h3>Genaue Grundumsatz-Berechnung</h3>
+    <p>Der Rechner wählt automatisch zwischen Katch-McArdle und Harris-Benedict – je nachdem, welche Daten du angibst.</p>
   </div>
   <div class="what-item">
     <div class="what-num">03</div>
     <h3>Mehr kommt noch</h3>
-    <p>Zyklusbasierte Ernährung, Pläne und App sind in Entwicklung. Hier entsteht mehr.</p>
+    <p>Makronährstoffe, Zieleingabe. Folge uns auf Instagram</p>
   </div>
 </section>
 
 <!-- BIP STRIP -->
 <div class="bip-strip">
   <p class="bip-text">
-    <strong>Kalora wird öffentlich gebaut.</strong> Vom Kalorienrechner zur vollautomatisierten Gesundheits-App für Frauen – du siehst jeden Schritt auf Instagram.
+    <strong>Kalora ist auf Instagram.</strong> Info-Video, Updates und vieles mehr.
   </p>
-  <a href="https://instagram.com" target="_blank" rel="noopener" class="bip-link">
+  <a href="https://www.instagram.com/kalora.de/" target="_blank" rel="noopener" class="bip-link">
     @kalora.health folgen →
   </a>
 </div>
@@ -427,27 +414,19 @@
   </div>
   <div class="footer-links">
     <a href="legal.html">Impressum & Datenschutz</a>
-    <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.instagram.com/kalora.de/" target="_blank" rel="noopener">Instagram</a>
   </div>
   <p class="footer-copy">© 2026 Kalora Health</p>
 </footer>
 
 <script>
-  const btn  = document.getElementById('themeToggle');
-  const html = document.documentElement;
-
-  function applyTheme(t) {
-    html.setAttribute('data-theme', t);
-    btn.textContent = t === 'dark' ? '☀️' : '🌙';
-    localStorage.setItem('kalora-theme', t);
-  }
-
-  const saved = localStorage.getItem('kalora-theme');
-  if (saved) applyTheme(saved);
-
-  btn.addEventListener('click', () => {
-    applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-  });
+  (function() {
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    });
+  })();
 </script>
 </body>
 </html>
