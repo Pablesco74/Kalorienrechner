@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +7,27 @@
     <title>Rechtliches - Kalora</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
+        :root,
+        [data-theme="light"] {
             --primary-blue: #1A237E;
             --text-color: #2C3E50;
-            --bg-color: #F5F7FA;
+            --bg-color: #FDFBF7;
             --card-bg: #FFFFFF;
+            --border-color: #E8E5DF;
+            --muted-color: #7F8C8D;
+            --divider-color: #EEE;
+            --footer-color: #95A5A6;
+        }
+
+        [data-theme="dark"] {
+            --primary-blue: #FF8B7B;
+            --text-color: #E8EAF0;
+            --bg-color: #1A2332;
+            --card-bg: #242D3E;
+            --border-color: #313A4D;
+            --muted-color: #9FA3B8;
+            --divider-color: #313A4D;
+            --footer-color: #9FA3B8;
         }
 
         body {
@@ -31,7 +47,7 @@
             padding: 40px;
             background: var(--card-bg);
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .logo-area {
@@ -50,14 +66,14 @@
 
         .logo-sub {
             font-size: 14px;
-            color: #7F8C8D;
+            color: var(--muted-color);
             margin-top: 5px;
         }
 
         h1 {
             font-size: 24px;
             color: var(--primary-blue);
-            border-bottom: 2px solid var(--bg-color);
+            border-bottom: 2px solid var(--border-color);
             padding-bottom: 10px;
             margin-top: 40px;
         }
@@ -70,7 +86,7 @@
 
         p, li {
             font-size: 15px;
-            color: #444;
+            color: var(--text-color);
         }
 
         .back-link {
@@ -90,13 +106,13 @@
             text-align: center;
             padding: 30px;
             font-size: 12px;
-            color: #95A5A6;
+            color: var(--footer-color);
             margin-top: auto;
         }
 
         .section-divider {
             height: 1px;
-            background: #EEE;
+            background: var(--divider-color);
             margin: 50px 0;
         }
 
@@ -160,5 +176,12 @@
         &copy; 2026 Kalora - Dein smarter Kalorien Guide.
     </footer>
 
+<script>
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    });
+</script>
 </body>
 </html>
