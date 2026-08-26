@@ -7,14 +7,9 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/flavicon_dark.svg">
-    
-    <script>
-        // Setze Theme basierend auf System-Präferenz
-        (function() {
-            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-        })();
-    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -23,11 +18,9 @@
     <header class="header">
         <div class="header-inner">
             <div class="logo-container">
-                <!-- Dark Mode Logo -->
-                <img src="assets/Kalora_Dark.svg" alt="Kalora Logo" class="logo-dark">
-                
-                <!-- Light Mode Logo -->
-                <img src="assets/Kalora_Light.svg" alt="Kalora Logo" class="logo-light">
+                <a href="index.html">
+                    <img src="assets/Kalora_Light.svg" alt="Kalora Logo">
+                </a>
             </div>
         </div>
     </header>

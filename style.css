@@ -31,31 +31,6 @@ html {
     --chart-cardio: #B4A5F5;      /* Lavender */
 }
 
-[data-theme="dark"] {
-    /* Backgrounds - Soft Navy */
-    --bg-body: #1A2332;           /* Soft Navy */
-    --bg-header: #212936;
-    --bg-card: #242D3E;
-    --bg-input: #1F2731;
-    --border-color: #313A4D;
-    
-    /* Text Colors */
-    --text-primary: #E8EAF0;
-    --text-muted: #9FA3B8;
-    --text-chart: #B4BAE3;
-    
-    /* Accent Colors */
-    --accent-primary: #FF8B7B;    /* Coral */
-    --accent-secondary: #A8D5BA;  /* Mint */
-    --accent-tertiary: #F2A884;   /* Peach */
-    
-    /* Chart Colors */
-    --chart-bmr: #FF8B7B;
-    --chart-neat: #A8D5BA;
-    --chart-steps: #F9E4B7;
-    --chart-strength: #F2A884;
-    --chart-cardio: #B4A5F5;
-}
 
 * {
     margin: 0;
@@ -106,21 +81,6 @@ body {
     display: block;
 }
 
-[data-theme="dark"] .logo-dark {
-    display: block;
-}
-
-[data-theme="dark"] .logo-light {
-    display: none;
-}
-
-[data-theme="light"] .logo-dark {
-    display: none;
-}
-
-[data-theme="light"] .logo-light {
-    display: block;
-}
 
 
 /* Main Container */

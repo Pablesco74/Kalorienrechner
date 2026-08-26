@@ -157,30 +157,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ---------- Theme basiert auf System-Präferenz ----------
-    const root = document.documentElement;
-
-    function getSystemTheme() {
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-
-    function applyTheme(theme) {
-        root.setAttribute('data-theme', theme);
-    }
-
-    applyTheme(getSystemTheme());
-
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        const newTheme = e.matches ? 'dark' : 'light';
-        applyTheme(newTheme);
-
-        if (kcalChart) {
-            const lastData = kcalChart.data.datasets[0].data;
-            const labels = kcalChart.data.labels;
-            kcalChart.destroy();
-            renderChartWithData(labels, lastData);
-        }
-    });
+    // ---------- Theme ----------
+    document.documentElement.setAttribute('data-theme', 'light');
 
     function getChartColors() {
         const style = getComputedStyle(document.documentElement);
