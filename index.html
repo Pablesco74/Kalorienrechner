@@ -57,30 +57,18 @@
 
     .logo-container img { height: 100%; width: auto; display: block; }
 
-    .header-right { display: flex; align-items: center; gap: 10px; }
+    .header-nav { display: flex; align-items: center; gap: 6px; }
 
-    .header-link {
+    .header-nav-link {
       color: var(--text-muted);
       font-size: 0.875rem;
       font-weight: 500;
       text-decoration: none;
-      padding: 0.6rem 0.8rem;
-      border-radius: 12px;
+      padding: 0.5rem 0.875rem;
+      border-radius: 10px;
       transition: color 0.2s, background 0.2s;
     }
-    .header-link:hover { color: var(--text-primary); background: rgba(0,0,0,0.04); }
-
-    .header-cta {
-      background: var(--accent-primary);
-      color: #fff;
-      padding: 0.6rem 1.1rem;
-      border-radius: 12px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: opacity 0.2s, transform 0.15s;
-    }
-    .header-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+    .header-nav-link:hover { color: var(--text-primary); background: rgba(0,0,0,0.04); }
 
     /* ── HERO ── */
     .hero {
@@ -331,8 +319,7 @@
     @media (max-width: 480px) {
       .header { padding: 0.875rem 1rem; }
       .logo-container { height: 28px; }
-      .header-link { display: none; }
-      .header-cta { display: none; }
+      .header-nav-link { display: none; }
       h1 { font-size: 1.75rem; }
     }
   </style>
@@ -344,10 +331,10 @@
   <div class="logo-container">
     <img src="assets/Kalora_Light.svg" alt="Kalora"/>
   </div>
-  <div class="header-right">
-    <a href="proteinpulver.html" class="header-link">Proteinpulver</a>
-    <a href="rechner.html" class="header-cta">Zum Rechner →</a>
-  </div>
+  <nav class="header-nav">
+    <a href="proteinpulver.html" class="header-nav-link">Whey Preisvergleich</a>
+    <a href="rechner.html" class="header-nav-link">Kalorienrechner</a>
+  </nav>
 </header>
 
 <!-- HERO -->
