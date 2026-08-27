@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function getChartColors() {
         const style = getComputedStyle(document.documentElement);
         return {
-            bmr: style.getPropertyValue('--chart-bmr').trim() || '#E85D75',
+            bmr: style.getPropertyValue('--chart-bmr').trim() || '#262D83',
             neat: style.getPropertyValue('--chart-neat').trim() || '#9DB4A0',
             steps: style.getPropertyValue('--chart-steps').trim() || '#F2CC8F',
             strength: style.getPropertyValue('--chart-strength').trim() || '#D97757',
