@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kalora – Dein smarter Kalorienrechner</title>
+  <title>Kalora – Smarte Tools für bessere Ernährung</title>
   <link rel="icon" type="image/svg+xml" href="assets/flavicon_dark.svg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -18,9 +18,11 @@
       --border-color:     #E8E5DF;
       --text-primary:     #2D3047;
       --text-muted:       #6B6D7C;
+      --text-faint:       #9A9BA8;
       --accent-primary:   #262D83;
       --accent-secondary: #9DB4A0;
       --accent-tertiary:  #D97757;
+      --accent-soft:      #ECEEF5;
     }
 
     html { scroll-behavior: smooth; }
@@ -72,13 +74,11 @@
 
     /* ── HERO ── */
     .hero {
-      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       text-align: center;
-      padding: 80px 24px 64px;
+      padding: 64px 24px 20px;
     }
 
     .bip-pill {
@@ -91,7 +91,7 @@
       font-size: 12px;
       font-weight: 400;
       color: var(--text-muted);
-      margin-bottom: 32px;
+      margin-bottom: 28px;
       animation: fadeDown .5s ease both;
     }
 
@@ -116,117 +116,173 @@
     .bip-pill a:hover { text-decoration: underline; }
 
     h1 {
-      font-size: clamp(1.875rem, 5vw, 3.25rem);
+      font-size: clamp(1.75rem, 4.5vw, 2.75rem);
       font-weight: 700;
-      line-height: 1.12;
+      line-height: 1.15;
       letter-spacing: -0.5px;
       color: var(--text-primary);
-      max-width: 600px;
-      margin-bottom: 20px;
+      margin: 0 0 14px;
       animation: fadeUp .6s .1s ease both;
     }
 
-    h1 em {
-      font-style: normal;
-      color: var(--accent-primary);
-    }
-
     .hero-sub {
-      font-size: 1rem;
-      line-height: 1.7;
+      font-size: 0.95rem;
+      line-height: 1.65;
       color: var(--text-muted);
-      max-width: 400px;
-      margin-bottom: 36px;
-      font-weight: 400;
+      max-width: 380px;
+      margin: 0;
       animation: fadeUp .6s .2s ease both;
     }
 
-    .cta-row {
+    /* ── PRODUCT CARDS ── */
+    .products {
       display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-      animation: fadeUp .6s .3s ease both;
-    }
-
-    .btn-main {
-      background: var(--accent-primary);
-      color: #fff;
-      padding: 0.875rem 1.75rem;
-      border-radius: 12px;
-      font-size: 0.9375rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: opacity .2s, transform .15s;
-      box-shadow: 0 4px 12px rgba(38,45,131,0.25);
-    }
-    .btn-main:hover { opacity: .88; transform: translateY(-1px); }
-
-    .btn-sec {
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      font-weight: 400;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      transition: color .2s;
-      padding: 0.875rem 0.5rem;
-    }
-    .btn-sec:hover { color: var(--text-primary); }
-
-    /* ── FEATURE CARDS ── */
-    .what {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      flex-direction: column;
       gap: 1.25rem;
-      padding: 0 2rem 4.5rem;
-      max-width: 1100px;
+      max-width: 620px;
       width: 100%;
       margin: 0 auto;
-      animation: fadeUp .7s .4s ease both;
+      padding: 36px 2rem 64px;
+      animation: fadeUp .7s .3s ease both;
     }
 
-    .what-item {
+    .product-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 20px;
-      padding: 1.75rem;
-      transition: border-color 0.2s ease, transform 0.2s ease;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s, transform 0.2s;
       text-decoration: none;
       color: inherit;
-      display: block;
     }
 
-    .what-item:hover {
+    .product-card:hover {
       border-color: var(--accent-primary);
       transform: translateY(-2px);
     }
 
-    .what-num {
-      font-size: 0.75rem;
-      font-weight: 600;
+    .product-card.featured {
+      border-width: 2px;
+      border-color: var(--accent-primary);
+    }
+
+    .product-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
       color: var(--accent-primary);
-      letter-spacing: 0.08em;
-      margin-bottom: 14px;
-      opacity: 0.7;
+      margin: 0 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .what-item h3 {
-      font-size: 0.9375rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 10px;
-      line-height: 1.35;
-      letter-spacing: -0.2px;
+    .product-eyebrow-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent-tertiary);
     }
 
-    .what-item p {
-      font-size: 0.8125rem;
-      line-height: 1.7;
+    .product-card h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin: 0 0 10px;
+      line-height: 1.25;
+    }
+
+    .product-desc {
+      font-size: 0.85rem;
+      line-height: 1.65;
       color: var(--text-muted);
-      font-weight: 400;
+      margin: 0 0 20px;
+    }
+
+    .product-stats {
+      display: flex;
+      gap: 24px;
+      padding: 16px 0;
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .product-stat-value {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .product-stat-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin: 0;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-primary);
+      color: #fff;
+      padding: 0.8rem 1.5rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 12px rgba(38,45,131,0.2);
+      align-self: flex-start;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-primary);
+      font-size: 0.875rem;
+      font-weight: 600;
+      align-self: flex-start;
+      transition: opacity 0.2s;
+    }
+    .btn-secondary:hover { opacity: 0.7; }
+    .btn-secondary:hover .btn-arrow { transform: translateX(3px); }
+
+    .btn-arrow { transition: transform 0.2s; }
+
+    .rechner-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .rechner-features li {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      line-height: 1.5;
+    }
+
+    .rechner-features li::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent-secondary);
+      flex-shrink: 0;
+      margin-top: 5px;
     }
 
     /* ── BIP STRIP ── */
@@ -310,8 +366,8 @@
     @media (max-width: 768px) {
       .header { padding: 1rem 1.5rem; }
       .logo-container { height: 34px; }
-      .hero { padding: 60px 20px 48px; }
-      .what { grid-template-columns: 1fr; padding: 0 1.25rem 3rem; gap: 1rem; }
+      .hero { padding: 48px 20px 16px; }
+      .products { padding: 28px 1.25rem 48px; gap: 1rem; }
       .bip-strip { padding: 1.5rem 1.25rem; }
       .site-footer { padding: 1.25rem; flex-direction: column; align-items: flex-start; }
     }
@@ -320,7 +376,9 @@
       .header { padding: 0.875rem 1rem; }
       .logo-container { height: 28px; }
       .header-nav-link { display: none; }
-      h1 { font-size: 1.75rem; }
+      h1 { font-size: 1.5rem; }
+      .product-card { padding: 1.5rem; }
+      .product-stats { gap: 16px; flex-wrap: wrap; }
     }
   </style>
 </head>
@@ -338,51 +396,65 @@
 </header>
 
 <!-- HERO -->
-<main class="hero">
-  <div class="bip-pill">
-    <span class="bip-dot"></span>
-    Wir bauen öffentlich &nbsp;·&nbsp;
-    <a href="https://www.instagram.com/kalora.de/" target="_blank" rel="noopener">Folge dem Weg →</a>
-  </div>
+<main>
+  <section class="hero">
+    <div class="bip-pill">
+      <span class="bip-dot"></span>
+      Wir bauen öffentlich &nbsp;·&nbsp;
+      <a href="https://www.instagram.com/kalora.de/" target="_blank" rel="noopener">Folge dem Weg →</a>
+    </div>
 
-  <h1>Kalorien berechnen,<br/>die <em>wirklich passen.</em></h1>
+    <h1>Smarte Tools für<br>bessere Ernährung.</h1>
 
-  <p class="hero-sub">
-    Ein präziser Kalorienrechner, der Aktivität, Training und Alltag berücksichtigt. Kostenlos, ohne Account.
-  </p>
+    <p class="hero-sub">
+      Preisvergleiche, Rechner und Guides — kostenlos, ohne Account, datengetrieben.
+    </p>
+  </section>
 
-  <div class="cta-row">
-    <a href="rechner.html" class="btn-main">Jetzt berechnen</a>
-    <a href="https://www.instagram.com/kalora.de/" target="_blank" rel="noopener" class="btn-sec">
-      Aufbau mitverfolgen
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  <!-- PRODUCT CARDS -->
+  <section class="products">
+    <!-- Featured: Whey Preisvergleich -->
+    <a href="proteinpulver.html" class="product-card featured">
+      <div class="product-eyebrow">
+        <span class="product-eyebrow-dot"></span>
+        30 Marken im Vergleich
+      </div>
+      <h2>Whey Preisvergleich</h2>
+      <p class="product-desc">Preis pro Gramm Eiweiß, pro Kilo und pro Portion — sortierbar, mit echten Marktpreisen. Finde das Whey mit dem besten Preis-Leistungs-Verhältnis.</p>
+      <div class="product-stats">
+        <div>
+          <p class="product-stat-value">0,02 €</p>
+          <p class="product-stat-label">Bester Preis / g Eiweiß</p>
+        </div>
+        <div>
+          <p class="product-stat-value">17,50 €</p>
+          <p class="product-stat-label">Günstigstes / kg</p>
+        </div>
+        <div>
+          <p class="product-stat-value">Aug 2026</p>
+          <p class="product-stat-label">Preisstand</p>
+        </div>
+      </div>
+      <span class="btn-primary">Zum Vergleich →</span>
     </a>
-  </div>
-</main>
 
-<!-- FEATURE CARDS -->
-<section class="what">
-  <div class="what-item">
-    <div class="what-num">01</div>
-    <h3>Dein Verbrauch, Schritt für Schritt</h3>
-    <p>Kein pauschaler Aktivitätsfaktor, wie bei anderen Rechnern. Der Verbrauch wird aus Grundumsatz, Schritten, Krafttraining und Cardio zusammengerechnet.</p>
-  </div>
-  <div class="what-item">
-    <div class="what-num">02</div>
-    <h3>Genaue Grundumsatz-Berechnung</h3>
-    <p>Der Rechner wählt automatisch zwischen Katch-McArdle und Harris-Benedict – je nachdem, welche Daten du angibst.</p>
-  </div>
-  <div class="what-item">
-    <div class="what-num">03</div>
-    <h3>Mehr kommt noch</h3>
-    <p>Zielangabe und passende Makronährstoffangaben, um das Ab- oder Zunehmen zu erleichtern.</p>
-  </div>
-  <a href="proteinpulver.html" class="what-item">
-    <div class="what-num">NEU</div>
-    <h3>Proteinpulver-Vergleich</h3>
-    <p>30 Marken im direkten Preisvergleich — sortiert nach Preis pro Gramm Eiweiß, pro Kilo und pro Portion.</p>
-  </a>
-</section>
+    <!-- Secondary: Kalorienrechner -->
+    <a href="rechner.html" class="product-card">
+      <div class="product-eyebrow">Kalorienrechner</div>
+      <h2>Dein täglicher Verbrauch</h2>
+      <p class="product-desc">Kein pauschaler Aktivitätsfaktor. Dein Verbrauch wird individuell berechnet.</p>
+      <ul class="rechner-features">
+        <li>Grundumsatz, Schritte, Training</li>
+        <li>Katch-McArdle oder Mifflin-St Jeor</li>
+        <li>Arbeitstage vs. freie Tage</li>
+      </ul>
+      <span class="btn-secondary">
+        Jetzt berechnen
+        <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </a>
+  </section>
+</main>
 
 <!-- BIP STRIP -->
 <div class="bip-strip">
@@ -390,7 +462,7 @@
     <strong>Kalora ist auf Instagram.</strong> Info-Videos, Updates und vieles mehr.
   </p>
   <a href="https://www.instagram.com/kalora.de/" target="_blank" rel="noopener" class="bip-link">
-    @kalora.health folgen →
+    @kalora.de folgen →
   </a>
 </div>
 

@@ -406,6 +406,37 @@ canvas {
     max-width: 100%;
 }
 
+/* Info Cards - Rechner-Seite */
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 4rem 2rem;
+}
+
+.info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.info-card h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
+}
+
+.info-card p {
+    font-size: 0.8125rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+}
+
 /* Footer - Minimal */
 .site-footer {
     margin-top: 4rem;
@@ -449,6 +480,10 @@ canvas {
 
 /* Responsive - Tablet */
 @media (max-width: 1200px) {
+    .info-cards {
+        padding: 0 2rem 2rem;
+    }
+
     .container {
         padding: 2.5rem 2rem;
         gap: 2.5rem;
@@ -472,6 +507,11 @@ canvas {
 
     .logo-container {
         height: 34px;
+    }
+
+    .info-cards {
+        grid-template-columns: 1fr;
+        padding: 0 1.5rem 2rem;
     }
 
     .container {
