@@ -4,36 +4,23 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kalora – Dein smarter Kalorienrechner</title>
+  <link rel="icon" type="image/svg+xml" href="assets/flavicon_dark.svg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Exact theme variables from kalora-rechner.de ── */
-    :root,
-    [data-theme="light"] {
+    :root {
       --bg-body:          #FDFBF7;
       --bg-header:        #FFFFFF;
       --bg-card:          #FFFFFF;
       --border-color:     #E8E5DF;
       --text-primary:     #2D3047;
       --text-muted:       #6B6D7C;
-      --accent-primary:   #E85D75;
+      --accent-primary:   #262D83;
       --accent-secondary: #9DB4A0;
       --accent-tertiary:  #D97757;
-    }
-
-    [data-theme="dark"] {
-      --bg-body:          #1A2332;
-      --bg-header:        #212936;
-      --bg-card:          #242D3E;
-      --border-color:     #313A4D;
-      --text-primary:     #E8EAF0;
-      --text-muted:       #9FA3B8;
-      --accent-primary:   #FF8B7B;
-      --accent-secondary: #A8D5BA;
-      --accent-tertiary:  #F2A884;
     }
 
     html { scroll-behavior: smooth; }
@@ -45,11 +32,10 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      transition: background-color 0.5s ease, color 0.5s ease;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── HEADER (matches rechner) ── */
+    /* ── HEADER ── */
     .header {
       background: var(--bg-header);
       padding: 1.25rem 2rem;
@@ -71,12 +57,18 @@
 
     .logo-container img { height: 100%; width: auto; display: block; }
 
-    [data-theme="dark"]  .logo-dark  { display: block; }
-    [data-theme="dark"]  .logo-light { display: none;  }
-    [data-theme="light"] .logo-dark  { display: none;  }
-    [data-theme="light"] .logo-light { display: block; }
-
     .header-right { display: flex; align-items: center; gap: 10px; }
+
+    .header-link {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 0.6rem 0.8rem;
+      border-radius: 12px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .header-link:hover { color: var(--text-primary); background: rgba(0,0,0,0.04); }
 
     .header-cta {
       background: var(--accent-primary);
@@ -179,7 +171,7 @@
       font-weight: 600;
       text-decoration: none;
       transition: opacity .2s, transform .15s;
-      box-shadow: 0 4px 12px rgba(232,93,117,0.25);
+      box-shadow: 0 4px 12px rgba(38,45,131,0.25);
     }
     .btn-main:hover { opacity: .88; transform: translateY(-1px); }
 
@@ -199,10 +191,10 @@
     /* ── FEATURE CARDS ── */
     .what {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1.25rem;
       padding: 0 2rem 4.5rem;
-      max-width: 900px;
+      max-width: 1100px;
       width: 100%;
       margin: 0 auto;
       animation: fadeUp .7s .4s ease both;
@@ -214,6 +206,9 @@
       border-radius: 20px;
       padding: 1.75rem;
       transition: border-color 0.2s ease, transform 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
 
     .what-item:hover {
@@ -284,7 +279,7 @@
     }
     .bip-link:hover { opacity: .85; }
 
-    /* ── FOOTER (matches rechner) ── */
+    /* ── FOOTER ── */
     .site-footer {
       margin-top: auto;
       padding: 1.5rem 2rem;
@@ -336,6 +331,7 @@
     @media (max-width: 480px) {
       .header { padding: 0.875rem 1rem; }
       .logo-container { height: 28px; }
+      .header-link { display: none; }
       .header-cta { display: none; }
       h1 { font-size: 1.75rem; }
     }
@@ -346,10 +342,10 @@
 <!-- HEADER -->
 <header class="header">
   <div class="logo-container">
-    <img class="logo-dark"  src="https://kalora-rechner.de/assets/Kalora_Dark.svg"  alt="Kalora"/>
-    <img class="logo-light" src="https://kalora-rechner.de/assets/Kalora_Light.svg" alt="Kalora"/>
+    <img src="assets/Kalora_Light.svg" alt="Kalora"/>
   </div>
   <div class="header-right">
+    <a href="proteinpulver.html" class="header-link">Proteinpulver</a>
     <a href="rechner.html" class="header-cta">Zum Rechner →</a>
   </div>
 </header>
@@ -394,6 +390,11 @@
     <h3>Mehr kommt noch</h3>
     <p>Zielangabe und passende Makronährstoffangaben, um das Ab- oder Zunehmen zu erleichtern.</p>
   </div>
+  <a href="proteinpulver.html" class="what-item">
+    <div class="what-num">NEU</div>
+    <h3>Proteinpulver-Vergleich</h3>
+    <p>30 Marken im direkten Preisvergleich — sortiert nach Preis pro Gramm Eiweiß, pro Kilo und pro Portion.</p>
+  </a>
 </section>
 
 <!-- BIP STRIP -->
@@ -409,8 +410,7 @@
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-logo">
-    <img class="logo-dark"  src="https://kalora-rechner.de/assets/Kalora_Dark.svg"  alt="Kalora"/>
-    <img class="logo-light" src="https://kalora-rechner.de/assets/Kalora_Light.svg" alt="Kalora"/>
+    <img src="assets/Kalora_Light.svg" alt="Kalora"/>
   </div>
   <div class="footer-links">
     <a href="legal.html">Impressum & Datenschutz</a>
@@ -419,14 +419,5 @@
   <p class="footer-copy">© 2026 Kalora Health</p>
 </footer>
 
-<script>
-  (function() {
-    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-    });
-  })();
-</script>
 </body>
 </html>

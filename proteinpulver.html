@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Proteinpulver-Vergleich – Kalora</title>
+  <link rel="icon" type="image/svg+xml" href="assets/flavicon_dark.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-body:          #FDFBF7;
+      --bg-header:        #FFFFFF;
+      --bg-card:          #FFFFFF;
+      --border-color:     #E8E5DF;
+      --text-primary:     #2D3047;
+      --text-muted:       #6B6D7C;
+      --text-faint:       #9A9BA8;
+      --accent-primary:   #262D83;
+      --accent-secondary: #9DB4A0;
+      --accent-tertiary:  #D97757;
+      --accent-soft:      #ECEEF5;
+      --rank-color:       #D97757;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: var(--bg-body);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--bg-header);
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-container {
+      height: 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-container a { display: flex; align-items: center; text-decoration: none; }
+    .logo-container img { height: 100%; width: auto; display: block; }
+
+    .header-right { display: flex; align-items: center; gap: 10px; }
+
+    .header-link {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 0.6rem 0.8rem;
+      border-radius: 12px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .header-link:hover { color: var(--text-primary); background: rgba(0,0,0,0.04); }
+    .header-link.active { color: var(--accent-primary); font-weight: 600; }
+
+    .header-cta {
+      background: var(--accent-primary);
+      color: #fff;
+      padding: 0.6rem 1.1rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .header-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ── PAGE LAYOUT ── */
+    .page {
+      flex: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+      width: 100%;
+    }
+
+    /* ── HERO ── */
+    .page-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-primary);
+      margin: 0 0 14px;
+    }
+
+    .page h1 {
+      font-weight: 700;
+      font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+      margin: 0 0 16px;
+      color: var(--text-primary);
+      max-width: 18ch;
+    }
+
+    .page-lede {
+      margin: 0 0 36px;
+      max-width: 56ch;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 36px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+      margin-bottom: 40px;
+    }
+
+    .stat-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin: 0 0 4px;
+    }
+
+    .stat-value {
+      font-weight: 700;
+      font-size: 1.35rem;
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    .stat-sub {
+      margin: 2px 0 0;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* ── TABLE ── */
+    .board-scroll {
+      overflow-x: auto;
+      margin: 0 -8px;
+      padding: 0 8px;
+    }
+
+    .board {
+      min-width: 640px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 2.2rem minmax(150px, 1.6fr) repeat(4, minmax(72px, 1fr));
+      align-items: center;
+      column-gap: 14px;
+    }
+
+    /* Head */
+    .board-head {
+      border-bottom: 2px solid var(--text-primary);
+      padding-bottom: 10px;
+      margin-bottom: 2px;
+    }
+
+    .board-head .col {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .sort-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-align: right;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .board-head .col:nth-child(2) .sort-btn { text-align: left; }
+    .sort-btn:hover { color: var(--text-primary); }
+    .sort-btn:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 3px; }
+
+    .sort-mark { font-size: 0.6rem; opacity: 0; transition: opacity 0.15s; }
+    .sort-mark.active { opacity: 1; color: var(--accent-primary); }
+
+    /* Body */
+    .num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .board-body .row {
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border-color);
+      transition: background 0.15s;
+    }
+
+    .board-body .row:hover {
+      background: rgba(0,0,0,0.015);
+    }
+
+    .board-body .row.is-best {
+      background: var(--accent-soft);
+      margin: 0 -14px;
+      padding: 13px 14px;
+      border-radius: 8px;
+      border-bottom-color: transparent;
+    }
+
+    .rank {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-faint);
+    }
+
+    .row.is-best .rank { color: var(--rank-color); }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .brand-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .brand-name a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .brand-name a:hover {
+      color: var(--accent-primary);
+    }
+
+    .brand-note {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+    }
+
+    .best-tag {
+      display: inline-block;
+      margin-top: 2px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent-primary);
+    }
+
+    .ppg { position: relative; }
+
+    .ppg-bar {
+      height: 3px;
+      background: var(--accent-primary);
+      opacity: 0.35;
+      margin-top: 5px;
+      margin-left: auto;
+      border-radius: 2px;
+    }
+
+    .row.is-best .ppg-bar { opacity: 0.7; }
+
+    .rating-value { text-align: right; }
+    .rating-dash { color: var(--text-faint); }
+
+    /* ── SOURCES ── */
+    .sources {
+      margin-top: 36px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .sources p { margin: 0 0 6px; }
+    .sources a { color: var(--text-muted); transition: color 0.15s; }
+    .sources a:hover { color: var(--accent-primary); }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      margin-top: auto;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-logo { height: 22px; }
+    .footer-logo img { height: 100%; width: auto; opacity: 0.5; }
+
+    .footer-links { display: flex; gap: 20px; }
+
+    .footer-links a {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      text-decoration: none;
+      font-weight: 400;
+      transition: opacity 0.2s;
+    }
+    .footer-links a:hover { opacity: 0.7; }
+
+    .footer-copy { font-size: 0.8125rem; color: var(--text-muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .header { padding: 1rem 1.5rem; }
+      .logo-container { height: 34px; }
+      .page { padding: 36px 18px 48px; }
+      .stats { gap: 20px; }
+      .site-footer { padding: 1.25rem; flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 480px) {
+      .header { padding: 0.875rem 1rem; }
+      .logo-container { height: 28px; }
+      .header-link { display: none; }
+      .page h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo-container">
+    <a href="index.html">
+      <img src="assets/Kalora_Light.svg" alt="Kalora"/>
+    </a>
+  </div>
+  <div class="header-right">
+    <a href="proteinpulver.html" class="header-link active">Proteinpulver</a>
+    <a href="rechner.html" class="header-cta">Zum Rechner →</a>
+  </div>
+</header>
+
+<!-- PAGE -->
+<main class="page">
+  <p class="page-eyebrow" id="stamp">Vergleich wird geladen …</p>
+  <h1>Proteinpulver im Vergleich</h1>
+  <p class="page-lede">Preis pro Kilo, pro Portion und pro Gramm Eiweiß für gängige Whey- und Proteinpulver in Deutschland — recherchiert aus aktuellen Preisvergleichen und Testberichten.</p>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="board-scroll">
+    <div class="board">
+      <div class="row board-head">
+        <div class="col"></div>
+        <div class="col"><button class="sort-btn" data-key="name">Marke <span class="sort-mark">▲</span></button></div>
+        <div class="col"><button class="sort-btn" data-key="preisProKg">€/kg <span class="sort-mark">▲</span></button></div>
+        <div class="col"><button class="sort-btn" data-key="preisProPortion">€/Portion <span class="sort-mark">▲</span></button></div>
+        <div class="col"><button class="sort-btn" data-key="preisProGProtein">€/g Eiweiß <span class="sort-mark">▲</span></button></div>
+        <div class="col"><button class="sort-btn" data-key="bewertung">Bewertung <span class="sort-mark">▲</span></button></div>
+      </div>
+      <div class="board-body" id="boardBody"></div>
+    </div>
+  </div>
+
+  <footer class="sources">
+    <p id="stampFull">Preisstand: wird geladen …</p>
+    <p>Richtpreise für Standardpackungen, teils gerundet; Portion angenommen mit 30 g Pulver. Einzelne Angebote können abweichen. Quellen: <a href="https://proteindatabase.de/ranking/preis-leistungs-sieger" target="_blank" rel="noopener">ProteinDB</a>, <a href="https://droptime.de/rangliste/bestes-whey-proteinpulver" target="_blank" rel="noopener">droptime.de</a>, <a href="https://geizhals.de" target="_blank" rel="noopener">Geizhals</a>.</p>
+  </footer>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo">
+    <img src="assets/Kalora_Light.svg" alt="Kalora"/>
+  </div>
+  <div class="footer-links">
+    <a href="legal.html">Impressum & Datenschutz</a>
+    <a href="https://www.instagram.com/kalora.de/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+  <p class="footer-copy">© 2026 Kalora Health</p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var state = { sortKey: "preisProGProtein", sortDir: "asc" };
+  var DATA = [];
+  var PORTION_G = 30;
+  var PRICE_STAMP = "";
+
+  function fmtEUR(n) {
+    return n.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function derive(p) {
+    var proteinTotalG = p.packung * (p.protein / 100);
+    return {
+      preisProKg: p.preis / (p.packung / 1000),
+      preisProPortion: p.preis * (PORTION_G / p.packung),
+      preisProGProtein: p.preis / proteinTotalG
+    };
+  }
+
+  function getRows() {
+    return DATA.map(function (p) { return Object.assign({}, p, derive(p)); });
+  }
+
+  function sortRows(rows) {
+    var key = state.sortKey, dir = state.sortDir === "asc" ? 1 : -1;
+    return rows.slice().sort(function (a, b) {
+      var av = a[key], bv = b[key];
+      if (av === null || av === undefined) return 1;
+      if (bv === null || bv === undefined) return -1;
+      if (typeof av === "string") return av.localeCompare(bv, "de") * dir;
+      return (av - bv) * dir;
+    });
+  }
+
+  function renderStats(rows) {
+    var best = rows.reduce(function (a, b) { return b.preisProGProtein < a.preisProGProtein ? b : a; }, rows[0]);
+    var sortedByPpg = rows.slice().sort(function (a, b) { return a.preisProGProtein - b.preisProGProtein; });
+    var median = sortedByPpg[Math.floor(sortedByPpg.length / 2)].preisProGProtein;
+    var maxPrice = Math.max.apply(null, rows.map(function (r) { return r.preisProKg; }));
+    var minPrice = Math.min.apply(null, rows.map(function (r) { return r.preisProKg; }));
+
+    var stats = [
+      { label: "Bester Wert", value: best.name, sub: fmtEUR(best.preisProGProtein) + " € je g Eiweiß" },
+      { label: "Median €/g Eiweiß", value: fmtEUR(median) + " €", sub: "über " + rows.length + " Marken" },
+      { label: "Preisspanne €/kg", value: fmtEUR(minPrice) + " – " + fmtEUR(maxPrice) + " €", sub: "günstigste bis teuerste Marke" }
+    ];
+
+    var el = document.getElementById("stats");
+    el.innerHTML = "";
+    stats.forEach(function (s) {
+      var div = document.createElement("div");
+      div.innerHTML = '<p class="stat-label">' + s.label + '</p><p class="stat-value">' + s.value + '</p><p class="stat-sub">' + s.sub + '</p>';
+      el.appendChild(div);
+    });
+  }
+
+  function renderHead() {
+    document.querySelectorAll(".sort-mark").forEach(function (m) { m.classList.remove("active"); m.textContent = "▲"; });
+    document.querySelectorAll(".sort-btn").forEach(function (btn) {
+      var mark = btn.querySelector(".sort-mark");
+      if (btn.getAttribute("data-key") === state.sortKey) {
+        mark.classList.add("active");
+        mark.textContent = state.sortDir === "asc" ? "▲" : "▼";
+      }
+    });
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function renderBody(rows) {
+    var body = document.getElementById("boardBody");
+    body.innerHTML = "";
+    var maxPpg = Math.max.apply(null, rows.map(function (r) { return r.preisProGProtein; }));
+    var minPpg = Math.min.apply(null, rows.map(function (r) { return r.preisProGProtein; }));
+
+    rows.forEach(function (r, i) {
+      var isBest = r.preisProGProtein === minPpg;
+      var barPct = maxPpg > 0 ? Math.max(6, (r.preisProGProtein / maxPpg) * 100) : 0;
+      var row = document.createElement("div");
+      row.className = "row" + (isBest ? " is-best" : "");
+
+      var brandNameHtml = r.link
+        ? '<a href="' + escapeHtml(r.link) + '" target="_blank" rel="noopener sponsored">' + escapeHtml(r.name) + '</a>'
+        : escapeHtml(r.name);
+
+      row.innerHTML =
+        '<div class="rank">' + (i + 1).toString().padStart(2, "0") + '</div>' +
+        '<div class="brand"><span class="brand-name">' + brandNameHtml + '</span><span class="brand-note">' + escapeHtml(r.note) + '</span>' + (isBest ? '<span class="best-tag">Bester Wert</span>' : '') + '</div>' +
+        '<div class="num">' + fmtEUR(r.preisProKg) + '</div>' +
+        '<div class="num">' + fmtEUR(r.preisProPortion) + '</div>' +
+        '<div class="num ppg"><div>' + fmtEUR(r.preisProGProtein) + '</div><div class="ppg-bar" style="width:' + barPct + '%"></div></div>' +
+        '<div class="num rating-value">' + (r.bewertung != null ? r.bewertung.toFixed(2) : '<span class="rating-dash">–</span>') + '</div>';
+      body.appendChild(row);
+    });
+  }
+
+  function render() {
+    if (DATA.length === 0) return;
+    var rows = sortRows(getRows());
+    renderStats(getRows());
+    renderHead();
+    renderBody(rows);
+  }
+
+  document.querySelectorAll(".sort-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var key = btn.getAttribute("data-key");
+      if (state.sortKey === key) {
+        state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+      } else {
+        state.sortKey = key;
+        state.sortDir = key === "name" ? "asc" : "asc";
+      }
+      render();
+    });
+  });
+
+  // Load data from JSON
+  fetch("data/proteinpulver.json")
+    .then(function (res) { return res.json(); })
+    .then(function (json) {
+      DATA = json.marken;
+      PORTION_G = json.portionGramm || 30;
+      PRICE_STAMP = json.preisstand || "";
+
+      document.getElementById("stamp").textContent = DATA.length + " Marken im Vergleich";
+      document.getElementById("stampFull").textContent = "Preisstand: " + PRICE_STAMP + ". Wird regelmäßig aktualisiert.";
+
+      render();
+    })
+    .catch(function () {
+      document.getElementById("stamp").textContent = "Daten konnten nicht geladen werden.";
+    });
+})();
+</script>
+
+</body>
+</html>

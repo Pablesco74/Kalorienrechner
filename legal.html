@@ -19,16 +19,6 @@
             --footer-color: #95A5A6;
         }
 
-        [data-theme="dark"] {
-            --primary-blue: #FF8B7B;
-            --text-color: #E8EAF0;
-            --bg-color: #1A2332;
-            --card-bg: #242D3E;
-            --border-color: #313A4D;
-            --muted-color: #9FA3B8;
-            --divider-color: #313A4D;
-            --footer-color: #9FA3B8;
-        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -176,12 +166,5 @@
         &copy; 2026 Kalora - Dein smarter Kalorien Guide.
     </footer>
 
-<script>
-    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-    });
-</script>
 </body>
 </html>
