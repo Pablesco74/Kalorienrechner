@@ -62,9 +62,36 @@ body {
 .header-inner {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     max-width: 1800px;
     margin: 0 auto;
+}
+
+/* Header Navigation */
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.header-nav-link {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.5rem 0.875rem;
+    border-radius: 10px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.header-nav-link:hover {
+    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.header-nav-link.active {
+    color: var(--accent-primary);
+    font-weight: 600;
 }
 
 /* Logo */
@@ -73,6 +100,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.logo-container a {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
 .logo-container img {
@@ -372,6 +406,37 @@ canvas {
     max-width: 100%;
 }
 
+/* Info Cards - Rechner-Seite */
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 4rem 2rem;
+}
+
+.info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.info-card h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
+}
+
+.info-card p {
+    font-size: 0.8125rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+}
+
 /* Footer - Minimal */
 .site-footer {
     margin-top: 4rem;
@@ -415,6 +480,10 @@ canvas {
 
 /* Responsive - Tablet */
 @media (max-width: 1200px) {
+    .info-cards {
+        padding: 0 2rem 2rem;
+    }
+
     .container {
         padding: 2.5rem 2rem;
         gap: 2.5rem;
@@ -438,6 +507,11 @@ canvas {
 
     .logo-container {
         height: 34px;
+    }
+
+    .info-cards {
+        grid-template-columns: 1fr;
+        padding: 0 1.5rem 2rem;
     }
 
     .container {
@@ -505,6 +579,10 @@ canvas {
 
     .logo-container {
         height: 28px;
+    }
+
+    .header-nav-link {
+        display: none;
     }
 
     .container {
