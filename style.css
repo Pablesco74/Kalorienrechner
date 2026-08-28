@@ -632,6 +632,10 @@ canvas {
         display: none;
     }
 
+    .header-inner {
+        justify-content: center;
+    }
+
     .intro {
         padding: 28px 1rem 0;
     }
