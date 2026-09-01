@@ -406,35 +406,74 @@ canvas {
     max-width: 100%;
 }
 
-/* Info Cards - Rechner-Seite */
-.info-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
+/* Intro Section - Rechner-Seite */
+.intro {
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 4rem 2rem;
+    padding: 48px 4rem 0;
+    text-align: center;
 }
 
-.info-card {
-    background: var(--bg-card);
+.intro h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    margin: 0 0 10px;
+}
+
+.intro-sub {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0 auto 36px;
+    max-width: 440px;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
     border: 1px solid var(--border-color);
     border-radius: 16px;
-    padding: 1.5rem;
+    background: var(--bg-card);
+    overflow: hidden;
+    margin-bottom: 0;
 }
 
-.info-card h3 {
-    font-size: 0.875rem;
+.feature {
+    padding: 24px 22px;
+    text-align: left;
+    position: relative;
+}
+
+.feature:not(:last-child) {
+    border-right: 1px solid var(--border-color);
+}
+
+.feature-accent {
+    width: 28px;
+    height: 3px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+}
+
+.feature:nth-child(1) .feature-accent { background: var(--accent-primary); }
+.feature:nth-child(2) .feature-accent { background: var(--accent-secondary); }
+.feature:nth-child(3) .feature-accent { background: var(--accent-tertiary); }
+
+.feature h3 {
+    font-size: 0.8125rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 8px;
-    letter-spacing: -0.2px;
+    margin: 0 0 6px;
+    line-height: 1.35;
 }
 
-.info-card p {
-    font-size: 0.8125rem;
-    line-height: 1.65;
+.feature p {
+    font-size: 0.75rem;
+    line-height: 1.6;
     color: var(--text-muted);
+    margin: 0;
 }
 
 /* Footer - Minimal */
@@ -480,8 +519,8 @@ canvas {
 
 /* Responsive - Tablet */
 @media (max-width: 1200px) {
-    .info-cards {
-        padding: 0 2rem 2rem;
+    .intro {
+        padding: 36px 2rem 0;
     }
 
     .container {
@@ -509,9 +548,17 @@ canvas {
         height: 34px;
     }
 
-    .info-cards {
+    .intro {
+        padding: 36px 1.5rem 0;
+    }
+
+    .features {
         grid-template-columns: 1fr;
-        padding: 0 1.5rem 2rem;
+    }
+
+    .feature:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
     }
 
     .container {
@@ -583,6 +630,18 @@ canvas {
 
     .header-nav-link {
         display: none;
+    }
+
+    .header-inner {
+        justify-content: center;
+    }
+
+    .intro {
+        padding: 28px 1rem 0;
+    }
+
+    .intro h1 {
+        font-size: 1.375rem;
     }
 
     .container {
